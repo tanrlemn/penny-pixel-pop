@@ -11,6 +11,7 @@ import { Suspense } from 'react';
 // local components
 import Navbar from './_navigation/navbar';
 import NewEnvelope from './_components/forms/newEnvelope';
+import TransactionDrawer from './_components/forms/transactionDrawer';
 import LoadingDiv from './_components/interactive/loadingDiv';
 
 const APP_NAME = 'Budge App';
@@ -59,6 +60,7 @@ export default function RootLayout({ children }) {
               <Navbar />
               {children}
               <NewEnvelope />
+              <TransactionDrawer />
             </Suspense>
           </ThemeProvider>
         </RecoilRootProvider>

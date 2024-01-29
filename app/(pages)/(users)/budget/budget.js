@@ -39,7 +39,9 @@ export default function Budget() {
   }, [categoryList, setIsLoading]);
 
   return (
-    <Box mt={'1rem'}>
+    <Box
+      mt={'1rem'}
+      mb={'5rem'}>
       <Container>
         <Heading mb={'1rem'}>Budget</Heading>
         <Flex

@@ -14,7 +14,6 @@ export default function Home() {
   const [code, setCode] = useQueryState('code');
 
   const { userData } = useUser();
-  console.log('userData', userData);
 
   useEffect(() => {
     const confirmAuth = async () => {

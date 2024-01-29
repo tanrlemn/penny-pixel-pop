@@ -2782,6 +2782,7 @@ __metadata:
     "@supabase/ssr": "npm:^0.0.10"
     "@supabase/supabase-js": "npm:^2.39.3"
     "@types/react": "npm:^18.2.48"
+    date-fns: "npm:^3.3.1"
     eslint: "npm:^8.56.0"
     eslint-config-next: "npm:14.1.0"
     framer-motion: "npm:^11.0.3"
@@ -2790,6 +2791,7 @@ __metadata:
     next: "npm:14.1.0"
     nuqs: "npm:^1.15.4"
     react: "npm:^18.2.0"
+    react-day-picker: "npm:^8.10.0"
     react-dom: "npm:^18.2.0"
     recoil: "npm:^0.7.7"
     typescript: "npm:^5.3.3"
@@ -3123,6 +3125,13 @@ __metadata:
   version: 1.0.8
   resolution: "damerau-levenshtein@npm:1.0.8"
   checksum: 4c2647e0f42acaee7d068756c1d396e296c3556f9c8314bac1ac63ffb236217ef0e7e58602b18bb2173deec7ec8e0cac8e27cccf8f5526666b4ff11a13ad54a3
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "date-fns@npm:3.3.1"
+  checksum: e04ff79244010e03b912d791cd3250af5f18866ce868604958d76bd87e5fb0b79f0a810b8e7066248452b41779b288c4fd21de1cac2cd4b6d384e9dd931c9674
   languageName: node
   linkType: hard
 
@@ -6075,6 +6084,16 @@ __metadata:
   peerDependencies:
     react: ^15.3.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
   checksum: aba0adb666018e5c64657c31f4914a8558be73f71d6e2210fa871ebfcab94d786c83082868d7c7fa66feddc2aec19e375745cf0903e0619f2efffef08b92d941
+  languageName: node
+  linkType: hard
+
+"react-day-picker@npm:^8.10.0":
+  version: 8.10.0
+  resolution: "react-day-picker@npm:8.10.0"
+  peerDependencies:
+    date-fns: ^2.28.0 || ^3.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: e9868aced1e40b4cb7d6cf8d50e250226b38ec7ebea944b65aa9db20a0f36d0581b8a501297d09dcbf2d812de852168952b3fb27990915381629d6e314c2a4d8
   languageName: node
   linkType: hard
 

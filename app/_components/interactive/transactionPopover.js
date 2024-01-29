@@ -1,6 +1,9 @@
 // hooks
 import { useState, useRef } from 'react';
-import { useEnvelopes, useEnvelopeDrawer } from '@/app/_lib/hooks/useEnvelopes';
+import {
+  useTransactions,
+  useTransactionsDrawer,
+} from '@/app/_lib/hooks/useTransactions';
 
 // utils
 import { formatCurrency } from '@/app/_lib/utils/currencyFormater';
@@ -23,16 +26,17 @@ import {
   PopoverTrigger,
   Stack,
   Stat,
+  StatHelpText,
   StatLabel,
   StatNumber,
   useDisclosure,
 } from '@chakra-ui/react';
 import { Edit, MoreHorizontal, Trash2 } from 'lucide-react';
 
-export default function EnvelopePopover({ envelope, color }) {
+export default function TransactionPopover({ txn, color }) {
   const cancelRef = useRef();
-  const { deleteEnvelope, setCurrentEnvelope } = useEnvelopes();
-  const { onOpen } = useEnvelopeDrawer();
+  const { deleteTxn, setCurrentTxn } = useTransactions();
+  const { onTxnOpen } = useTransactionsDrawer();
 
   const { isOpen, onOpen: alertOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
@@ -51,16 +55,23 @@ export default function EnvelopePopover({ envelope, color }) {
           <PopoverCloseButton />
           <PopoverHeader>
             <Stat>
-              <StatLabel mb={'0.45rem'}>{envelope.envelope_name}</StatLabel>
-              <StatNumber>{formatCurrency(envelope.budget_amount)}</StatNumber>
+              <StatLabel
+                mt={'0.5rem'}
+                mb={'0.45rem'}>
+                {txn.envelope_name}
+              </StatLabel>
+              <StatNumber mb={'0.5rem'}>
+                {formatCurrency(txn.amount)}
+              </StatNumber>
+              <StatHelpText>{txn.note}</StatHelpText>
             </Stat>
           </PopoverHeader>
           <PopoverBody>
             <Stack>
               <Button
                 onClick={() => {
-                  setCurrentEnvelope(envelope);
-                  onOpen();
+                  setCurrentTxn(txn);
+                  onTxnOpen();
                 }}
                 leftIcon={<Edit size={15} />}
                 size={'sm'}>
@@ -90,7 +101,7 @@ export default function EnvelopePopover({ envelope, color }) {
             <AlertDialogHeader
               fontSize='lg'
               fontWeight='bold'>
-              Delete Envelope
+              Delete Transaction
             </AlertDialogHeader>
 
             <AlertDialogBody>
@@ -107,7 +118,7 @@ export default function EnvelopePopover({ envelope, color }) {
                 colorScheme='red'
                 onClick={() => {
                   setIsLoading(true);
-                  deleteEnvelope(envelope.id);
+                  deleteTxn(txn.id);
                   onClose();
                 }}
                 ml={3}>

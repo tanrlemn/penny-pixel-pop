@@ -8,11 +8,13 @@ export async function POST(request) {
   const supabase = createClient(cookieStore);
 
   const req = await request.json();
-  const { id, envelope_name, category, budget_amount } = req;
+  const { id, envelope_id, amount, note, date } = req;
+
+  console.log(req);
 
   const { data, error } = await supabase
-    .from('envelopes')
-    .upsert([{ id, envelope_name, category, budget_amount }])
+    .from('transactions')
+    .upsert([{ id, envelope_id, amount, note, date }])
     .select();
 
   if (error) {

@@ -2,18 +2,12 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { createClient } from '../../../_lib/utils/supabase/server';
 
-export async function POST(request) {
+export async function GET() {
   const cookieStore = cookies();
 
   const supabase = createClient(cookieStore);
 
-  const req = await request.json();
-  const { id, envelope_name, category, budget_amount } = req;
-
-  const { data, error } = await supabase
-    .from('envelopes')
-    .upsert([{ id, envelope_name, category, budget_amount }])
-    .select();
+  const { data, error } = await supabase.from('profiles').select('*');
 
   if (error) {
     console.log(error);
