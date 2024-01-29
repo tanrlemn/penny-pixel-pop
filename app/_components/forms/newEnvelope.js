@@ -46,9 +46,8 @@ export default function NewEnvelope() {
       <DrawerOverlay />
       <DrawerContent minH={'80vh'}>
         <DrawerCloseButton />
-        <DrawerHeader>Create a new envelope</DrawerHeader>
 
-        <DrawerBody>
+        <DrawerBody pt={'4rem'}>
           <FormControl>
             <Stack spacing={3}>
               <Input

@@ -39,7 +39,7 @@ export default function MenuDrawer() {
         <Menu
           ref={btnRef}
           onClick={onOpen}
-          color={isHome ? 'white' : '#6B46C1'}
+          color={'#6B46C1'}
           cursor={'pointer'}
         />
       </Box>

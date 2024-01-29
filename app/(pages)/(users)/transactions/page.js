@@ -2,23 +2,21 @@
 const images = ['https://i.imgur.com/BFWf7kuh.jpg'];
 
 // local components
-import Dashboard from './dashboard';
+import Transactions from './transactions';
 
 // metadata
 export const metadata = {
-  title: 'Dashboard',
-  description:
-    'A central hub for viewing enrolled workshops, upcoming events, and recent activities.',
+  title: 'Transactions',
+  description: 'Add, edit, and delete transactions.',
   openGraph: {
-    title: 'Profile Page',
+    title: 'Transactions',
     images: images,
-    description:
-      'A central hub for viewing enrolled workshops, upcoming events, and recent activities.',
+    description: 'Add, edit, and delete transactions.',
     locale: 'en_US',
     type: 'website',
   },
 };
 
 export default function Page() {
-  return <Dashboard />;
+  return <Transactions />;
 }

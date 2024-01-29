@@ -41,7 +41,13 @@ export function useUser() {
     getUser();
   }, [userData, supabase, router, pathname, setUserData]);
 
-  return { userData };
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    setUserData(null);
+    router.push('/auth/login?signedOut=true');
+  };
+
+  return { userData, signOut };
 }
 
 export function useProfile() {
@@ -51,7 +57,7 @@ export function useProfile() {
   useEffect(() => {
     const getProfile = async () => {
       if (profile === null) {
-        const res = await fetch('/api/supabase/getProfile');
+        const res = await fetch('/api/auth/getProfile');
 
         const { data, error } = await res.json();
 

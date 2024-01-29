@@ -157,7 +157,6 @@ export function useEnvelopes() {
   };
 
   const createUpdateNewEnvelope = async (id, newEnvelope, setIsLoading) => {
-    console.log('id', id);
     const { envelope_name, budget_amount } = newEnvelope;
 
     id

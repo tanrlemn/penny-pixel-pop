@@ -6,9 +6,10 @@ import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { createClient } from '@/app/_lib/utils/supabase/client';
 
 // hooks
-import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useUser } from '@/app/_lib/hooks/useUser';
+import { useQueryState } from 'nuqs';
 
 // chakra-ui
 import { Box, Heading, Text, Flex, Link } from '@chakra-ui/react';
@@ -17,74 +18,19 @@ import { Box, Heading, Text, Flex, Link } from '@chakra-ui/react';
 import AuthSplashSection from './splashSection';
 import LinkedLogo from '../../../../_components/branding/linkedLogo';
 
-const views = [
-  {
-    id: 'sign_in',
-    title: 'Log in',
-    description: 'Welcome back',
-    link: '/auth/login',
-  },
-  {
-    id: 'sign_up',
-    title: 'Get started',
-    description: 'Create a new account',
-    link: '/auth/sign-up',
-  },
-  {
-    id: 'forgotten_password',
-    title: 'Reset your password',
-    description:
-      "Type in your email and we'll send you a link to reset your password",
-    link: '/auth/forgot-password',
-  },
-];
-
 export default function AuthUI() {
   const router = useRouter();
 
-  const searchParams = useSearchParams();
-  const viewParam = searchParams.get('view');
+  const [signedOut, setSignedOut] = useQueryState('signedOut');
 
   const supabase = createClient();
   const { userData } = useUser();
 
-  const [view, setView] = useState(views[0]);
-
-  const handleViewChange = (view) => {
-    setView(view);
-    window.history.replaceState(
-      {
-        ...window.history.state,
-        as: view.link,
-        url: view.link,
-      },
-      '',
-      view.link
-    );
-  };
-
   useEffect(() => {
-    if (viewParam !== null) {
-      switch (viewParam) {
-        case 'sign_in':
-          handleViewChange(views[0]);
-          break;
-        case 'sign_up':
-          handleViewChange(views[1]);
-          break;
-        case 'forgot_password':
-          handleViewChange(views[2]);
-          break;
-        default:
-          handleViewChange(views[0]);
-          break;
-      }
-    }
-
-    if (userData !== null) {
+    if (userData !== null && !signedOut) {
       router.push('/dashboard');
     }
-  }, [router, userData, viewParam]);
+  }, [router, userData, signedOut]);
 
   return (
     <>
@@ -108,9 +54,9 @@ export default function AuthUI() {
           <Heading
             size={'lg'}
             mb={'0.5rem'}>
-            {view.title}
+            Welcome back!
           </Heading>
-          <Text>{view.description}</Text>
+          <Text>Sign in to your account to continue.</Text>
           <Box
             w={'100%'}
             mb={'2rem'}>
@@ -120,23 +66,9 @@ export default function AuthUI() {
                 theme: ThemeSupa,
               }}
               providers={['google']}
-              // view={view.id}
               showLinks={false}
               onlyThirdPartyProviders
             />
-
-            {/* <Stack
-              textAlign={'center'}
-              mt={'1rem'}>
-              {view.id === 'sign_in' && (
-                <>
-                  <ForgotPasswordLink />
-                  <SignUpLink />
-                </>
-              )}
-              {view.id === 'sign_up' && <SignInLink />}
-              {view.id === 'forgotten_password' && <SignInLink />}
-            </Stack> */}
           </Box>
           <Text
             textAlign={'center'}
