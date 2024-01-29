@@ -94,51 +94,6 @@ export default function AuthUI() {
     }
   }, [router, userData, viewParam]);
 
-  const ForgotPasswordLink = () => {
-    return (
-      <Button
-        variant={'link'}
-        fontSize={'0.8rem'}
-        textDecor={'underline'}
-        fontWeight={400}
-        onClick={() => {
-          handleViewChange(views[2]);
-        }}>
-        Forgot your password?
-      </Button>
-    );
-  };
-
-  const SignUpLink = () => {
-    return (
-      <Button
-        variant={'link'}
-        fontSize={'0.8rem'}
-        textDecor={'underline'}
-        fontWeight={400}
-        onClick={() => {
-          handleViewChange(views[1]);
-        }}>
-        Don&apos;t have an account? Sign up
-      </Button>
-    );
-  };
-
-  const SignInLink = () => {
-    return (
-      <Button
-        variant={'link'}
-        fontSize={'0.8rem'}
-        textDecor={'underline'}
-        fontWeight={400}
-        onClick={() => {
-          handleViewChange(views[0]);
-        }}>
-        Already have an account? Sign in
-      </Button>
-    );
-  };
-
   return (
     <>
       <Flex
