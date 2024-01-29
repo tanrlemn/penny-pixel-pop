@@ -11,15 +11,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useUser } from '@/app/_lib/hooks/useUser';
 
 // chakra-ui
-import {
-  Box,
-  Heading,
-  Text,
-  Flex,
-  Link,
-  Button,
-  Stack,
-} from '@chakra-ui/react';
+import { Box, Heading, Text, Flex, Link } from '@chakra-ui/react';
 
 // local components
 import AuthSplashSection from './splashSection';

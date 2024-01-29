@@ -1,7 +1,6 @@
 // images
 const images = ['https://i.imgur.com/BFWf7kuh.jpg'];
 
-import { Suspense } from 'react';
 // local components
 import AuthUI from './auth';
 
@@ -19,9 +18,5 @@ export const metadata = {
 };
 
 export default function Page() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <AuthUI />
-    </Suspense>
-  );
+  return <AuthUI />;
 }

@@ -6,10 +6,12 @@ const inter = Inter({ subsets: ['latin'] });
 // providers
 import { RecoilRootProvider } from './_lib/context/RecoilRoot';
 import { ThemeProvider } from './_lib/context/ThemeProvider';
+import { Suspense } from 'react';
 
 // local components
 import Navbar from './_navigation/navbar';
 import NewEnvelope from './_components/forms/newEnvelope';
+import LoadingDiv from './_components/interactive/loadingDiv';
 
 const APP_NAME = 'Budge App';
 const APP_DEFAULT_TITLE = 'Budge App';
@@ -53,9 +55,11 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <RecoilRootProvider>
           <ThemeProvider>
-            <Navbar />
-            {children}
-            <NewEnvelope />
+            <Suspense fallback={<LoadingDiv />}>
+              <Navbar />
+              {children}
+              <NewEnvelope />
+            </Suspense>
           </ThemeProvider>
         </RecoilRootProvider>
       </body>
