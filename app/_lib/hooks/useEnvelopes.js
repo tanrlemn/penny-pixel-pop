@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+// recoil
 import { useRecoilValue, useResetRecoilState, useRecoilState } from 'recoil';
 import {
   envelopesState,
@@ -12,6 +12,11 @@ import {
   userState,
 } from '@/app/_state/atoms';
 import { categories } from '@/app/_state/constants';
+
+// hooks
+import { useEffect, useState, useCallback } from 'react';
+
+// services
 import {
   createUpdateEnvelopeAPI,
   deleteEnvelopeAPI,
@@ -19,7 +24,12 @@ import {
   fetchEnvelopesAPI,
 } from '../services/envelopeService';
 
+// chakra-ui
+import { useToast } from '@chakra-ui/react';
+
 export function useEnvelopes() {
+  const toast = useToast();
+
   const user = useRecoilValue(userState);
   const [envelopes, setEnvelopes] = useRecoilState(envelopesState);
 
@@ -62,13 +72,29 @@ export function useEnvelopes() {
         setEnvelopes(data);
 
         resetCurrentEnvelope();
+
+        toast({
+          title: 'Category updated',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        });
       } catch (error) {
         console.error('Envelope update category error:', error);
+
+        toast({
+          title: 'Category updated failed',
+          description:
+            'There was an error updating the envelope category. Please try again.',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
       } finally {
         setIsLoading(false);
       }
     },
-    [resetCurrentEnvelope, setEnvelopes]
+    [resetCurrentEnvelope, setEnvelopes, toast]
   );
 
   const createUpdateEnvelope = useCallback(
@@ -87,13 +113,29 @@ export function useEnvelopes() {
         setEnvelopes(data);
 
         resetCurrentEnvelope();
+
+        toast({
+          title: `Envelope ${envelopeId ? 'updated' : 'created'}`,
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        });
       } catch (error) {
         console.error('Envelope update/create error:', error);
+        toast({
+          title: `Envelope ${envelopeId ? 'update' : 'create'} failed`,
+          description: `There was an error ${
+            envelopeId ? 'updating' : 'creating'
+          } the envelope. Please try again.`,
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
       } finally {
         setIsLoading(false);
       }
     },
-    [resetCurrentEnvelope, setEnvelopes]
+    [resetCurrentEnvelope, setEnvelopes, toast]
   );
 
   const deleteEnvelope = useCallback(
@@ -105,11 +147,27 @@ export function useEnvelopes() {
         setEnvelopes(updateEnvelopes);
 
         resetCurrentEnvelope();
+
+        toast({
+          title: 'Envelope deleted',
+          status: 'warning',
+          duration: 5000,
+          isClosable: true,
+        });
       } catch (error) {
         console.error('Envelope delete error:', error);
+
+        toast({
+          title: 'Envelope delete failed',
+          description:
+            'There was an error deleting the envelope. Please try again.',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
       }
     },
-    [resetCurrentEnvelope, setEnvelopes]
+    [resetCurrentEnvelope, setEnvelopes, toast]
   );
 
   return {
