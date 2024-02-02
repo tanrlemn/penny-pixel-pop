@@ -28,7 +28,6 @@ import LinkedLogo from '../_components/branding/linkedLogo';
 
 export default function MenuDrawer() {
   const btnRef = useRef();
-  const pathname = usePathname();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -46,20 +45,19 @@ export default function MenuDrawer() {
       <Drawer
         isOpen={isOpen}
         placement='top'
-        isFullHeight
         onClose={onClose}
         autoFocus={false}>
+        <DrawerOverlay />
         <DrawerContent
           w={'100%'}
           maxH={{ base: '100vh' }}
-          pb={{ base: '6rem', md: '3rem' }}
           color={'white'}
           background={'purple.600'}>
           <DrawerCloseButton p={'2rem'} />
           <DrawerHeader>
             <LinkedLogo
               text
-              color='purple.100'
+              color='purple.50'
             />
           </DrawerHeader>
 
@@ -67,15 +65,32 @@ export default function MenuDrawer() {
             p={{ base: '2rem', md: '2rem 3rem' }}
             w={'100%'}>
             <VStack
+              h={'100%'}
               align={'flex-start'}
-              gap={'1rem'}>
+              justify={'space-between'}>
+              <Box mb={'3rem'}>
+                <Heading
+                  color={'purple.50'}
+                  size={'md'}
+                  mb={'1rem'}>
+                  Transform your finances with chat <br />– budgeting made so
+                  simple, it feels like talking to a friend.
+                </Heading>
+                <Link href='/auth/login'>
+                  <Button colorScheme={'gray'}>Get started</Button>
+                </Link>
+              </Box>
+
               <Link
-                href='/auth/login'
-                mb={'3rem'}>
-                <Button colorScheme={'teal'}>Login</Button>
+                fontSize={'0.85rem'}
+                href='/privacy'>
+                Privacy Policy
               </Link>
-              <Link href='/privacy'>Privacy Policy</Link>
-              <Link href='/terms'>Terms of Service</Link>
+              <Link
+                fontSize={'0.85rem'}
+                href='/terms'>
+                Terms of Service
+              </Link>
             </VStack>
           </DrawerBody>
         </DrawerContent>
