@@ -48,25 +48,33 @@ export default function Transactions() {
           justify={'space-between'}
           align={'center'}>
           <Heading size={'sm'}>All transactions</Heading>
-          <Button
-            onClick={() => onOpen()}
-            colorScheme={'purple'}
-            size={'xs'}>
-            + New Transaction
-          </Button>
+          {transactions && (
+            <Button
+              onClick={() => onOpen()}
+              colorScheme={'purple'}
+              size={'xs'}>
+              + New Transaction
+            </Button>
+          )}
         </Flex>
       </Container>
-      <TableContainer
-        pt={'1rem'}
-        pl={'1rem'}>
-        {isLoading && (
-          <LoadingDiv
-            id={'budget'}
-            isLoading={isLoading}
-          />
-        )}
-        {transactions && <TransactionsList transactions={transactions} />}
-      </TableContainer>
+      <Container
+        maxW={'1100px'}
+        p={0}>
+        <TableContainer
+          pt={'1rem'}
+          pl={{ base: '1rem', md: 0 }}>
+          {isLoading && (
+            <Box m={'0 auto'}>
+              <LoadingDiv
+                id={'budget'}
+                isLoading={isLoading}
+              />
+            </Box>
+          )}
+          {transactions && <TransactionsList transactions={transactions} />}
+        </TableContainer>
+      </Container>
     </Box>
   );
 }

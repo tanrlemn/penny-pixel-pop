@@ -57,15 +57,14 @@ export default function Totals({ title, totals, color }) {
   return (
     <Box
       position={'sticky'}
+      m={'0 auto'}
+      maxW={'900px'}
       left={'0'}
       mb={'1rem'}
       p={'1rem 0'}
-      w={'100%'}>
+      pt={'2rem'}>
       <Flex
         mb={'1rem'}
-        position={'sticky'}
-        maxW={'fit-content'}
-        left={'0'}
         align={'center'}
         gap={'1rem'}>
         <Tag
@@ -81,7 +80,7 @@ export default function Totals({ title, totals, color }) {
           fontSize={'0.8rem'}
           color={'gray.500'}>
           <Tr>
-            <Th w={'full'}>
+            <Th>
               <DataTitle>{formattedTotals.income.title}</DataTitle>
             </Th>
             <Td isNumeric>

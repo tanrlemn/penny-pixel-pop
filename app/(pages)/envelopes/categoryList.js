@@ -1,5 +1,5 @@
 // hooks
-import { useTransactionsDrawer } from '@/app/_lib/hooks/useTransactions';
+import { useEnvelopeDrawer } from '@/app/_lib/hooks/useEnvelopes';
 
 // chakra-ui
 import {
@@ -16,15 +16,33 @@ import {
 } from '@chakra-ui/react';
 
 // local components
-import TransactionItem from './transactionItem';
+import EnvelopeItem from './envelopeItem';
 
-export default function TransactionsList({ transactions }) {
-  const { onOpen } = useTransactionsDrawer();
+export default function CategoryList({ category, envelopes, color }) {
+  const { onOpen } = useEnvelopeDrawer();
   return (
     <Box
+      m={'0 auto'}
       mb={'1rem'}
       p={'1rem 0'}
       w={'max-content'}>
+      <Flex
+        mb={'1rem'}
+        position={'sticky'}
+        maxW={'fit-content'}
+        left={'0'}
+        align={'center'}
+        gap={'1rem'}>
+        <Tag
+          size={'sm'}
+          colorScheme={color}>
+          {category}
+        </Tag>
+        <Text fontSize={'0.75rem'}>
+          {envelopes.length} envelope
+          {envelopes.length === 0 || envelopes.length > 1 ? 's' : ''}
+        </Text>
+      </Flex>
       <Table
         variant='simple'
         size={'sm'}>
@@ -36,37 +54,41 @@ export default function TransactionsList({ transactions }) {
               <DataTitle>Envelope name</DataTitle>
             </Th>
             <Th isNumeric>
+              <DataTitle>Budget amount</DataTitle>
+            </Th>
+            <Th isNumeric>
               <DataTitle>Amount spent</DataTitle>
             </Th>
-            <Th>
-              <DataTitle>Date</DataTitle>
+            <Th isNumeric>
+              <DataTitle>Amount left</DataTitle>
             </Th>
             <Th>
-              <DataTitle>Note</DataTitle>
+              <DataTitle>Category</DataTitle>
             </Th>
           </Tr>
         </Thead>
         <Tbody>
-          {transactions.length > 0 ? (
-            transactions.map((txn) => {
+          {envelopes.length > 0 ? (
+            envelopes.map((envelope) => {
               return (
-                <TransactionItem
-                  key={txn.id}
-                  txn={txn}
+                <EnvelopeItem
+                  key={envelope.id}
+                  envelope={envelope}
+                  color={color}
                 />
               );
             })
           ) : (
             <Tr color={'gray.600'}>
               <Td position={'absolute'}>
-                <DataText>Empty. Click to add a transaction.</DataText>
+                <DataText>Empty. Click to add an envelope.</DataText>
               </Td>
               <Td
                 borderBottom={'none'}
                 pb={'1.5rem'}></Td>
             </Tr>
           )}
-          <Tr onClick={onOpen}>
+          <Tr onClick={() => onOpen(category)}>
             <Td
               color={'gray.500'}
               position={'sticky'}
