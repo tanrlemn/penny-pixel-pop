@@ -2,6 +2,10 @@ import { NextResponse, NextRequest } from 'next/server';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const { searchParams } = request.nextUrl;
+  const code = searchParams.get('code');
+
   if (process.env.MAINTENANCE_MODE === 'true') {
     return NextResponse.redirect(new URL('/maintenance', request.url));
   }
@@ -58,7 +62,22 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user && pathname.includes('/auth')) {
+    return NextResponse.redirect(new URL('/envelopes', request.url));
+  }
+
+  if (
+    !user &&
+    !pathname.includes('/auth') &&
+    !pathname.includes('/maintenance') &&
+    !code
+  ) {
+    return NextResponse.redirect(new URL('/auth/login', request.url));
+  }
 
   return response;
 }

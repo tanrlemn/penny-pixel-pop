@@ -12,8 +12,7 @@ import Logo from './logo';
 export default function LinkedLogo({ link = '/', logo = 'pill' }) {
   const isMobile = useIsMobile();
   const widths = {
-    pill: isMobile ? '5rem' : '6rem',
-    'pill-text': isMobile ? '10rem' : '12rem',
+    pill: isMobile ? '3rem' : '3rem',
   };
 
   return (

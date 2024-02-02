@@ -1,10 +1,13 @@
 'use client';
 
+// recoil
+import { useRecoilValue, useRecoilState } from 'recoil';
+import { enrichedTransactionsSelector } from '@/app/_state/selectors';
+import { isloadingState } from '@/app/_state/atoms';
+
 // hooks
-import {
-  useTransactions,
-  useTransactionsDrawer,
-} from '@/app/_lib/hooks/useTransactions';
+import { useEffect } from 'react';
+import { useTransactionsDrawer } from '@/app/_lib/hooks/useTransactions';
 
 // chakra-ui
 import {
@@ -21,8 +24,16 @@ import TransactionsList from './transactionsList';
 import LoadingDiv from '@/app/_components/interactive/loadingDiv';
 
 export default function Transactions() {
-  const { transactions } = useTransactions();
-  const { onTxnOpen } = useTransactionsDrawer();
+  const transactions = useRecoilValue(enrichedTransactionsSelector);
+  const [isLoading, setIsLoading] = useRecoilState(isloadingState);
+
+  const { onOpen } = useTransactionsDrawer();
+
+  useEffect(() => {
+    if (transactions) {
+      setIsLoading(false);
+    }
+  }, [transactions, setIsLoading]);
 
   return (
     <Box
@@ -38,7 +49,7 @@ export default function Transactions() {
           align={'center'}>
           <Heading size={'sm'}>All transactions</Heading>
           <Button
-            onClick={() => onTxnOpen()}
+            onClick={() => onOpen()}
             colorScheme={'purple'}
             size={'xs'}>
             + New Transaction
@@ -48,11 +59,13 @@ export default function Transactions() {
       <TableContainer
         pt={'1rem'}
         pl={'1rem'}>
-        {transactions ? (
-          <TransactionsList transactions={transactions} />
-        ) : (
-          <LoadingDiv />
+        {isLoading && (
+          <LoadingDiv
+            id={'budget'}
+            isLoading={isLoading}
+          />
         )}
+        {transactions && <TransactionsList transactions={transactions} />}
       </TableContainer>
     </Box>
   );

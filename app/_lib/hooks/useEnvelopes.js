@@ -1,243 +1,127 @@
-'use client';
-
-// recoil
+import { useEffect, useState, useCallback } from 'react';
+import { useRecoilValue, useResetRecoilState, useRecoilState } from 'recoil';
 import {
-  atom,
-  useRecoilState,
-  useRecoilValue,
-  useResetRecoilState,
-} from 'recoil';
-
-// hooks
-import { useEffect, useState } from 'react';
-import { useUser } from '@/app/_lib/hooks/useUser';
-import { useTransactions } from '@/app/_lib/hooks/useTransactions';
-
-export const envelopesState = atom({
-  key: 'envelopesState',
-  default: null,
-});
-
-export const categoryListState = atom({
-  key: 'categoryListState',
-  default: null,
-});
-
-const currentEnvelopeState = atom({
-  key: 'currentEnvelopeState',
-  default: {
-    id: null,
-    envelope_name: '',
-    budget_amount: 0,
-    category: 'Necessities',
-  },
-});
-
-export const categories = [
-  { name: 'Necessities', color: 'yellow' },
-  { name: 'Pressing', color: 'orange' },
-  { name: 'Savings', color: 'purple' },
-  { name: 'Discretionary', color: 'blue' },
-  { name: 'Income', color: 'green' },
-];
+  envelopesState,
+  envelopeNameWidthState,
+  budgetAmountWidthState,
+  amountSpentWidthState,
+  amountLeftWidthState,
+  categoryWidthState,
+  envelopeDrawerState,
+  currentEnvelopeState,
+  userState,
+} from '@/app/_state/atoms';
+import { categories } from '@/app/_state/constants';
+import {
+  createUpdateEnvelopeAPI,
+  deleteEnvelopeAPI,
+  updateEnvelopeCategoryAPI,
+  fetchEnvelopesAPI,
+} from '../services/envelopeService';
 
 export function useEnvelopes() {
-  const { userData } = useUser();
-  const { transactions } = useTransactions();
+  const user = useRecoilValue(userState);
   const [envelopes, setEnvelopes] = useRecoilState(envelopesState);
-  const [categoryList, setCategoryList] = useRecoilState(categoryListState);
+
   const [currentEnvelope, setCurrentEnvelope] =
     useRecoilState(currentEnvelopeState);
-  const resetEnvelope = useResetRecoilState(currentEnvelopeState);
 
-  const [trigger, setTrigger] = useState(false);
+  const [categoryList, setCategoryList] = useState([]);
 
   useEffect(() => {
-    const getEnvelopes = async () => {
-      if (envelopes === null) {
-        const res = await fetch('/api/envelopes/getEnvelopes');
+    const fetchEnvelopes = async () => {
+      if (!user) return;
+      const data = await fetchEnvelopesAPI();
+      setEnvelopes(data);
 
-        const { data, error } = await res.json();
+      const categorizedEnvelopes = categories.map((category) => ({
+        ...category,
+        envelopes: data.filter(
+          (envelope) => envelope.category === category.name
+        ),
+      }));
 
-        if (error) {
-          console.error(error);
-        }
+      setCategoryList(categorizedEnvelopes);
+    };
 
-        const formattedData = data.map((envelope) => {
-          return {
-            ...envelope,
-            transactions: [],
-            totalSpent: 0,
-            amountLeft: envelope.budget_amount,
-          };
+    envelopes === null && fetchEnvelopes();
+  }, [user, setEnvelopes, envelopes]);
+
+  const resetCurrentEnvelope = useResetRecoilState(currentEnvelopeState);
+
+  const updateEnvelopeCategory = useCallback(
+    async ({ envelopeId, category, setIsLoading }) => {
+      setIsLoading(true);
+      try {
+        await updateEnvelopeCategoryAPI({
+          envelopeId,
+          category,
         });
 
-        setEnvelopes(formattedData);
+        const data = await fetchEnvelopesAPI();
+        setEnvelopes(data);
+
+        resetCurrentEnvelope();
+      } catch (error) {
+        console.error('Envelope update category error:', error);
+      } finally {
+        setIsLoading(false);
       }
-    };
+    },
+    [resetCurrentEnvelope, setEnvelopes]
+  );
 
-    const getCategoryList = async () => {
-      const envelopesWithTransactions = envelopes.map((envelope) => {
-        if (transactions === null) {
-          return {
-            ...envelope,
-            transactions: [],
-            totalSpent: 0,
-            amountLeft: envelope.budget_amount,
-          };
-        }
+  const createUpdateEnvelope = useCallback(
+    async ({ envelopeId, envelope, setIsLoading }) => {
+      setIsLoading(true);
+      try {
+        envelopeId
+          ? await createUpdateEnvelopeAPI({
+              envelopeId,
+              envelope,
+              setIsLoading,
+            })
+          : await createUpdateEnvelopeAPI({ envelope, setIsLoading });
 
-        const transactionsForEnvelope = transactions.filter(
-          (transaction) => transaction.envelope_id === envelope.id
-        );
+        const data = await fetchEnvelopesAPI();
+        setEnvelopes(data);
 
-        const totalSpent = transactionsForEnvelope.reduce(
-          (acc, transaction) => acc + transaction.amount,
-          0
-        );
+        resetCurrentEnvelope();
+      } catch (error) {
+        console.error('Envelope update/create error:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [resetCurrentEnvelope, setEnvelopes]
+  );
 
-        const amountLeft = envelope.budget_amount - totalSpent;
+  const deleteEnvelope = useCallback(
+    async ({ envelopeId }) => {
+      try {
+        await deleteEnvelopeAPI({ envelopeId });
 
-        return {
-          ...envelope,
-          transactions: transactionsForEnvelope,
-          totalSpent,
-          amountLeft,
-        };
-      });
+        const updateEnvelopes = await fetchEnvelopesAPI();
+        setEnvelopes(updateEnvelopes);
 
-      const list = categories.map((category) => {
-        return {
-          name: category.name,
-          envelopes: envelopesWithTransactions.filter(
-            (envelope) => envelope.category === category.name
-          ),
-          color: category.color,
-        };
-      });
-      setCategoryList(
-        list.sort(
-          (a, b) => (a.envelopes.length === 0) - (b.envelopes.length === 0)
-        )
-      );
-    };
-
-    userData !== null && envelopes === null && getEnvelopes();
-    envelopes !== null &&
-      transactions !== null &&
-      categoryList === null &&
-      getCategoryList();
-
-    if (trigger) {
-      setTrigger(false);
-      setEnvelopes(null);
-      setCategoryList(null);
-    }
-  }, [
-    currentEnvelope,
-    envelopes,
-    setEnvelopes,
-    userData,
-    setCategoryList,
-    transactions,
-    categoryList,
-    trigger,
-  ]);
-
-  const updateEnvelopeCategory = async (envelopeId, category) => {
-    await fetch('/api/envelopes/updateEnvelopeCategory', {
-      method: 'POST',
-      body: JSON.stringify({
-        envelopeId,
-        category,
-      }),
-    });
-
-    setTrigger(true);
-  };
-
-  const createUpdateNewEnvelope = async (id, newEnvelope, setIsLoading) => {
-    const { envelope_name, budget_amount } = newEnvelope;
-
-    id
-      ? await fetch('/api/envelopes/updateEnvelope', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            id,
-            envelope_name,
-            budget_amount,
-            category: currentEnvelope.category,
-          }),
-        })
-      : await fetch('/api/envelopes/createEnvelope', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            envelope_name,
-            budget_amount,
-            category: currentEnvelope.category,
-          }),
-        });
-
-    setTrigger(true);
-    setIsLoading(false);
-  };
-
-  const deleteEnvelope = async (id) => {
-    await fetch('/api/envelopes/deleteEnvelope', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id,
-      }),
-    });
-
-    setTrigger(true);
-  };
+        resetCurrentEnvelope();
+      } catch (error) {
+        console.error('Envelope delete error:', error);
+      }
+    },
+    [resetCurrentEnvelope, setEnvelopes]
+  );
 
   return {
-    envelopes,
     categoryList,
     updateEnvelopeCategory,
-    createUpdateNewEnvelope,
+    createUpdateEnvelope,
     deleteEnvelope,
     currentEnvelope,
     setCurrentEnvelope,
-    resetEnvelope,
+    resetCurrentEnvelope,
   };
 }
-
-export const envelopeNameWidthState = atom({
-  key: 'envelopeNameWidthState',
-  default: 0,
-});
-
-export const budgetAmountWidthState = atom({
-  key: 'budgetAmountWidthState',
-  default: 0,
-});
-
-export const amountSpentWidthState = atom({
-  key: 'amountSpentWidthState',
-  default: 0,
-});
-
-export const amountLeftWidthState = atom({
-  key: 'amountLeftWidthState',
-  default: 0,
-});
-
-export const categoryWidthState = atom({
-  key: 'categoryWidthState',
-  default: 0,
-});
 
 export function useEnvelopeWidths() {
   const [envelopeNameWidth, setEnvelopeNameWidth] = useRecoilState(
@@ -267,16 +151,20 @@ export function useEnvelopeWidths() {
   };
 }
 
-export const newEnvelopeDrawerState = atom({
-  key: 'newEnvelopeDrawerState',
-  default: false,
-});
-
 export function useEnvelopeDrawer() {
-  const [isOpen, setIsOpen] = useRecoilState(newEnvelopeDrawerState);
+  const [isOpen, setIsOpen] = useRecoilState(envelopeDrawerState);
+  const resetCurrentEnvelope = useResetRecoilState(currentEnvelopeState);
+  const [currentEnvelope, setCurrentEnvelope] =
+    useRecoilState(currentEnvelopeState);
 
-  const onClose = () => setIsOpen(false);
-  const onOpen = () => {
+  const onClose = () => {
+    setIsOpen(false);
+    resetCurrentEnvelope();
+  };
+  const onOpen = (category) => {
+    if (category) {
+      setCurrentEnvelope({ ...currentEnvelope, category });
+    }
     setIsOpen(true);
   };
 

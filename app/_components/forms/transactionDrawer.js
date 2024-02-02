@@ -1,12 +1,16 @@
 'use client';
 
+// recoil
+import { currentTxnState, envelopesState } from '@/app/_state/atoms';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { currentTransactionSelector } from '@/app/_state/selectors';
+
 // hooks
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   useTransactionsDrawer,
   useTransactions,
 } from '@/app/_lib/hooks/useTransactions';
-import { useEnvelopes } from '@/app/_lib/hooks/useEnvelopes';
 
 // chakra-ui
 import {
@@ -31,21 +35,25 @@ import {
 import DatePicker from '@/app/_components/forms/datePicker';
 
 export default function TransactionDrawer() {
-  const { envelopes } = useEnvelopes();
-  const { currentTxn, createUpdateTxn, setCurrentTxn, resetTxn } =
-    useTransactions();
-  const { isTxnOpen, onTxnClose } = useTransactionsDrawer();
+  const envelopes = useRecoilValue(envelopesState);
+  const { createUpdateTransaction, deleteTransaction } = useTransactions();
+  const setCurrentTxn = useSetRecoilState(currentTxnState);
+  const currentTxn = useRecoilValue(currentTransactionSelector);
+  const { isOpen, onClose } = useTransactionsDrawer();
 
   const [isLoading, setIsLoading] = useState(false);
 
   const [date, setDate] = useState(new Date());
 
+  useEffect(() => {
+  }, [currentTxn]);
+
   return (
     <Drawer
-      isOpen={isTxnOpen}
+      isOpen={isOpen}
       placement='bottom'
       size={'lg'}
-      onClose={onTxnClose}>
+      onClose={onClose}>
       <DrawerOverlay />
       <DrawerContent minH={'80vh'}>
         <DrawerCloseButton />
@@ -106,10 +114,10 @@ export default function TransactionDrawer() {
                     <DatePicker
                       date={date}
                       setDate={setDate}
-                      setCurrent={(date) => {
+                      setCurrent={(newDate) => {
                         setCurrentTxn({
                           ...currentTxn,
-                          date: date,
+                          date: newDate,
                         });
                       }}
                     />
@@ -134,9 +142,12 @@ export default function TransactionDrawer() {
                 <Button
                   onClick={() => {
                     setIsLoading(true);
-                    createUpdateTxn(currentTxn.id, currentTxn, setIsLoading);
-                    resetTxn();
-                    onTxnClose();
+                    createUpdateTransaction({
+                      transactionId: currentTxn.id,
+                      transaction: currentTxn,
+                      setIsLoading,
+                    });
+                    onClose();
                   }}
                   isLoading={isLoading}
                   colorScheme={'purple'}

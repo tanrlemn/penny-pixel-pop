@@ -2,14 +2,14 @@
 const images = ['https://i.imgur.com/BFWf7kuh.jpg'];
 
 // local components
-import Budget from './budget';
+import Envelopes from './envelopes';
 
 // metadata
 export const metadata = {
-  title: 'Budget',
+  title: 'Envelopes',
   description: 'List of current envelopes with allocated and spent amounts.',
   openGraph: {
-    title: 'Budget',
+    title: 'Envelope List - Budget App',
     images: images,
     description: 'List of current envelopes with allocated and spent amounts.',
     locale: 'en_US',
@@ -18,5 +18,5 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <Budget />;
+  return <Envelopes />;
 }

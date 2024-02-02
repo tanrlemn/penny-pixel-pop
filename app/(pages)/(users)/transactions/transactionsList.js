@@ -1,3 +1,6 @@
+// hooks
+import { useTransactionsDrawer } from '@/app/_lib/hooks/useTransactions';
+
 // chakra-ui
 import {
   Box,
@@ -16,6 +19,7 @@ import {
 import TransactionItem from './transactionItem';
 
 export default function TransactionsList({ transactions }) {
+  const { onOpen } = useTransactionsDrawer();
   return (
     <Box
       mb={'1rem'}
@@ -62,7 +66,7 @@ export default function TransactionsList({ transactions }) {
                 pb={'1.5rem'}></Td>
             </Tr>
           )}
-          <Tr>
+          <Tr onClick={onOpen}>
             <Td
               color={'gray.500'}
               position={'sticky'}

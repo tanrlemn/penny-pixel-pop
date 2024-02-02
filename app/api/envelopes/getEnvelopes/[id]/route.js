@@ -14,7 +14,7 @@ export async function GET(request, { params }) {
     .eq('id', id);
 
   if (error) {
-    console.log(error);
+    console.error(error);
   }
 
   return NextResponse.json({ data });

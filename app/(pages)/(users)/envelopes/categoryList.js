@@ -18,7 +18,7 @@ import {
 // local components
 import EnvelopeItem from './envelopeItem';
 
-export default function CategoryList({ name, envelopes, color }) {
+export default function CategoryList({ category, envelopes, color }) {
   const { onOpen } = useEnvelopeDrawer();
   return (
     <Box
@@ -35,7 +35,7 @@ export default function CategoryList({ name, envelopes, color }) {
         <Tag
           size={'sm'}
           colorScheme={color}>
-          {name}
+          {category}
         </Tag>
         <Text fontSize={'0.75rem'}>
           {envelopes.length} envelope
@@ -55,10 +55,10 @@ export default function CategoryList({ name, envelopes, color }) {
             <Th isNumeric>
               <DataTitle>Budget amount</DataTitle>
             </Th>
-            <Th>
+            <Th isNumeric>
               <DataTitle>Amount spent</DataTitle>
             </Th>
-            <Th>
+            <Th isNumeric>
               <DataTitle>Amount left</DataTitle>
             </Th>
             <Th>
@@ -87,7 +87,7 @@ export default function CategoryList({ name, envelopes, color }) {
                 pb={'1.5rem'}></Td>
             </Tr>
           )}
-          <Tr onClick={() => onOpen(name)}>
+          <Tr onClick={() => onOpen(category)}>
             <Td
               color={'gray.500'}
               position={'sticky'}

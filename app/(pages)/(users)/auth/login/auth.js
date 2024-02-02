@@ -5,32 +5,34 @@ import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { createClient } from '@/app/_lib/utils/supabase/client';
 
+// Recoil
+import { userState } from '@/app/_state/atoms';
+import { useRecoilValue } from 'recoil';
+
 // hooks
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useUser } from '@/app/_lib/hooks/useUser';
-import { useQueryState } from 'nuqs';
 
 // chakra-ui
 import { Box, Heading, Text, Flex, Link } from '@chakra-ui/react';
 
 // local components
 import AuthSplashSection from './splashSection';
-import LinkedLogo from '../../../../_components/branding/linkedLogo';
+import LinkedLogo from '@/app/_components/branding/linkedLogo';
 
 export default function AuthUI() {
   const router = useRouter();
 
-  const [signedOut, setSignedOut] = useQueryState('signedOut');
+  const user = useRecoilValue(userState);
+  const loggedIn = !!user;
 
   const supabase = createClient();
-  const { userData } = useUser();
 
   useEffect(() => {
-    if (userData !== null && !signedOut) {
-      router.push('/dashboard');
+    if (loggedIn) {
+      router.push('/envelopes');
     }
-  }, [router, userData, signedOut]);
+  }, [router, loggedIn]);
 
   return (
     <>
@@ -49,7 +51,7 @@ export default function AuthUI() {
           <Box
             mb={'5rem'}
             mt={'5rem'}>
-            <LinkedLogo logo='pill-text' />
+            <LinkedLogo />
           </Box>
           <Heading
             size={'lg'}

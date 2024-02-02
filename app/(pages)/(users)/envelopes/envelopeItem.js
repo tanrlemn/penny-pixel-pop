@@ -1,13 +1,10 @@
 // hooks
 import { useRef, useEffect, useState } from 'react';
-import {
-  categories,
-  useEnvelopes,
-  useEnvelopeWidths,
-} from '@/app/_lib/hooks/useEnvelopes';
+import { useEnvelopes, useEnvelopeWidths } from '@/app/_lib/hooks/useEnvelopes';
 
 // utils
 import { formatCurrency } from '@/app/_lib/utils/currencyFormater';
+import { categories } from '@/app/_state/constants';
 
 // chakra-ui
 import { Select, Td, Text, Tr } from '@chakra-ui/react';
@@ -126,7 +123,11 @@ export default function EnvelopeItem({ envelope, color }) {
           <Select
             onChange={(e) => {
               setIsLoading(true);
-              updateEnvelopeCategory(envelope.id, e.target.value);
+              updateEnvelopeCategory({
+                envelopeId: envelope.id,
+                category: e.target.value,
+                setIsLoading,
+              });
             }}
             variant={'filled'}
             bg={`${color}.100`}
