@@ -10,7 +10,7 @@ import { Box } from '@chakra-ui/react';
 
 export default function Home() {
   const router = useRouter();
-  const code = useQueryState('code');
+  const [code] = useQueryState('code');
 
   useEffect(() => {
     if (code && code !== 'undefined' && code !== null) {

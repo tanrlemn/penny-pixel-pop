@@ -12,6 +12,7 @@ import { useRecoilValue } from 'recoil';
 // hooks
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useQueryState } from 'nuqs';
 
 // chakra-ui
 import { Box, Heading, Text, Flex, Link } from '@chakra-ui/react';
@@ -21,6 +22,7 @@ import AuthSplashSection from './splashSection';
 import LinkedLogo from '@/app/_components/branding/linkedLogo';
 
 export default function AuthUI() {
+  const [redirectTo] = useQueryState('redirectTo');
   const router = useRouter();
 
   const user = useRecoilValue(userState);
@@ -30,9 +32,14 @@ export default function AuthUI() {
 
   useEffect(() => {
     if (loggedIn) {
-      router.push('/envelopes');
+      if (redirectTo && redirectTo !== 'undefined' && redirectTo !== null) {
+        console.log('redirecting to', redirectTo);
+        router.push(redirectTo);
+      } else {
+        router.push('/envelopes');
+      }
     }
-  }, [router, loggedIn]);
+  }, [router, loggedIn, redirectTo]);
 
   return (
     <>
