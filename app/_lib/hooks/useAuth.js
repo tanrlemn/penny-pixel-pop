@@ -3,14 +3,12 @@
 import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { userState, profileState } from '@/app/_state/atoms';
-import { useRouter } from 'next/navigation';
 import { createClient } from '@/app/_lib/utils/supabase/client';
 
 export const useAuth = () => {
   const setUser = useSetRecoilState(userState);
   const setProfile = useSetRecoilState(profileState);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
   const supabase = createClient();
 
   useEffect(() => {
@@ -38,18 +36,7 @@ export const useAuth = () => {
 
       setLoading(false);
     });
-
-    setLoading(false);
   }, [setUser, setProfile, supabase.auth]);
 
-  const signOut = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    setProfile(null);
-    setLoading(true);
-    router.replace('/auth/login');
-    setLoading(false);
-  };
-
-  return { loading, signOut };
+  return { loading };
 };

@@ -4,12 +4,17 @@
 import { useIsMobile } from '@/app/_lib/hooks/useIsMobile';
 
 // chakra-ui
-import { Link } from '@chakra-ui/react';
+import { Flex, Heading, Link } from '@chakra-ui/react';
 
 // local components
 import Logo from './logo';
 
-export default function LinkedLogo({ link = '/', logo = 'pill' }) {
+export default function LinkedLogo({
+  link = '/',
+  logo = 'pill',
+  text = false,
+  color = 'purple.500',
+}) {
   const isMobile = useIsMobile();
   const widths = {
     pill: isMobile ? '3rem' : '3rem',
@@ -17,10 +22,21 @@ export default function LinkedLogo({ link = '/', logo = 'pill' }) {
 
   return (
     <Link href={link}>
-      <Logo
-        logo={logo}
-        size={widths[logo]}
-      />
+      <Flex
+        align={'center'}
+        gap={'0.5rem'}>
+        <Logo
+          logo={logo}
+          size={widths[logo]}
+        />
+        {text && (
+          <Heading
+            size={'md'}
+            color={color}>
+            Penny Pixel Pop
+          </Heading>
+        )}
+      </Flex>
     </Link>
   );
 }

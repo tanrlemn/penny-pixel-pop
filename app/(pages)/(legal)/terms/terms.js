@@ -5,20 +5,13 @@ import { Box, Container, Heading, Link, Tag, Text } from '@chakra-ui/react';
 
 export default function Terms() {
   return (
-    <Container p={'5rem 1rem'}>
+    <Container p={'3rem 1rem'}>
       <Box mb={'2rem'}>
-        <Tag
-          size={'sm'}
-          textTransform={'uppercase'}
-          colorScheme={'purple'}
-          maxW={'fit-content'}>
-          Terms
-        </Tag>
         <Heading
           mb={'1rem'}
           size={'2xl'}
           fontWeight={800}>
-          Terms of Service for Thought Soda
+          Terms of Service for Penny Pixel Pop
         </Heading>
       </Box>
 
@@ -29,13 +22,12 @@ export default function Terms() {
           Introduction
         </Heading>
         <Text mb={'0.5rem'}>
-          Welcome to Thought Soda! These Terms of Service (&quot;Terms&quot;)
-          govern your use of the Thought Soda website and services
-          (&quot;Service&quot;).
+          Welcome to Penny Pixel Pop. These terms govern your use of our app and
+          services, providing important information about your legal rights.
         </Text>
         <Text>
-          By accessing or using our Service, you agree to be bound by these
-          Terms and our <Link href='/privacy'>Privacy Policy</Link>.
+          By accessing or using Penny Pixel Pop, you agree to be bound by these
+          terms. If you do not agree, you should not use the app.
         </Text>
       </Box>
 
@@ -43,18 +35,12 @@ export default function Terms() {
         <Heading
           mb={'0.5rem'}
           size={'md'}>
-          Use of Service
+          Use License
         </Heading>
-        <Text mb={'0.5rem'}>
-          The Service is intended for users who are at least 18 years old.
-        </Text>
-        <Text mb={'0.5rem'}>
-          Thought Soda provides a platform for creative workshops and
-          collaboration.
-        </Text>
         <Text>
-          Users must register for an account to access certain features of the
-          Service.
+          We grant you a limited, non-exclusive license to use Penny Pixel Pop
+          for personal, non-commercial purposes. This license does not include
+          any right to resell the app&apos;s content or services.
         </Text>
       </Box>
 
@@ -64,9 +50,10 @@ export default function Terms() {
           size={'md'}>
           User Responsibilities
         </Heading>
-        <Text mb={'0.5rem'}>
-          Users are responsible for their conduct and any content they submit to
-          the Service.
+        <Text>
+          Users are responsible for maintaining the security of your account and
+          for all activities that occur under your account. You agree to use
+          Penny Pixel Pop lawfully and respect the rights of others.
         </Text>
         <Text>
           Prohibited activities include violating laws, infringing on
@@ -80,9 +67,9 @@ export default function Terms() {
           Intellectual Property
         </Heading>
         <Text>
-          Thought Soda and its original content, features, and functionality are
-          owned by Thought Soda and are protected by copyright, trademark, and
-          other intellectual property laws.
+          The content and services provided by Penny Pixel Pop, including all
+          software, text, and graphics, are protected by intellectual property
+          laws and are owned by us or our licensors.
         </Text>
       </Box>
       <Box mb={'2rem'}>
@@ -92,33 +79,47 @@ export default function Terms() {
           Termination
         </Heading>
         <Text>
-          We may terminate or suspend access to our Service immediately, without
-          prior notice, for any breach of these Terms.
+          We may terminate your access to the app without notice if you violate
+          these terms.
         </Text>
       </Box>
       <Box mb={'2rem'}>
         <Heading
           mb={'0.5rem'}
           size={'md'}>
-          Limitation of Liability
+          Disclaimers and Limitations of Liability
         </Heading>
         <Text>
-          Thought Soda is not liable for any direct, indirect, incidental, or
-          consequential damages resulting from the use or inability to use the
-          Service.
+          Penny Pixel Pop is provided &quot;as is.&quot; We disclaim all
+          warranties and limit our liability to the maximum extent permitted by
+          law.
         </Text>
       </Box>
+
       <Box mb={'2rem'}>
         <Heading
           mb={'0.5rem'}
           size={'md'}>
-          Changes to Terms
+          Dispute Resolution
         </Heading>
         <Text>
-          We reserve the right to modify or replace these Terms at any time. We
-          will provide notice of any changes on our platform.
+          Any disputes related to these terms will be resolved through binding
+          arbitration or in small claims court, subject to applicable law.
         </Text>
       </Box>
+
+      <Box mb={'2rem'}>
+        <Heading
+          mb={'0.5rem'}
+          size={'md'}>
+          Modifications to the Terms
+        </Heading>
+        <Text>
+          We reserve the right to modify these terms at any time. Your continued
+          use of the app constitutes acceptance of the new terms.
+        </Text>
+      </Box>
+
       <Box mb={'2rem'}>
         <Heading
           mb={'0.5rem'}
@@ -128,8 +129,8 @@ export default function Terms() {
         <Text>
           If you have any questions about these Terms of Service, please contact
           us at{' '}
-          <Link href='mailto:support@thoughtsoda.com'>
-            support@thoughtsoda.com
+          <Link href='mailto:support@pennypixelpop.com'>
+            support@pennypixelpop.com
           </Link>
           .
         </Text>

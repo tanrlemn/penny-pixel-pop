@@ -3,6 +3,9 @@ import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
+// images
+const images = ['https://i.imgur.com/4KQQFag.jpg'];
+
 // providers
 import { RecoilRootProvider } from './_lib/context/RecoilRoot';
 import { ThemeProvider } from './_lib/context/ThemeProvider';
@@ -46,7 +49,7 @@ export const metadata = {
       template: APP_TITLE_TEMPLATE,
     },
     description: APP_DESCRIPTION,
-    images: '/images/og-image.png',
+    images: images,
   },
 };
 

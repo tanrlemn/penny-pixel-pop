@@ -1,12 +1,13 @@
 'use client';
 
-// Next.js hooks
+// hooks
 import { usePathname, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useAuth } from '@/app/_lib/hooks/useAuth';
 
 // Recoil
 import { useRecoilValue } from 'recoil';
 import { userState, profileState } from '@/app/_state/atoms';
-import { useAuth } from '@/app/_lib/hooks/useAuth';
 
 // Supabase
 import { createClient } from '@/app/_lib/utils/supabase/client';
@@ -21,11 +22,10 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  Link,
 } from '@chakra-ui/react';
 
 // Icons
-import { LogOut, MoreHorizontal, Settings } from 'lucide-react';
+import { LogOut, MoreHorizontal } from 'lucide-react';
 
 // Local components
 import MenuDrawer from './menuDrawer';
@@ -34,7 +34,7 @@ import LinkedLogo from '../_components/branding/linkedLogo';
 import Logo from '../_components/branding/logo';
 
 export default function Navbar() {
-  useAuth();
+  const { loading } = useAuth();
 
   const pathname = usePathname();
   const user = useRecoilValue(userState);
@@ -45,6 +45,27 @@ export default function Navbar() {
 
   const isMaintenance = pathname === '/maintenance';
   const isAuth = pathname.includes('/auth');
+  const isUserPage =
+    pathname.includes('/envelopes') ||
+    pathname.includes('/settings') ||
+    pathname.includes('/dashboard') ||
+    pathname.includes('/transactions');
+
+  useEffect(() => {
+    if (!loading && !loggedIn && !isAuth && isUserPage) {
+      console.log('redirecting to login');
+      router.replace('/auth/login?redirectTo=' + pathname);
+    }
+  }, [
+    loading,
+    user,
+    loggedIn,
+    router,
+    isAuth,
+    isMaintenance,
+    isUserPage,
+    pathname,
+  ]);
 
   const signOut = async () => {
     await supabase.auth.signOut({ scope: 'local' });
@@ -78,7 +99,6 @@ export default function Navbar() {
           <LoggedOutLayout />
         )}
       </Flex>
-      {!isMaintenance && !isAuth && <MenuTabs />}
     </Box>
   );
 }
@@ -107,6 +127,7 @@ function LoggedInLayout({ profile, signOut }) {
         </Box>
       </Flex>
       <UserMenu signOut={signOut} />
+      <MenuTabs />
     </>
   );
 }
@@ -114,7 +135,7 @@ function LoggedInLayout({ profile, signOut }) {
 function LoggedOutLayout() {
   return (
     <>
-      <LinkedLogo />
+      <LinkedLogo text={true} />
       <MenuDrawer />
     </>
   );

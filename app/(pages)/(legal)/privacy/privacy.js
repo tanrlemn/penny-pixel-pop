@@ -5,20 +5,13 @@ import { Box, Container, Heading, Link, Tag, Text } from '@chakra-ui/react';
 
 export default function Privacy() {
   return (
-    <Container p={'5rem 1rem'}>
+    <Container p={'3rem 1rem'}>
       <Box mb={'2rem'}>
-        <Tag
-          size={'sm'}
-          textTransform={'uppercase'}
-          colorScheme={'purple'}
-          maxW={'fit-content'}>
-          Policy
-        </Tag>
         <Heading
           mb={'1rem'}
           size={'2xl'}
           fontWeight={800}>
-          Privacy Policy for Thought Soda
+          Privacy Policy for Penny Pixel Pop
         </Heading>
       </Box>
       <Box mb={'2rem'}>
@@ -28,9 +21,9 @@ export default function Privacy() {
           Introduction
         </Heading>
         <Text>
-          Your privacy is important to us. This Privacy Policy explains how we
-          collect, use, disclose, and safeguard your information when you use
-          Thought Soda.
+          Welcome to Penny Pixel Pop. We are committed to protecting your
+          privacy and ensuring you understand how we collect, use, and share
+          your information.
         </Text>
       </Box>
       <Box mb={'2rem'}>
@@ -40,12 +33,15 @@ export default function Privacy() {
           Information Collection and Use
         </Heading>
         <Text mb={'0.75rem'}>
-          Personal Identification Information: We collect information that you
-          voluntarily provide when registering, such as name, email address, and
-          password.
+          We collect personal information you provide to us directly within the
+          app, such as your name, email address, and financial data for
+          budgeting purposes. We also automatically collect usage data to
+          improve app functionality.
         </Text>
         <Text>
-          Usage Data: We collect data on how the Service is accessed and used.
+          Your information is used to provide app services, personalize your
+          experience, and communicate important updates. We analyze usage data
+          to enhance app performance and user experience.
         </Text>
       </Box>
       <Box mb={'2rem'}>
@@ -122,8 +118,8 @@ export default function Privacy() {
         <Text>
           If you have any questions about this Privacy Policy, please contact us
           at{' '}
-          <Link href='mailto:support@thoughtsoda.com'>
-            support@thoughtsoda.com
+          <Link href='mailto:support@pennypixelpop.com'>
+            support@pennypixelpop.com
           </Link>
           .
         </Text>

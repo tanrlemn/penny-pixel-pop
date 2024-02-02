@@ -57,27 +57,26 @@ export default function MenuDrawer() {
           background={'purple.600'}>
           <DrawerCloseButton p={'2rem'} />
           <DrawerHeader>
-            <LinkedLogo />
+            <LinkedLogo
+              text
+              color='purple.100'
+            />
           </DrawerHeader>
 
           <DrawerBody
-            p={{ base: '0 2rem', md: '1rem 3rem' }}
+            p={{ base: '2rem', md: '2rem 3rem' }}
             w={'100%'}>
-            <Flex
-              w={'100%'}
-              h={'100%'}
-              flexDirection={{ base: 'column', md: 'row' }}
-              justify={'space-between'}>
-              <Flex gap={'2rem'}>
-                <Link href='/auth/login'>
-                  <Button colorScheme={'purple'}>Login</Button>
-                </Link>
-              </Flex>
-              <VStack>
-                <Link href='/privacy'>Privacy Policy</Link>
-                <Link href='/terms'>Terms of Service</Link>
-              </VStack>
-            </Flex>
+            <VStack
+              align={'flex-start'}
+              gap={'1rem'}>
+              <Link
+                href='/auth/login'
+                mb={'3rem'}>
+                <Button colorScheme={'teal'}>Login</Button>
+              </Link>
+              <Link href='/privacy'>Privacy Policy</Link>
+              <Link href='/terms'>Terms of Service</Link>
+            </VStack>
           </DrawerBody>
         </DrawerContent>
       </Drawer>

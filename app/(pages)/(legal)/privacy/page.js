@@ -1,5 +1,5 @@
 // images
-const images = ['https://i.imgur.com/BFWf7kuh.jpg'];
+const images = ['https://i.imgur.com/jZ6hSsX.jpg'];
 
 // local components
 import Privacy from './privacy';
@@ -7,11 +7,11 @@ import Privacy from './privacy';
 // metadata
 export const metadata = {
   title: 'Privacy Policy',
-  description: 'Privacy Policy for using Thought Soda',
+  description: 'Privacy Policy for using Penny Pixel Pop',
   openGraph: {
     title: 'Privacy Policy',
     images: images,
-    description: 'Privacy Policy for using Thought Soda',
+    description: 'Privacy Policy for using Penny Pixel Pop',
     locale: 'en_US',
     type: 'website',
   },
