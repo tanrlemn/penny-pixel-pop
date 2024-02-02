@@ -13,6 +13,7 @@ import { useRecoilValue } from 'recoil';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQueryState } from 'nuqs';
+import { useOrigin } from '@/app/_lib/hooks/useOrigin';
 
 // chakra-ui
 import { Box, Heading, Text, Flex, Link } from '@chakra-ui/react';
@@ -22,6 +23,8 @@ import AuthSplashSection from './splashSection';
 import LinkedLogo from '@/app/_components/branding/linkedLogo';
 
 export default function AuthUI() {
+  const origin = useOrigin();
+
   const [redirectTo] = useQueryState('redirectTo');
   const router = useRouter();
 
@@ -84,6 +87,7 @@ export default function AuthUI() {
               providers={['google']}
               showLinks={false}
               onlyThirdPartyProviders
+              redirectTo={`${origin.origin}/auth/callback`}
             />
           </Box>
           <Text
