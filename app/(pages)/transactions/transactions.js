@@ -39,7 +39,7 @@ export default function Transactions() {
     <Box
       mt={'1rem'}
       mb={'5rem'}>
-      <Container>
+      <Container maxW={'900px'}>
         <Heading mb={'1rem'}>Transactions</Heading>
         <Flex
           borderBottom={'1px solid'}
@@ -57,13 +57,7 @@ export default function Transactions() {
             </Button>
           )}
         </Flex>
-      </Container>
-      <Container
-        maxW={'1100px'}
-        p={0}>
-        <TableContainer
-          pt={'1rem'}
-          pl={{ base: '1rem', md: 0 }}>
+        <TableContainer pt={'1rem'}>
           {isLoading && (
             <Box m={'0 auto'}>
               <LoadingDiv

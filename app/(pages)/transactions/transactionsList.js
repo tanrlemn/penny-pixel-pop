@@ -25,7 +25,8 @@ export default function TransactionsList({ transactions }) {
       m={'0 auto'}
       mb={'1rem'}
       p={'1rem 0'}
-      w={'max-content'}>
+      minW={'max-content'}
+      w={'100%'}>
       <Table
         variant='simple'
         size={'sm'}>

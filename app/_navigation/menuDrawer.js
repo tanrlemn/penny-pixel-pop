@@ -29,7 +29,6 @@ import LinkedLogo from '../_components/branding/linkedLogo';
 export default function MenuDrawer() {
   const btnRef = useRef();
   const pathname = usePathname();
-  const isHome = pathname === '/';
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
