@@ -20,6 +20,8 @@ import EnvelopeItem from './envelopeItem';
 
 export default function CategoryList({ category, envelopes, color }) {
   const { onOpen } = useEnvelopeDrawer();
+  const isIncome = category === 'Income';
+
   return (
     <Box
       m={'0 auto'}
@@ -58,10 +60,13 @@ export default function CategoryList({ category, envelopes, color }) {
               <DataTitle>Budget amount</DataTitle>
             </Th>
             <Th isNumeric>
-              <DataTitle>Amount spent</DataTitle>
+              <DataTitle>Amount {isIncome ? 'earned' : 'spent'}</DataTitle>
             </Th>
             <Th isNumeric>
-              <DataTitle>Amount left</DataTitle>
+              <DataTitle>
+                {' '}
+                {isIncome ? 'Left to earn' : 'Amount left'}
+              </DataTitle>
             </Th>
             <Th>
               <DataTitle>Category</DataTitle>
