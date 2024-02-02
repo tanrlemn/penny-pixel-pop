@@ -1,5 +1,5 @@
 // images
-const images = ['https://i.imgur.com/BFWf7kuh.jpg'];
+const images = ['https://i.imgur.com/mhsvRaa.jpg'];
 
 // local components
 import Envelopes from './envelopes';

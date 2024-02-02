@@ -36,8 +36,6 @@ export const useAuth = () => {
 
       setLoading(false);
     });
-
-    setLoading(false);
   }, [setUser, setProfile, supabase.auth]);
 
   return { loading };
