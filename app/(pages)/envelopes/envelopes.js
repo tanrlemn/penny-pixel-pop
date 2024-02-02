@@ -25,7 +25,7 @@ import {
 // local components
 import CategoryList from './categoryList';
 import Totals from './totals';
-import LoadingDiv from '../../../_components/interactive/loadingDiv';
+import LoadingDiv from '@/app/_components/interactive/loadingDiv';
 
 export default function Envelopes() {
   const { onOpen } = useEnvelopeDrawer();
@@ -43,7 +43,7 @@ export default function Envelopes() {
     <Box
       mt={'1rem'}
       mb={'5rem'}>
-      <Container>
+      <Container maxW={'900px'}>
         <Heading mb={'1rem'}>Envelopes</Heading>
         <Flex
           borderBottom={'1px solid'}
@@ -52,49 +52,51 @@ export default function Envelopes() {
           justify={'space-between'}
           align={'center'}>
           <Heading size={'sm'}>All envelopes</Heading>
-          <Button
-            onClick={() => onOpen()}
-            colorScheme={'blue'}
-            size={'xs'}>
-            + New Envelope
-          </Button>
+          {categoryList && (
+            <Button
+              onClick={() => onOpen()}
+              colorScheme={'blue'}
+              size={'xs'}>
+              + New Envelope
+            </Button>
+          )}
         </Flex>
-      </Container>
-      <TableContainer
-        pt={'1rem'}
-        pl={'1rem'}>
-        {isLoading && (
-          <LoadingDiv
-            id={'budget'}
-            isLoading={isLoading}
-          />
-        )}
-        {categoryList &&
-          categoryList.map((category) => {
-            return (
-              <CategoryList
-                key={category.name}
-                category={category.name}
-                envelopes={category.envelopes}
-                color={category.color}
+        <TableContainer pt={'1rem'}>
+          {isLoading && (
+            <Box m={'0 auto'}>
+              <LoadingDiv
+                id={'budget'}
+                isLoading={isLoading}
               />
-            );
-          })}
-        {totals && (
-          <>
-            <Totals
-              totals={totals}
-              title={'Budgeted'}
-              color={'gray'}
-            />
-            <Totals
-              totals={totals}
-              title={'Actual'}
-              color={'red'}
-            />
-          </>
-        )}
-      </TableContainer>
+            </Box>
+          )}
+          {categoryList &&
+            categoryList.map((category) => {
+              return (
+                <CategoryList
+                  key={category.name}
+                  category={category.name}
+                  envelopes={category.envelopes}
+                  color={category.color}
+                />
+              );
+            })}
+          {totals && (
+            <>
+              <Totals
+                totals={totals}
+                title={'Budgeted'}
+                color={'gray'}
+              />
+              <Totals
+                totals={totals}
+                title={'Actual'}
+                color={'red'}
+              />
+            </>
+          )}
+        </TableContainer>
+      </Container>
     </Box>
   );
 }

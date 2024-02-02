@@ -48,11 +48,18 @@ export default function AuthUI() {
           h={'100vh'}
           minW={{ base: '100%', md: '400px' }}
           w={{ base: '100%', md: '450px' }}>
-          <Box
+          <Flex
+            gap={'0.75rem'}
             mb={'5rem'}
             mt={'5rem'}>
             <LinkedLogo />
-          </Box>
+            <Heading
+              mt={'0.5rem'}
+              color={'purple.500'}
+              size={'lg'}>
+              Penny Pixel Pop
+            </Heading>
+          </Flex>
           <Heading
             size={'lg'}
             mb={'0.5rem'}>

@@ -20,6 +20,8 @@ import {
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
   DrawerOverlay,
   Flex,
   FormControl,
@@ -45,22 +47,24 @@ export default function TransactionDrawer() {
 
   const [date, setDate] = useState(new Date());
 
-  useEffect(() => {
-  }, [currentTxn]);
+  useEffect(() => {}, [currentTxn]);
 
   return (
     <Drawer
       isOpen={isOpen}
-      placement='bottom'
-      size={'lg'}
+      placement={{ base: 'bottom', md: 'right' }}
+      size={{ base: 'lg', md: 'sm' }}
       onClose={onClose}>
       <DrawerOverlay />
       <DrawerContent minH={'80vh'}>
         <DrawerCloseButton />
 
-        <DrawerBody pt={'4rem'}>
-          {envelopes && (
-            <>
+        {envelopes && (
+          <>
+            <DrawerHeader>
+              <Text fontSize={'1.5rem'}>Transaction</Text>
+            </DrawerHeader>
+            <DrawerBody pt={'2rem'}>
               <FormControl>
                 <Stack spacing={3}>
                   <Flex
@@ -138,7 +142,12 @@ export default function TransactionDrawer() {
                   </Box>
                 </Stack>
               </FormControl>
-              <Box mt={'3rem'}>
+            </DrawerBody>
+
+            <DrawerFooter
+              borderTop={'1px solid'}
+              borderTopColor={'gray.200'}>
+              <Box>
                 <Button
                   onClick={() => {
                     setIsLoading(true);
@@ -155,9 +164,9 @@ export default function TransactionDrawer() {
                   Save transaction
                 </Button>
               </Box>
-            </>
-          )}
-        </DrawerBody>
+            </DrawerFooter>
+          </>
+        )}
       </DrawerContent>
     </Drawer>
   );

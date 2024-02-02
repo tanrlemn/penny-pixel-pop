@@ -61,6 +61,7 @@ export default function Navbar() {
       top={'0'}>
       <Flex
         p={{ base: '1rem', md: '1rem 3rem' }}
+        display={isAuth ? 'none' : 'flex'}
         w={'100%'}
         align={'center'}
         justify={{ base: 'space-between' }}>

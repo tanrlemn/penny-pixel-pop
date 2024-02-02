@@ -13,7 +13,7 @@ export default function Home() {
   const code = useQueryState('code');
 
   useEffect(() => {
-    if (code && code !== 'undefined' && code !== 'null') {
+    if (code && code !== 'undefined' && code !== null) {
       router.push(`/envelopes`);
     }
   }, [code, router]);

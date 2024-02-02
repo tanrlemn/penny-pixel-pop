@@ -14,11 +14,11 @@ import EnvelopeDrawer from './_components/forms/envelopeDrawer';
 import TransactionDrawer from './_components/forms/transactionDrawer';
 import LoadingDiv from './_components/interactive/loadingDiv';
 
-const APP_NAME = 'Budge App';
-const APP_DEFAULT_TITLE = 'Budge App';
-const APP_TITLE_TEMPLATE = '%s - Budge App';
+const APP_NAME = 'Penny Pixel Pop';
+const APP_DEFAULT_TITLE = 'Penny Pixel Pop - Budgeting App';
+const APP_TITLE_TEMPLATE = '%s - Penny Pixel Pop';
 const APP_DESCRIPTION =
-  'Simplify your budgeting process with Budge App. Budge App is a free budgeting app that helps you track your spending and save more money';
+  'Simplify your budgeting process with Penny Pixel Pop. Penny Pixel Pop is a free budgeting app that helps you track your spending and save more money through natural language processing.';
 
 // metadata
 export const metadata = {

@@ -12,6 +12,8 @@ import {
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
   DrawerOverlay,
   Flex,
   FormControl,
@@ -37,21 +39,30 @@ export default function EnvelopeDrawer() {
   return (
     <Drawer
       isOpen={isOpen}
-      placement='bottom'
-      size={'lg'}
+      placement={{ base: 'bottom', md: 'right' }}
+      size={{ base: 'lg', md: 'sm' }}
       onClose={onClose}>
       <DrawerOverlay />
       <DrawerContent minH={'80vh'}>
         <DrawerCloseButton />
 
-        <DrawerBody pt={'4rem'}>
+        <DrawerHeader>
+          <Text fontSize={'1.5rem'}>Envelope</Text>
+        </DrawerHeader>
+
+        <DrawerBody pt={'2rem'}>
           <FormControl>
             <Stack spacing={3}>
               <Input
                 border={'none'}
+                borderBottom={'1px solid'}
+                borderColor={'gray.200'}
+                borderRadius={0}
                 _placeholder={{ color: 'gray.300' }}
                 transition={'all 0.2s ease-in-out'}
                 _focus={{
+                  borderRadius: '9px',
+                  borderBottom: 'none',
                   padding: '0.5rem 1rem',
                 }}
                 focusBorderColor='green.300'
@@ -115,7 +126,11 @@ export default function EnvelopeDrawer() {
               </Flex>
             </Stack>
           </FormControl>
-          <Box mt={'3rem'}>
+        </DrawerBody>
+        <DrawerFooter
+          borderTop={'1px solid'}
+          borderTopColor={'gray.200'}>
+          <Box>
             <Button
               onClick={() => {
                 setIsLoading(true);
@@ -133,7 +148,7 @@ export default function EnvelopeDrawer() {
               Save envelope
             </Button>
           </Box>
-        </DrawerBody>
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );

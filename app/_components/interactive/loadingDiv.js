@@ -29,6 +29,7 @@ export default function LoadingDiv({ id, isLoading }) {
     <>
       {loadingDiv && (
         <Box
+          m={'0 auto'}
           position={'relative'}
           maxW={'3rem'}>
           <Lottie
