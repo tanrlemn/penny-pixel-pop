@@ -10,7 +10,7 @@ export async function GET() {
   const { data, error } = await supabase.from('profiles').select('*');
 
   if (error) {
-    console.log(error);
+    console.error(error);
   }
 
   return NextResponse.json({ data });

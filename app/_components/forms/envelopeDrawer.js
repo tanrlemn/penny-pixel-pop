@@ -1,11 +1,8 @@
 'use client';
 
 // hooks
-import {
-  useEnvelopeDrawer,
-  categories,
-  useEnvelopes,
-} from '@/app/_lib/hooks/useEnvelopes';
+import { useState } from 'react';
+import { useEnvelopeDrawer, useEnvelopes } from '@/app/_lib/hooks/useEnvelopes';
 
 // chakra-ui
 import {
@@ -15,7 +12,6 @@ import {
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
-  DrawerHeader,
   DrawerOverlay,
   Flex,
   FormControl,
@@ -24,15 +20,16 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { categories } from '@/app/_state/constants';
 
-export default function NewEnvelope() {
+export default function EnvelopeDrawer() {
   const {
     currentEnvelope,
-    createUpdateNewEnvelope,
+    createUpdateEnvelope,
     setCurrentEnvelope,
-    resetEnvelope,
+    resetCurrentEnvelope,
   } = useEnvelopes();
+
   const { isOpen, onClose } = useEnvelopeDrawer();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -65,12 +62,12 @@ export default function NewEnvelope() {
                 h={'auto'}
                 fontWeight={500}
                 value={currentEnvelope.envelope_name}
-                onChange={(e) =>
+                onChange={(e) => {
                   setCurrentEnvelope({
                     ...currentEnvelope,
                     envelope_name: e.target.value,
-                  })
-                }
+                  });
+                }}
               />
               <Flex
                 align={'center'}
@@ -122,12 +119,12 @@ export default function NewEnvelope() {
             <Button
               onClick={() => {
                 setIsLoading(true);
-                createUpdateNewEnvelope(
-                  currentEnvelope.id,
-                  currentEnvelope,
-                  setIsLoading
-                );
-                resetEnvelope();
+                createUpdateEnvelope({
+                  envelopeId: currentEnvelope.id,
+                  envelope: currentEnvelope,
+                  setIsLoading,
+                });
+                resetCurrentEnvelope();
                 onClose();
               }}
               isLoading={isLoading}

@@ -4,24 +4,19 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQueryState } from 'nuqs';
-import { useUser } from './_lib/hooks/useUser';
 
 // chakra-ui
 import { Box } from '@chakra-ui/react';
 
 export default function Home() {
   const router = useRouter();
-  const [code, setCode] = useQueryState('code');
-
-  const { userData } = useUser();
+  const code = useQueryState('code');
 
   useEffect(() => {
-    const confirmAuth = async () => {
-      userData && router.push('/dashboard');
-    };
-
-    confirmAuth();
-  }, [code, router, userData]);
+    if (code && code !== 'undefined' && code !== 'null') {
+      router.push(`/envelopes`);
+    }
+  }, [code, router]);
 
   return <Box></Box>;
 }

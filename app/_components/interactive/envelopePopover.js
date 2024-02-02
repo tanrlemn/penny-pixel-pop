@@ -107,7 +107,7 @@ export default function EnvelopePopover({ envelope, color }) {
                 colorScheme='red'
                 onClick={() => {
                   setIsLoading(true);
-                  deleteEnvelope(envelope.id);
+                  deleteEnvelope({ envelopeId: envelope.id });
                   onClose();
                 }}
                 ml={3}>

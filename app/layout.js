@@ -10,7 +10,7 @@ import { Suspense } from 'react';
 
 // local components
 import Navbar from './_navigation/navbar';
-import NewEnvelope from './_components/forms/newEnvelope';
+import EnvelopeDrawer from './_components/forms/envelopeDrawer';
 import TransactionDrawer from './_components/forms/transactionDrawer';
 import LoadingDiv from './_components/interactive/loadingDiv';
 
@@ -59,7 +59,7 @@ export default function RootLayout({ children }) {
             <Suspense fallback={<LoadingDiv />}>
               <Navbar />
               {children}
-              <NewEnvelope />
+              <EnvelopeDrawer />
               <TransactionDrawer />
             </Suspense>
           </ThemeProvider>

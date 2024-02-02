@@ -1,3 +1,7 @@
+// recoil
+import { currentTxnState, envelopesState } from '@/app/_state/atoms';
+import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
+
 // hooks
 import { useState, useRef } from 'react';
 import {
@@ -35,8 +39,9 @@ import { Edit, MoreHorizontal, Trash2 } from 'lucide-react';
 
 export default function TransactionPopover({ txn, color }) {
   const cancelRef = useRef();
-  const { deleteTxn, setCurrentTxn } = useTransactions();
-  const { onTxnOpen } = useTransactionsDrawer();
+  const { deleteTransaction } = useTransactions();
+  const { onOpen } = useTransactionsDrawer();
+  const setCurrentTxn = useSetRecoilState(currentTxnState);
 
   const { isOpen, onOpen: alertOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
@@ -71,7 +76,7 @@ export default function TransactionPopover({ txn, color }) {
               <Button
                 onClick={() => {
                   setCurrentTxn(txn);
-                  onTxnOpen();
+                  onOpen();
                 }}
                 leftIcon={<Edit size={15} />}
                 size={'sm'}>
@@ -118,7 +123,7 @@ export default function TransactionPopover({ txn, color }) {
                 colorScheme='red'
                 onClick={() => {
                   setIsLoading(true);
-                  deleteTxn(txn.id);
+                  deleteTransaction({ transactionId: txn.id });
                   onClose();
                 }}
                 ml={3}>

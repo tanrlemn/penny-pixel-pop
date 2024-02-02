@@ -4,7 +4,7 @@
 import { usePathname } from 'next/navigation';
 
 // chakra-ui
-import { Box, Flex, Link } from '@chakra-ui/react';
+import { Box, Flex, Link, Text, VStack } from '@chakra-ui/react';
 import { History, Home, List, Search } from 'lucide-react';
 
 export default function MenuTabs() {
@@ -16,25 +16,22 @@ export default function MenuTabs() {
       position={'fixed'}
       bottom={0}
       bg={'white'}
-      p={'0 2rem 1rem 2rem'}
+      p={'0 2rem 0 2rem'}
       w={'100%'}
       left={0}>
       <Flex
-        justify={'space-between'}
+        justify={'space-around'}
         align={'center'}>
         <MenuTab
-          icon={<Home size={21} />}
-          link={'/dashboard'}
-          isCurrent={pathname.includes('/dashboard')}
-        />
-        <MenuTab
           icon={<List size={21} />}
-          link={'/budget'}
-          isCurrent={pathname.includes('/budget')}
+          link={'/envelopes'}
+          title={'Envelopes'}
+          isCurrent={pathname.includes('/envelopes')}
         />
         <MenuTab
           icon={<History size={21} />}
           link={'/transactions'}
+          title={'Transactions'}
           isCurrent={pathname.includes('/transactions')}
         />
       </Flex>
@@ -42,13 +39,16 @@ export default function MenuTabs() {
   );
 }
 
-const MenuTab = ({ isCurrent, link, icon }) => {
+const MenuTab = ({ isCurrent, link, icon, title }) => {
   return (
     <Link
       color={isCurrent ? 'purple.600' : 'gray.400'}
       href={link}
       p={'1rem'}>
-      <Flex>{icon}</Flex>
+      <VStack>
+        {icon}
+        <Text fontSize={'0.7rem'}>{title}</Text>
+      </VStack>
     </Link>
   );
 };
