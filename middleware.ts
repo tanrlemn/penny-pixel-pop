@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
           response.cookies.set(name, value, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'none',
+            sameSite: 'lax',
             path: '/',
             ...options,
           });
