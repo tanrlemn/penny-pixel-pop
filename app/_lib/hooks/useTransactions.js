@@ -24,7 +24,12 @@ import {
 // hooks
 import { useCallback, useEffect } from 'react';
 
+// chakra-ui
+import { useToast } from '@chakra-ui/react';
+
 export function useTransactions() {
+  const toast = useToast();
+
   const user = useRecoilValue(userState);
   const setTransactions = useSetRecoilState(transactionsState);
   const resetCurrentTxn = useResetRecoilState(currentTxnState);
@@ -52,13 +57,29 @@ export function useTransactions() {
         setTransactions(updatedTransactions);
 
         resetCurrentTxn(); // Reset current transaction state
+
+        toast({
+          title: `Transaction ${transactionId ? 'updated' : 'created'}`,
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        });
       } catch (error) {
         console.error('Transaction update/create error:', error);
+        toast({
+          title: `Transaction ${transactionId ? 'update' : 'create'} failed`,
+          description: `There was an error ${
+            transactionId ? 'updating' : 'creating'
+          } the transaction. Please try again.`,
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
       } finally {
         setIsLoading(false);
       }
     },
-    [setTransactions, resetCurrentTxn]
+    [setTransactions, resetCurrentTxn, toast]
   );
 
   const deleteTransaction = useCallback(
@@ -68,11 +89,27 @@ export function useTransactions() {
 
         const updatedTransactions = await fetchTransactionsAPI();
         setTransactions(updatedTransactions);
+
+        toast({
+          title: 'Transaction deleted',
+          status: 'warning',
+          duration: 5000,
+          isClosable: true,
+        });
       } catch (error) {
         console.error('Transaction delete error:', error);
+
+        toast({
+          title: 'Transaction delete failed',
+          description:
+            'There was an error deleting the transaction. Please try again.',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
       }
     },
-    [setTransactions]
+    [setTransactions, toast]
   );
 
   return {
