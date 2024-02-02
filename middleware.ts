@@ -74,9 +74,9 @@ export async function middleware(request: NextRequest) {
     !user &&
     !pathname.includes('/auth') &&
     !pathname.includes('/maintenance') &&
-    !code &&
-    (code === 'undefined' || code === 'null')
+    (code === 'undefined' || code === null)
   ) {
+    console.log('redirecting to login');
     return NextResponse.redirect(new URL('/auth/login', request.url));
   }
 
