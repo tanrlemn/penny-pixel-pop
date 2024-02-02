@@ -21,6 +21,7 @@ import { Box, Heading, Text, Flex, Link } from '@chakra-ui/react';
 // local components
 import AuthSplashSection from './splashSection';
 import LinkedLogo from '@/app/_components/branding/linkedLogo';
+import LoadingDiv from '@/app/_components/interactive/loadingDiv';
 
 export default function AuthUI() {
   const origin = useOrigin();
@@ -39,7 +40,7 @@ export default function AuthUI() {
         console.log('redirecting to', redirectTo);
         router.push(redirectTo);
       } else {
-        router.push('/envelopes');
+        // router.push('/envelopes');
       }
     }
   }, [router, loggedIn, redirectTo]);
@@ -79,16 +80,20 @@ export default function AuthUI() {
           <Box
             w={'100%'}
             mb={'2rem'}>
-            <Auth
-              supabaseClient={supabase}
-              appearance={{
-                theme: ThemeSupa,
-              }}
-              providers={['google']}
-              showLinks={false}
-              onlyThirdPartyProviders
-              redirectTo={`${origin.origin}/auth/callback`}
-            />
+            {origin.origin ? (
+              <Auth
+                supabaseClient={supabase}
+                appearance={{
+                  theme: ThemeSupa,
+                }}
+                providers={['google']}
+                showLinks={false}
+                onlyThirdPartyProviders
+                redirectTo={`${origin.origin}/auth/callback`}
+              />
+            ) : (
+              <LoadingDiv />
+            )}
           </Box>
           <Text
             textAlign={'center'}

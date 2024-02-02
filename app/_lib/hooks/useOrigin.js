@@ -1,9 +1,19 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 export function useOrigin() {
-  const origin = typeof window !== 'undefined' && window.location.origin;
-  const pathname = typeof window !== 'undefined' && window.location.pathname;
-  const href = typeof window !== 'undefined' && window.location.href;
+  const [origin, setOrigin] = useState(null);
+  const [pathname, setPathname] = useState(null);
+  const [href, setHref] = useState(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setOrigin(window.location.origin);
+      setPathname(window.location.pathname);
+      setHref(window.location.href);
+    }
+  }, []);
 
   return { origin, pathname, href };
 }

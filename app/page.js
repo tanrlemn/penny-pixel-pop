@@ -23,14 +23,7 @@ import LoadingDiv from './_components/interactive/loadingDiv';
 import HowItWorks from './_components/sections/howItWorks';
 
 export default function Home() {
-  const router = useRouter();
   const [code] = useQueryState('code');
-
-  useEffect(() => {
-    if (code && code !== 'undefined' && code !== null) {
-      router.push(`/envelopes`);
-    }
-  }, [code, router]);
 
   return (
     <Container
