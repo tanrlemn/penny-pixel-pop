@@ -24,7 +24,7 @@ import LinkedLogo from '@/app/_components/branding/linkedLogo';
 import LoadingDiv from '@/app/_components/interactive/loadingDiv';
 
 export default function AuthUI() {
-  const origin = useOrigin();
+  const { callbackUrl } = useOrigin();
 
   const [redirectTo] = useQueryState('redirectTo');
   const router = useRouter();
@@ -80,20 +80,16 @@ export default function AuthUI() {
           <Box
             w={'100%'}
             mb={'2rem'}>
-            {origin.origin ? (
-              <Auth
-                supabaseClient={supabase}
-                appearance={{
-                  theme: ThemeSupa,
-                }}
-                providers={['google']}
-                showLinks={false}
-                onlyThirdPartyProviders
-                redirectTo={`${origin.origin}/auth/callback`}
-              />
-            ) : (
-              <LoadingDiv />
-            )}
+            <Auth
+              supabaseClient={supabase}
+              appearance={{
+                theme: ThemeSupa,
+              }}
+              providers={['google']}
+              showLinks={false}
+              onlyThirdPartyProviders
+              redirectTo={`${callbackUrl}/auth/callback`}
+            />
           </Box>
           <Text
             textAlign={'center'}

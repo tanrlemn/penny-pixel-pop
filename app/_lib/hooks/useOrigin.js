@@ -1,19 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+const MODE = process.env.NEXT_PUBLIC_MODE;
 
 export function useOrigin() {
-  const [origin, setOrigin] = useState(null);
-  const [pathname, setPathname] = useState(null);
-  const [href, setHref] = useState(null);
+  if (typeof window === 'undefined') {
+    return { pathname: '', callbackUrl: '', fullPagePath: '' };
+  }
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setOrigin(window.location.origin);
-      setPathname(window.location.pathname);
-      setHref(window.location.href);
-    }
-  }, []);
+  const origin = window.location.origin;
+  const pathname = window.location.pathname;
 
-  return { origin, pathname, href };
+  const port = window.location.port;
+  const removePort = port !== '' ? origin.replace(`:${port}`, '') : origin;
+
+  const callbackUrl = MODE === 'production' ? removePort : origin;
+  const fullPagePath = `${callbackUrl}${pathname}`;
+
+  console.log('callbackUrl', callbackUrl);
+
+  return { pathname, callbackUrl, fullPagePath };
 }
