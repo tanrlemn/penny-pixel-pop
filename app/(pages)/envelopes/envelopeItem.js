@@ -108,7 +108,8 @@ export default function EnvelopeItem({ envelope, color }) {
       <Td
         isNumeric
         ref={amountLeftWidthRef}
-        w={amountLeftWidth}>
+        w={amountLeftWidth}
+        color={envelope.isOver ? 'red.500' : null}>
         <DataText>{formatCurrency(envelope.amountLeft)}</DataText>
       </Td>
       <Td
