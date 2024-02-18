@@ -77,14 +77,17 @@ export function useTransactions() {
 
         toast.promise(newTransaction, {
           success: {
+            position: 'top',
             title: `Transaction ${transactionId ? 'updated' : 'created'}`,
             duration: 3000,
             isClosable: true,
           },
           loading: {
+            position: 'top',
             title: `Saving transaction...`,
           },
           error: {
+            position: 'top',
             title: `Transaction ${transactionId ? 'update' : 'create'} failed`,
             description: `There was an error ${
               transactionId ? 'updating' : 'creating'
@@ -96,6 +99,7 @@ export function useTransactions() {
       } catch (error) {
         console.error('Transaction update/create error:', error);
         toast({
+          position: 'top',
           title: `Transaction ${transactionId ? 'update' : 'create'} failed`,
           description: `There was an error ${
             transactionId ? 'updating' : 'creating'
@@ -126,14 +130,17 @@ export function useTransactions() {
 
         toast.promise(deletedTransaction, {
           success: {
+            position: 'top',
             title: 'Transaction deleted',
             duration: 3000,
             isClosable: true,
           },
           loading: {
+            position: 'top',
             title: 'Deleting transaction...',
           },
           error: {
+            position: 'top',
             title: 'Transaction delete failed',
             description:
               'There was an error deleting the transaction. Please try again.',
@@ -148,6 +155,7 @@ export function useTransactions() {
         console.error('Transaction delete error:', error);
 
         toast({
+          position: 'top',
           title: 'Transaction delete failed',
           description:
             'There was an error deleting the transaction. Please try again.',

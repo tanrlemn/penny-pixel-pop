@@ -80,14 +80,17 @@ export function useEnvelopes() {
 
         toast.promise(updatedEnvelope, {
           success: {
+            position: 'top',
             title: 'Category updated',
             duration: 3000,
             isClosable: true,
           },
           loading: {
+            position: 'top',
             title: 'Updating category...',
           },
           error: {
+            position: 'top',
             title: 'Category updated failed',
             description:
               'There was an error updating the envelope category. Please try again.',
@@ -99,6 +102,7 @@ export function useEnvelopes() {
         console.error('Envelope update category error:', error);
 
         toast({
+          position: 'top',
           title: 'Category updated failed',
           description:
             'There was an error updating the envelope category. Please try again.',
@@ -152,14 +156,17 @@ export function useEnvelopes() {
 
         toast.promise(newEnvelope, {
           success: {
+            position: 'top',
             title: `Envelope ${envelopeId ? 'updated' : 'created'}`,
             duration: 3000,
             isClosable: true,
           },
           loading: {
+            position: 'top',
             title: `Saving envelope...`,
           },
           error: {
+            position: 'top',
             title: `Envelope ${envelopeId ? 'update' : 'create'} failed`,
             description: `There was an error ${
               envelopeId ? 'updating' : 'creating'
@@ -171,6 +178,7 @@ export function useEnvelopes() {
       } catch (error) {
         console.error('Envelope update/create error:', error);
         toast({
+          position: 'top',
           title: `Envelope ${envelopeId ? 'update' : 'create'} failed`,
           description: `There was an error ${
             envelopeId ? 'updating' : 'creating'
@@ -203,14 +211,17 @@ export function useEnvelopes() {
 
         toast.promise(deletedEnvelope, {
           success: {
+            position: 'top',
             title: 'Envelope deleted',
             duration: 3000,
             isClosable: true,
           },
           loading: {
+            position: 'top',
             title: 'Deleting envelope...',
           },
           error: {
+            position: 'top',
             title: 'Envelope delete failed',
             description:
               'There was an error deleting the envelope. Please try again.',
@@ -224,6 +235,7 @@ export function useEnvelopes() {
         console.error('Envelope delete error:', error);
 
         toast({
+          position: 'top',
           title: 'Envelope delete failed',
           description:
             'There was an error deleting the envelope. Please try again.',
