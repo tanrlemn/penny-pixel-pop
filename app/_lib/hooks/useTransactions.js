@@ -112,7 +112,7 @@ export function useTransactions() {
   );
 
   const deleteTransaction = useCallback(
-    async ({ transactionId }) => {
+    async ({ transactionId, setIsLoading }) => {
       try {
         const deletedTransaction = new Promise((resolve, reject) => {
           deleteTransactionAPI({ transactionId })
@@ -141,6 +141,9 @@ export function useTransactions() {
             isClosable: true,
           },
         });
+
+        resetCurrentTxn();
+        setIsLoading(false);
       } catch (error) {
         console.error('Transaction delete error:', error);
 
@@ -154,12 +157,13 @@ export function useTransactions() {
         });
       }
     },
-    [setTransactions, toast]
+    [setTransactions, toast, resetCurrentTxn]
   );
 
   return {
     createUpdateTransaction,
     deleteTransaction,
+    resetCurrentTxn,
   };
 }
 

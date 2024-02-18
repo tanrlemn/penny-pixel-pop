@@ -45,6 +45,7 @@ export default function TransactionItem({ txn }) {
         <DataText>{txn.note}</DataText>
       </Td>
       <Td
+        cursor={'pointer'}
         color={'gray.500'}
         onClick={() => {
           setCurrentTxn(txn);

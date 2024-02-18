@@ -2,7 +2,7 @@
 
 // hooks
 import { useRef } from 'react';
-import { usePathname } from 'next/navigation';
+import { useAuth } from '../_lib/hooks/useAuth';
 
 // chakra-ui
 import {
@@ -28,18 +28,21 @@ import LinkedLogo from '../_components/branding/linkedLogo';
 
 export default function MenuDrawer() {
   const btnRef = useRef();
+  const { loading } = useAuth();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
       <Box>
-        <Menu
-          ref={btnRef}
-          onClick={onOpen}
-          color={'#6B46C1'}
-          cursor={'pointer'}
-        />
+        <Button isLoading={loading}>
+          <Menu
+            ref={btnRef}
+            onClick={onOpen}
+            color={'#6B46C1'}
+            cursor={'pointer'}
+          />
+        </Button>
       </Box>
 
       <Drawer
