@@ -1,17 +1,20 @@
 // hooks
 import { useRef, useEffect, useState } from 'react';
-import { useEnvelopes, useEnvelopeWidths } from '@/app/_lib/hooks/useEnvelopes';
+import {
+  useEnvelopeDrawer,
+  useEnvelopes,
+  useEnvelopeWidths,
+} from '@/app/_lib/hooks/useEnvelopes';
 
 // utils
 import { formatCurrency } from '@/app/_lib/utils/currencyFormater';
 import { categories } from '@/app/_state/constants';
 
 // chakra-ui
-import { Select, Td, Text, Tr } from '@chakra-ui/react';
+import { Select, Td, Text, Tr, useDisclosure } from '@chakra-ui/react';
 
 // local components
 import LoadingDiv from '@/app/_components/interactive/loadingDiv';
-import EnvelopePopover from '@/app/_components/interactive/envelopePopover';
 
 export default function EnvelopeItem({ envelope, color }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -36,7 +39,9 @@ export default function EnvelopeItem({ envelope, color }) {
     setCategoryWidth,
   } = useEnvelopeWidths();
 
-  const { updateEnvelopeCategory } = useEnvelopes();
+  const { onOpen } = useEnvelopeDrawer();
+
+  const { updateEnvelopeCategory, setCurrentEnvelope } = useEnvelopes();
 
   useEffect(() => {
     if (envelopeWidthRef.current) {
@@ -87,28 +92,50 @@ export default function EnvelopeItem({ envelope, color }) {
   ]);
 
   return (
-    <Tr key={envelope.id}>
+    <Tr
+      cursor={'pointer'}
+      key={envelope.id}
+      onClick={() => {
+        setCurrentEnvelope(envelope);
+      }}>
       <Td
+        onClick={() => {
+          setCurrentEnvelope(envelope);
+          onOpen();
+        }}
         ref={envelopeWidthRef}
         w={envelopeNameWidth}>
         <DataText>{envelope.envelope_name}</DataText>
       </Td>
       <Td
+        onClick={() => {
+          setCurrentEnvelope(envelope);
+          onOpen();
+        }}
         isNumeric
         ref={budgetAmountWidthRef}
         w={budgetAmountWidth}>
         <DataText>{formatCurrency(envelope.budget_amount)}</DataText>
       </Td>
       <Td
+        onClick={() => {
+          setCurrentEnvelope(envelope);
+          onOpen();
+        }}
         isNumeric
         ref={amountSpentWidthRef}
         w={amountSpentWidth}>
         <DataText>{formatCurrency(envelope.totalSpent)}</DataText>
       </Td>
       <Td
+        onClick={() => {
+          setCurrentEnvelope(envelope);
+          onOpen();
+        }}
         isNumeric
         ref={amountLeftWidthRef}
-        w={amountLeftWidth}>
+        w={amountLeftWidth}
+        color={envelope.isOver ? 'red.500' : null}>
         <DataText>{formatCurrency(envelope.amountLeft)}</DataText>
       </Td>
       <Td
@@ -147,12 +174,6 @@ export default function EnvelopeItem({ envelope, color }) {
             })}
           </Select>
         )}
-      </Td>
-      <Td color={'gray.500'}>
-        <EnvelopePopover
-          envelope={envelope}
-          color={color}
-        />
       </Td>
     </Tr>
   );

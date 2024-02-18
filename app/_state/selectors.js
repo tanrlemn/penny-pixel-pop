@@ -39,6 +39,7 @@ export const enrichedEnvelopesSelector = selector({
           ...envelope,
           totalSpent,
           amountLeft: envelope.budget_amount - totalSpent,
+          isOver: envelope.budget_amount < totalSpent,
         };
       })
       .sort((a, b) => b.amountLeft - a.amountLeft);

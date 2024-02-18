@@ -49,20 +49,49 @@ export function useTransactions() {
     async ({ transactionId, transaction, setIsLoading }) => {
       setIsLoading(true);
       try {
-        transactionId
-          ? await updateTransactionAPI({ transactionId, transaction })
-          : await updateTransactionAPI({ transaction });
+        const newTransaction = transactionId
+          ? new Promise((resolve, reject) => {
+              updateTransactionAPI({ transactionId, transaction })
+                .then(() => setTimeout(() => resolve(200), 500))
+                .then(async () => {
+                  const updatedTransactions = await fetchTransactionsAPI();
+                  setTransactions(updatedTransactions);
+                })
+                .catch((error) => reject(error));
+            })
+          : new Promise((resolve, reject) => {
+              updateTransactionAPI({ transaction })
+                .then(() =>
+                  setTimeout(() => {
+                    resolve(200);
+                  }, 500)
+                )
+                .then(async () => {
+                  const updatedTransactions = await fetchTransactionsAPI();
+                  setTransactions(updatedTransactions);
+                })
+                .catch((error) => reject(error));
+            });
 
-        const updatedTransactions = await fetchTransactionsAPI();
-        setTransactions(updatedTransactions);
+        resetCurrentTxn();
 
-        resetCurrentTxn(); // Reset current transaction state
-
-        toast({
-          title: `Transaction ${transactionId ? 'updated' : 'created'}`,
-          status: 'success',
-          duration: 5000,
-          isClosable: true,
+        toast.promise(newTransaction, {
+          success: {
+            title: `Transaction ${transactionId ? 'updated' : 'created'}`,
+            duration: 3000,
+            isClosable: true,
+          },
+          loading: {
+            title: `Saving transaction...`,
+          },
+          error: {
+            title: `Transaction ${transactionId ? 'update' : 'create'} failed`,
+            description: `There was an error ${
+              transactionId ? 'updating' : 'creating'
+            } the transaction. Please try again.`,
+            duration: 3000,
+            isClosable: true,
+          },
         });
       } catch (error) {
         console.error('Transaction update/create error:', error);
@@ -83,19 +112,38 @@ export function useTransactions() {
   );
 
   const deleteTransaction = useCallback(
-    async ({ transactionId }) => {
+    async ({ transactionId, setIsLoading }) => {
       try {
-        await deleteTransactionAPI({ transactionId });
-
-        const updatedTransactions = await fetchTransactionsAPI();
-        setTransactions(updatedTransactions);
-
-        toast({
-          title: 'Transaction deleted',
-          status: 'warning',
-          duration: 5000,
-          isClosable: true,
+        const deletedTransaction = new Promise((resolve, reject) => {
+          deleteTransactionAPI({ transactionId })
+            .then(() => setTimeout(() => resolve(200), 500))
+            .then(async () => {
+              const updatedTransactions = await fetchTransactionsAPI();
+              setTransactions(updatedTransactions);
+            })
+            .catch((error) => reject(error));
         });
+
+        toast.promise(deletedTransaction, {
+          success: {
+            title: 'Transaction deleted',
+            duration: 3000,
+            isClosable: true,
+          },
+          loading: {
+            title: 'Deleting transaction...',
+          },
+          error: {
+            title: 'Transaction delete failed',
+            description:
+              'There was an error deleting the transaction. Please try again.',
+            duration: 3000,
+            isClosable: true,
+          },
+        });
+
+        resetCurrentTxn();
+        setIsLoading(false);
       } catch (error) {
         console.error('Transaction delete error:', error);
 
@@ -109,18 +157,18 @@ export function useTransactions() {
         });
       }
     },
-    [setTransactions, toast]
+    [setTransactions, toast, resetCurrentTxn]
   );
 
   return {
     createUpdateTransaction,
     deleteTransaction,
+    resetCurrentTxn,
   };
 }
 
 export function useTransactionsDrawer() {
   const [isOpen, setIsOpen] = useRecoilState(transactionsDrawerState);
-  // const resetCurrentTxn = useResetRecoilState(currentTxnState);
 
   const onClose = () => {
     setIsOpen(false);

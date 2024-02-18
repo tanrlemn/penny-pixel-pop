@@ -63,21 +63,37 @@ export function useEnvelopes() {
     async ({ envelopeId, category, setIsLoading }) => {
       setIsLoading(true);
       try {
-        await updateEnvelopeCategoryAPI({
-          envelopeId,
-          category,
+        const updatedEnvelope = new Promise((resolve, reject) => {
+          updateEnvelopeCategoryAPI({
+            envelopeId,
+            category,
+          })
+            .then(() => setTimeout(() => resolve(200), 1000))
+            .then(async () => {
+              const data = await fetchEnvelopesAPI();
+              setEnvelopes(data);
+            })
+            .catch((error) => reject(error));
         });
-
-        const data = await fetchEnvelopesAPI();
-        setEnvelopes(data);
 
         resetCurrentEnvelope();
 
-        toast({
-          title: 'Category updated',
-          status: 'success',
-          duration: 5000,
-          isClosable: true,
+        toast.promise(updatedEnvelope, {
+          success: {
+            title: 'Category updated',
+            duration: 3000,
+            isClosable: true,
+          },
+          loading: {
+            title: 'Updating category...',
+          },
+          error: {
+            title: 'Category updated failed',
+            description:
+              'There was an error updating the envelope category. Please try again.',
+            duration: 3000,
+            isClosable: true,
+          },
         });
       } catch (error) {
         console.error('Envelope update category error:', error);
@@ -87,7 +103,7 @@ export function useEnvelopes() {
           description:
             'There was an error updating the envelope category. Please try again.',
           status: 'error',
-          duration: 5000,
+          duration: 3000,
           isClosable: true,
         });
       } finally {
@@ -101,24 +117,56 @@ export function useEnvelopes() {
     async ({ envelopeId, envelope, setIsLoading }) => {
       setIsLoading(true);
       try {
-        envelopeId
-          ? await createUpdateEnvelopeAPI({
-              envelopeId,
-              envelope,
-              setIsLoading,
+        const newEnvelope = envelopeId
+          ? new Promise((resolve, reject) => {
+              createUpdateEnvelopeAPI({
+                envelopeId,
+                envelope,
+                setIsLoading,
+              })
+                .then(() => setTimeout(() => resolve(200), 1000))
+                .then(async () => {
+                  const data = await fetchEnvelopesAPI();
+                  setEnvelopes(data);
+                })
+                .catch((error) => reject(error));
             })
-          : await createUpdateEnvelopeAPI({ envelope, setIsLoading });
-
-        const data = await fetchEnvelopesAPI();
-        setEnvelopes(data);
+          : new Promise((resolve, reject) => {
+              createUpdateEnvelopeAPI({
+                envelope,
+                setIsLoading,
+              })
+                .then(() =>
+                  setTimeout(() => {
+                    resolve(200);
+                  }, 1000)
+                )
+                .then(async () => {
+                  const data = await fetchEnvelopesAPI();
+                  setEnvelopes(data);
+                })
+                .catch((error) => reject(error));
+            });
 
         resetCurrentEnvelope();
 
-        toast({
-          title: `Envelope ${envelopeId ? 'updated' : 'created'}`,
-          status: 'success',
-          duration: 5000,
-          isClosable: true,
+        toast.promise(newEnvelope, {
+          success: {
+            title: `Envelope ${envelopeId ? 'updated' : 'created'}`,
+            duration: 3000,
+            isClosable: true,
+          },
+          loading: {
+            title: `Saving envelope...`,
+          },
+          error: {
+            title: `Envelope ${envelopeId ? 'update' : 'create'} failed`,
+            description: `There was an error ${
+              envelopeId ? 'updating' : 'creating'
+            } the envelope. Please try again.`,
+            duration: 3000,
+            isClosable: true,
+          },
         });
       } catch (error) {
         console.error('Envelope update/create error:', error);
@@ -128,7 +176,7 @@ export function useEnvelopes() {
             envelopeId ? 'updating' : 'creating'
           } the envelope. Please try again.`,
           status: 'error',
-          duration: 5000,
+          duration: 3000,
           isClosable: true,
         });
       } finally {
@@ -139,21 +187,39 @@ export function useEnvelopes() {
   );
 
   const deleteEnvelope = useCallback(
-    async ({ envelopeId }) => {
+    async ({ envelopeId, setIsLoading }) => {
       try {
-        await deleteEnvelopeAPI({ envelopeId });
+        const deletedEnvelope = new Promise((resolve, reject) => {
+          deleteEnvelopeAPI({ envelopeId })
+            .then(() => setTimeout(() => resolve(200), 1000))
+            .then(async () => {
+              const updateEnvelopes = await fetchEnvelopesAPI();
+              setEnvelopes(updateEnvelopes);
 
-        const updateEnvelopes = await fetchEnvelopesAPI();
-        setEnvelopes(updateEnvelopes);
-
-        resetCurrentEnvelope();
-
-        toast({
-          title: 'Envelope deleted',
-          status: 'warning',
-          duration: 5000,
-          isClosable: true,
+              resetCurrentEnvelope();
+            })
+            .catch((error) => reject(error));
         });
+
+        toast.promise(deletedEnvelope, {
+          success: {
+            title: 'Envelope deleted',
+            duration: 3000,
+            isClosable: true,
+          },
+          loading: {
+            title: 'Deleting envelope...',
+          },
+          error: {
+            title: 'Envelope delete failed',
+            description:
+              'There was an error deleting the envelope. Please try again.',
+            duration: 3000,
+            isClosable: true,
+          },
+        });
+
+        setIsLoading(false);
       } catch (error) {
         console.error('Envelope delete error:', error);
 
@@ -162,7 +228,7 @@ export function useEnvelopes() {
           description:
             'There was an error deleting the envelope. Please try again.',
           status: 'error',
-          duration: 5000,
+          duration: 3000,
           isClosable: true,
         });
       }

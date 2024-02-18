@@ -2,14 +2,23 @@
 import { formatCurrency } from '@/app/_lib/utils/currencyFormater';
 import { formatDistance, subDays } from 'date-fns';
 
+// recoil
+import { useSetRecoilState } from 'recoil';
+import { currentTxnState } from '@/app/_state/atoms';
+
+// hooks
+import { useTransactionsDrawer } from '@/app/_lib/hooks/useTransactions';
+
 // chakra-ui
 import { Td, Text, Tr } from '@chakra-ui/react';
 
 // local components
-import LoadingDiv from '@/app/_components/interactive/loadingDiv';
-import TransactionPopover from '@/app/_components/interactive/transactionPopover';
+import { MoreHorizontal } from 'lucide-react';
 
 export default function TransactionItem({ txn }) {
+  const { onOpen } = useTransactionsDrawer();
+  const setCurrentTxn = useSetRecoilState(currentTxnState);
+
   return (
     <Tr key={txn.id}>
       <Td>
@@ -35,8 +44,14 @@ export default function TransactionItem({ txn }) {
       <Td>
         <DataText>{txn.note}</DataText>
       </Td>
-      <Td color={'gray.500'}>
-        <TransactionPopover txn={txn} />
+      <Td
+        cursor={'pointer'}
+        color={'gray.500'}
+        onClick={() => {
+          setCurrentTxn(txn);
+          onOpen();
+        }}>
+        <MoreHorizontal />
       </Td>
     </Tr>
   );

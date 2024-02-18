@@ -43,7 +43,7 @@ export default function Envelopes() {
     <Box
       mt={'1rem'}
       mb={'5rem'}>
-      <Container maxW={'900px'}>
+      <Container maxW={{ base: '100vw', md: '900px' }}>
         <Heading mb={'1rem'}>Envelopes</Heading>
         <Flex
           borderBottom={'1px solid'}

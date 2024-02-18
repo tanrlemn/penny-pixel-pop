@@ -15,20 +15,12 @@ export default function LinkedLogo({
   text = false,
   color = 'purple.500',
 }) {
-  const isMobile = useIsMobile();
-  const widths = {
-    pill: isMobile ? '3rem' : '3rem',
-  };
-
   return (
     <Link href={link}>
       <Flex
         align={'center'}
         gap={'0.5rem'}>
-        <Logo
-          logo={logo}
-          size={widths[logo]}
-        />
+        <Logo logo={logo} />
         {text && (
           <Heading
             size={'md'}

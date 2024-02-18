@@ -2,10 +2,16 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { type CookieOptions, createServerClient } from '@supabase/ssr';
 
+const MODE = process.env.NEXT_PUBLIC_MODE;
+
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url);
+  const { searchParams, origin, port } = new URL(request.url);
+
+  const removePort = port !== '' ? origin.replace(`:${port}`, '') : origin;
+
+  const callbackUrl = MODE === 'production' ? removePort : origin;
+
   const code = searchParams.get('code');
-  // if "next" is in param, use it as the redirect URL
   const next = searchParams.get('next') ?? '/envelopes';
 
   if (code) {
@@ -29,10 +35,10 @@ export async function GET(request: Request) {
     );
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`);
+      return NextResponse.redirect(`${callbackUrl}${next}`);
     }
   }
 
   // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/auth/login?error=oauth_error`);
+  return NextResponse.redirect(`${callbackUrl}/auth/login?error=oauth_error`);
 }

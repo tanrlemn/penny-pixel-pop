@@ -16,20 +16,19 @@ export default function MenuTabs() {
       position={'fixed'}
       bottom={0}
       bg={'white'}
-      p={'0 2rem 0 2rem'}
       w={'100%'}
       left={0}>
       <Flex
         justify={'space-around'}
         align={'center'}>
         <MenuTab
-          icon={<List size={21} />}
+          icon={<List size={17} />}
           link={'/envelopes'}
           title={'Envelopes'}
           isCurrent={pathname.includes('/envelopes')}
         />
         <MenuTab
-          icon={<History size={21} />}
+          icon={<History size={17} />}
           link={'/transactions'}
           title={'Transactions'}
           isCurrent={pathname.includes('/transactions')}
@@ -44,7 +43,7 @@ const MenuTab = ({ isCurrent, link, icon, title }) => {
     <Link
       color={isCurrent ? 'purple.600' : 'gray.400'}
       href={link}
-      p={'1rem'}>
+      p={'0.5rem'}>
       <VStack>
         {icon}
         <Text fontSize={'0.7rem'}>{title}</Text>

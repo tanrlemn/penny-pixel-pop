@@ -6,7 +6,7 @@ import circleLogo from '@/app/_assets/dark-circle.svg';
 // chakra-ui
 import { Box, Image } from '@chakra-ui/react';
 
-export default function Logo({ size = '3rem', logo = 'pill' }) {
+export default function Logo({ size = '2rem', logo = 'pill' }) {
   const logos = {
     pill: {
       src: circleLogo.src,
