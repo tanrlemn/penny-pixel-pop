@@ -43,7 +43,6 @@ export default function Navbar() {
   const router = useRouter();
   const supabase = createClient();
 
-  const isMaintenance = pathname === '/maintenance';
   const isAuth = pathname.includes('/auth');
   const isUserPage =
     pathname.includes('/envelopes') ||
@@ -54,18 +53,14 @@ export default function Navbar() {
   useEffect(() => {
     if (!loading && !loggedIn && !isAuth && isUserPage) {
       console.log('redirecting to login');
-      router.replace('/auth/login?redirectTo=' + pathname);
+      router.replace(
+        '/auth/login?message=You must be logged in to view that page'
+      );
+    } else if (!loading && loggedIn && isAuth && !isUserPage) {
+      console.log('redirecting to dashboard');
+      router.replace('/envelopes');
     }
-  }, [
-    loading,
-    user,
-    loggedIn,
-    router,
-    isAuth,
-    isMaintenance,
-    isUserPage,
-    pathname,
-  ]);
+  }, [loading, user, loggedIn, router, isAuth, isUserPage, pathname]);
 
   const signOut = async () => {
     await supabase.auth.signOut({ scope: 'local' });
@@ -78,19 +73,15 @@ export default function Navbar() {
       borderBottom={'1px solid'}
       borderBottomColor={'gray.200'}
       zIndex={1000}
-      position={isAuth ? 'absolute' : 'sticky'}
+      position={'sticky'}
       top={'0'}>
       <Flex
-        p={{ base: '1rem', md: '1rem 3rem' }}
-        display={isAuth ? 'none' : 'flex'}
+        p={{ base: '0.5rem', md: '0.5rem 2rem' }}
+        display={'flex'}
         w={'100%'}
         align={'center'}
         justify={{ base: 'space-between' }}>
-        {isMaintenance ? (
-          <MaintenanceLayout />
-        ) : isAuth ? (
-          <></>
-        ) : loggedIn ? (
+        {loggedIn ? (
           <LoggedInLayout
             profile={profile}
             signOut={signOut}
@@ -137,24 +128,6 @@ function LoggedOutLayout() {
     <>
       <LinkedLogo text={true} />
       <MenuDrawer />
-    </>
-  );
-}
-
-function MaintenanceLayout() {
-  return (
-    <>
-      <Flex
-        gap={{ base: '1rem' }}
-        direction={{ base: 'column', md: 'row' }}
-        align={{ base: 'flex-start', md: 'center' }}>
-        <LinkedLogo />
-        <Heading
-          size={'md'}
-          color={'purple.600'}>
-          We inspire collaboration
-        </Heading>
-      </Flex>
     </>
   );
 }
