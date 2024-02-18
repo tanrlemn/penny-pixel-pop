@@ -82,7 +82,10 @@ export const deleteEnvelopeAPI = async ({ envelopeId }) => {
         envelopeId,
       }),
     });
+
+    return envelopeId;
   } catch (error) {
     console.error('Envelope service delete error:', error);
+    return error;
   }
 };

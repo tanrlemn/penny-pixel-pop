@@ -23,23 +23,33 @@ import {
   PopoverTrigger,
   Stack,
   Stat,
+  StatHelpText,
   StatLabel,
   StatNumber,
   useDisclosure,
 } from '@chakra-ui/react';
 import { Edit, MoreHorizontal, Trash2 } from 'lucide-react';
 
-export default function EnvelopePopover({ envelope, color }) {
+export default function EnvelopePopover({ envelope, color, isOpen, onClose }) {
   const cancelRef = useRef();
   const { deleteEnvelope, setCurrentEnvelope } = useEnvelopes();
   const { onOpen } = useEnvelopeDrawer();
 
-  const { isOpen, onOpen: alertOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isAlertOpen,
+    onOpen: onAlertOpen,
+    onClose: onAlertClose,
+  } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
 
   return (
     <>
-      <Popover placement={'auto'}>
+      <Popover
+        isLazy
+        isOpen={isOpen}
+        onClose={onClose}
+        placement={'auto-start'}
+        autoFocus={false}>
         <PopoverTrigger color={'gray.500'}>
           <MoreHorizontal />
         </PopoverTrigger>
@@ -47,12 +57,21 @@ export default function EnvelopePopover({ envelope, color }) {
           bg={'gray.50'}
           border={'2px solid'}
           borderColor={`${color}.200`}>
-          <PopoverArrow bg={`${color}.400`} />
+          <PopoverArrow />
           <PopoverCloseButton />
           <PopoverHeader>
             <Stat>
               <StatLabel mb={'0.45rem'}>{envelope.envelope_name}</StatLabel>
               <StatNumber>{formatCurrency(envelope.budget_amount)}</StatNumber>
+              {envelope.isOver && (
+                <StatHelpText
+                  mt={'0.65rem'}
+                  fontWeight={500}
+                  fontStyle={'italic'}
+                  color={'red.500'}>
+                  Over budget
+                </StatHelpText>
+              )}
             </Stat>
           </PopoverHeader>
           <PopoverBody>
@@ -69,7 +88,7 @@ export default function EnvelopePopover({ envelope, color }) {
               <Button
                 onClick={() => {
                   setIsLoading(true);
-                  alertOpen();
+                  onAlertOpen();
                 }}
                 leftIcon={<Trash2 size={15} />}
                 colorScheme={'red'}
@@ -82,9 +101,9 @@ export default function EnvelopePopover({ envelope, color }) {
       </Popover>
       <AlertDialog
         isCentered
-        isOpen={isOpen}
+        isOpen={isAlertOpen}
         leastDestructiveRef={cancelRef}
-        onClose={onClose}>
+        onClose={onAlertClose}>
         <AlertDialogOverlay>
           <AlertDialogContent m={'1rem'}>
             <AlertDialogHeader
@@ -100,7 +119,7 @@ export default function EnvelopePopover({ envelope, color }) {
             <AlertDialogFooter>
               <Button
                 ref={cancelRef}
-                onClick={onClose}>
+                onClick={onAlertClose}>
                 Cancel
               </Button>
               <Button
@@ -108,7 +127,7 @@ export default function EnvelopePopover({ envelope, color }) {
                 onClick={() => {
                   setIsLoading(true);
                   deleteEnvelope({ envelopeId: envelope.id });
-                  onClose();
+                  onAlertClose();
                 }}
                 ml={3}>
                 Delete
