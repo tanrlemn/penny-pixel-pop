@@ -41,7 +41,9 @@ export default function TransactionItem({ txn }) {
           )}
         </DataText>
       </Td>
-      <Td>
+      <Td
+        maxW={{ base: '250px' }}
+        whiteSpace={'pre-wrap'}>
         <DataText>{txn.note}</DataText>
       </Td>
       <Td

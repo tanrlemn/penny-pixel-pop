@@ -46,14 +46,18 @@ export default function CategoryList({ category, envelopes, color }) {
           {envelopes.length === 0 || envelopes.length > 1 ? 's' : ''}
         </Text>
       </Flex>
-      <Table
-        variant='simple'
-        size={'sm'}>
+      <Table size={'sm'}>
         <Thead
           fontSize={'0.8rem'}
           color={'gray.500'}>
           <Tr>
-            <Th>
+            <Th
+              px={'0.5rem'}
+              borderRight={'1px solid'}
+              borderColor={'gray.100'}
+              position={'sticky'}
+              left={0}
+              bg={'white'}>
               <DataTitle>Envelope name</DataTitle>
             </Th>
             <Th isNumeric>
@@ -87,19 +91,23 @@ export default function CategoryList({ category, envelopes, color }) {
           ) : (
             <Tr color={'gray.600'}>
               <Td position={'absolute'}>
-                <DataText>Empty. Click to add an envelope.</DataText>
+                <DataText>Empty. Add an envelope to get started.</DataText>
               </Td>
               <Td
                 borderBottom={'none'}
                 pb={'1.5rem'}></Td>
             </Tr>
           )}
-          <Tr onClick={() => onOpen(category)}>
+          <Tr
+            position={'relative'}
+            cursor={'pointer'}
+            minW={'100%'}
+            onClick={() => onOpen(category)}>
             <Td
-              color={'gray.500'}
               position={'sticky'}
-              left={'0'}>
-              <DataText>+ New</DataText>
+              left={'0'}
+              color={'gray.500'}>
+              <Text fontSize={'0.8rem'}>+ New</Text>
             </Td>
           </Tr>
         </Tbody>

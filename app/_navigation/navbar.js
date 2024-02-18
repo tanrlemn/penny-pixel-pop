@@ -73,7 +73,7 @@ export default function Navbar() {
       borderBottom={'1px solid'}
       borderBottomColor={'gray.200'}
       zIndex={1000}
-      position={'sticky'}
+      position={loggedIn ? 'relative' : 'sticky'}
       top={'0'}>
       <Flex
         p={{ base: '0.5rem', md: '0.5rem 2rem' }}

@@ -61,7 +61,7 @@ export default function TransactionsList({ transactions }) {
           ) : (
             <Tr color={'gray.600'}>
               <Td position={'absolute'}>
-                <DataText>Empty. Click to add a transaction.</DataText>
+                <DataText>Empty. Add a transaction to get started.</DataText>
               </Td>
               <Td
                 borderBottom={'none'}

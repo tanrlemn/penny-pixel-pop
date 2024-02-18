@@ -42,6 +42,10 @@ export default function Transactions() {
       <Container maxW={'900px'}>
         <Heading mb={'1rem'}>Transactions</Heading>
         <Flex
+          position={'sticky'}
+          zIndex={1000}
+          bg={'white'}
+          top={'0'}
           borderBottom={'1px solid'}
           borderBottomColor={'gray.200'}
           p={'0.5rem 0'}

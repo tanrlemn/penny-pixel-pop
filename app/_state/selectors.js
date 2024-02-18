@@ -61,8 +61,8 @@ export const envelopeTotalsSelector = selector({
     const transactions = get(enrichedTransactionsSelector);
     const envelopes = get(envelopesState);
 
-    if (!transactions || !envelopes) return null;
-    if (transactions.length === 0 || envelopes.length === 0)
+    if (!envelopes) return null;
+    if (envelopes.length === 0)
       return {
         totalBudgetedIncome: 0,
         totalBudgetedExpenses: 0,
@@ -77,6 +77,7 @@ export const envelopeTotalsSelector = selector({
     const incomeEnvelopes = envelopes.filter(
       (env) => env.category === 'Income'
     );
+
     const totalBudgetedIncome =
       incomeEnvelopes.length > 0
         ? incomeEnvelopes
@@ -93,12 +94,16 @@ export const envelopeTotalsSelector = selector({
       : 0;
 
     const totalSpent = transactions
-      .filter((txn) => !txn.isIncome)
-      .reduce((acc, cur) => acc + cur.amount, 0);
+      ? transactions
+          .filter((txn) => !txn.isIncome)
+          .reduce((acc, cur) => acc + cur.amount, 0)
+      : 0;
 
     const totalIncome = transactions
-      .filter((txn) => txn.isIncome)
-      .reduce((acc, cur) => acc + cur.amount, 0);
+      ? transactions
+          .filter((txn) => txn.isIncome)
+          .reduce((acc, cur) => acc + cur.amount, 0)
+      : 0;
 
     return {
       totalBudgetedIncome,

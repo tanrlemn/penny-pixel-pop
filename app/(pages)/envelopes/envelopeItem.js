@@ -99,12 +99,16 @@ export default function EnvelopeItem({ envelope, color }) {
         setCurrentEnvelope(envelope);
       }}>
       <Td
+        px={'0.5rem'}
+        borderRight={'1px solid'}
+        borderColor={'gray.100'}
+        position={'sticky'}
+        left={0}
+        bg={'white'}
         onClick={() => {
           setCurrentEnvelope(envelope);
           onOpen();
-        }}
-        ref={envelopeWidthRef}
-        w={envelopeNameWidth}>
+        }}>
         <DataText>{envelope.envelope_name}</DataText>
       </Td>
       <Td
