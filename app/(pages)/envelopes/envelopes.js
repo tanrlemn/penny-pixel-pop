@@ -41,6 +41,7 @@ export default function Envelopes() {
 
   return (
     <Box
+      h={'fit-content'}
       mt={'1rem'}
       mb={'5rem'}>
       <Container
@@ -48,6 +49,10 @@ export default function Envelopes() {
         p={'0.5rem'}>
         <Heading mb={'1rem'}>Envelopes</Heading>
         <Flex
+          position={'sticky'}
+          zIndex={1000}
+          bg={'white'}
+          top={'0'}
           borderBottom={'1px solid'}
           borderBottomColor={'gray.200'}
           p={'0.5rem 0'}

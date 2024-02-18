@@ -35,11 +35,12 @@ export default function MenuDrawer() {
   return (
     <>
       <Box>
-        <Button isLoading={loading}>
+        <Button
+          isLoading={loading}
+          onClick={onOpen}>
           <Menu
             size={17}
             ref={btnRef}
-            onClick={onOpen}
             color={'#6B46C1'}
             cursor={'pointer'}
           />
