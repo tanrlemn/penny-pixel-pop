@@ -2,6 +2,7 @@
 
 // hooks
 import { usePathname } from 'next/navigation';
+import { useAuth } from '../_lib/hooks/useAuth';
 
 // chakra-ui
 import { Box, Flex, Link, Text, VStack } from '@chakra-ui/react';
@@ -9,6 +10,7 @@ import { History, Home, List, Search } from 'lucide-react';
 
 export default function MenuTabs() {
   const pathname = usePathname();
+  const { loading } = useAuth();
   return (
     <Box
       borderTop={'1px solid'}
@@ -18,22 +20,24 @@ export default function MenuTabs() {
       bg={'white'}
       w={'100%'}
       left={0}>
-      <Flex
-        justify={'space-around'}
-        align={'center'}>
-        <MenuTab
-          icon={<List size={17} />}
-          link={'/envelopes'}
-          title={'Envelopes'}
-          isCurrent={pathname.includes('/envelopes')}
-        />
-        <MenuTab
-          icon={<History size={17} />}
-          link={'/transactions'}
-          title={'Transactions'}
-          isCurrent={pathname.includes('/transactions')}
-        />
-      </Flex>
+      {!loading && (
+        <Flex
+          justify={'space-around'}
+          align={'center'}>
+          <MenuTab
+            icon={<List size={17} />}
+            link={'/envelopes'}
+            title={'Envelopes'}
+            isCurrent={pathname.includes('/envelopes')}
+          />
+          <MenuTab
+            icon={<History size={17} />}
+            link={'/transactions'}
+            title={'Transactions'}
+            isCurrent={pathname.includes('/transactions')}
+          />
+        </Flex>
+      )}
     </Box>
   );
 }

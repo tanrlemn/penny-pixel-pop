@@ -37,6 +37,7 @@ export default function MenuDrawer() {
       <Box>
         <Button isLoading={loading}>
           <Menu
+            size={17}
             ref={btnRef}
             onClick={onOpen}
             color={'#6B46C1'}
