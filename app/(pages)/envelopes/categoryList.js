@@ -87,7 +87,7 @@ export default function CategoryList({ category, envelopes, color }) {
           ) : (
             <Tr color={'gray.600'}>
               <Td position={'absolute'}>
-                <DataText>Empty. Click to add an envelope.</DataText>
+                <DataText>Empty. Add an envelope to get started.</DataText>
               </Td>
               <Td
                 borderBottom={'none'}
