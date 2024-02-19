@@ -70,7 +70,9 @@ export default function EnvelopeDrawer() {
             pb={'0.5rem'}
             borderBottom={'1px solid'}
             borderBottomColor={'gray.200'}>
-            <Text fontSize={'1.25rem'}>
+            <Text
+              fontWeight={500}
+              fontSize={'1.25rem'}>
               {currentEnvelope.id ? 'Edit envelope' : 'Envelope'}
             </Text>
           </DrawerHeader>

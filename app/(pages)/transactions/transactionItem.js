@@ -12,9 +12,6 @@ import { useTransactionsDrawer } from '@/app/_lib/hooks/useTransactions';
 // chakra-ui
 import { Td, Text, Tr } from '@chakra-ui/react';
 
-// local components
-import { MoreHorizontal } from 'lucide-react';
-
 export default function TransactionItem({ txn }) {
   const { onOpen } = useTransactionsDrawer();
   const setCurrentTxn = useSetRecoilState(currentTxnState);

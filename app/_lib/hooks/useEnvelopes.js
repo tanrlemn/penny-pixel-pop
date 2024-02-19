@@ -259,34 +259,6 @@ export function useEnvelopes() {
   };
 }
 
-export function useEnvelopeWidths() {
-  const [envelopeNameWidth, setEnvelopeNameWidth] = useRecoilState(
-    envelopeNameWidthState
-  );
-  const [budgetAmountWidth, setBudgetAmountWidth] = useRecoilState(
-    budgetAmountWidthState
-  );
-  const [amountSpentWidth, setAmountSpentWidth] = useRecoilState(
-    amountSpentWidthState
-  );
-  const [amountLeftWidth, setAmountLeftWidth] =
-    useRecoilState(amountLeftWidthState);
-  const [categoryWidth, setCategoryWidth] = useRecoilState(categoryWidthState);
-
-  return {
-    envelopeNameWidth,
-    setEnvelopeNameWidth,
-    budgetAmountWidth,
-    setBudgetAmountWidth,
-    amountSpentWidth,
-    setAmountSpentWidth,
-    amountLeftWidth,
-    setAmountLeftWidth,
-    categoryWidth,
-    setCategoryWidth,
-  };
-}
-
 export function useEnvelopeDrawer() {
   const [isOpen, setIsOpen] = useRecoilState(envelopeDrawerState);
   const resetCurrentEnvelope = useResetRecoilState(currentEnvelopeState);

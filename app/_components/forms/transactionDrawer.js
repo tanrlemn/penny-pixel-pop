@@ -86,7 +86,9 @@ export default function TransactionDrawer() {
                 pb={'0.5rem'}
                 borderBottom={'1px solid'}
                 borderBottomColor={'gray.200'}>
-                <Text fontSize={'1.25rem'}>
+                <Text
+                  fontWeight={500}
+                  fontSize={'1.25rem'}>
                   {currentTxn.id ? 'Edit Transaction' : 'Transaction'}
                 </Text>
               </DrawerHeader>

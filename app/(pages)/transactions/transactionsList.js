@@ -2,18 +2,7 @@
 import { useTransactionsDrawer } from '@/app/_lib/hooks/useTransactions';
 
 // chakra-ui
-import {
-  Box,
-  Flex,
-  Table,
-  Tag,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-} from '@chakra-ui/react';
+import { Box, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 
 // local components
 import TransactionItem from './transactionItem';
