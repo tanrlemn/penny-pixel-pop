@@ -2154,16 +2154,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/functions-js@npm:^2.1.5":
-  version: 2.2.0
-  resolution: "@supabase/functions-js@npm:2.2.0"
+"@supabase/functions-js@npm:2.1.5":
+  version: 2.1.5
+  resolution: "@supabase/functions-js@npm:2.1.5"
   dependencies:
     "@supabase/node-fetch": "npm:^2.6.14"
-  checksum: 5884c6f0c213f6408834e9425842923685ebdca0ec42e89a0f3086d15ac81c285c790befe19fa01c6a961c39ccc7b7aae7c3608c408a65af785beaeddb2ef387
+  checksum: f2af9f12c9ffa4460998c166d71184bb2fc7753f2063548d482a51db3178da24217cd9dea1be8803356c3fd743848fdfb1e1903d882aa90fa7a7ae0c5dc7d070
   languageName: node
   linkType: hard
 
-"@supabase/gotrue-js@npm:^2.60.0":
+"@supabase/gotrue-js@npm:2.62.2":
   version: 2.62.2
   resolution: "@supabase/gotrue-js@npm:2.62.2"
   dependencies:
@@ -2172,7 +2172,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/node-fetch@npm:^2.6.14":
+"@supabase/node-fetch@npm:2.6.15, @supabase/node-fetch@npm:^2.6.14":
   version: 2.6.15
   resolution: "@supabase/node-fetch@npm:2.6.15"
   dependencies:
@@ -2181,7 +2181,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/postgrest-js@npm:^1.9.0":
+"@supabase/postgrest-js@npm:1.9.2":
   version: 1.9.2
   resolution: "@supabase/postgrest-js@npm:1.9.2"
   dependencies:
@@ -2190,7 +2190,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/realtime-js@npm:^2.9.3":
+"@supabase/realtime-js@npm:2.9.3":
   version: 2.9.3
   resolution: "@supabase/realtime-js@npm:2.9.3"
   dependencies:
@@ -2214,7 +2214,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/storage-js@npm:^2.5.4":
+"@supabase/storage-js@npm:2.5.5":
   version: 2.5.5
   resolution: "@supabase/storage-js@npm:2.5.5"
   dependencies:
@@ -2223,17 +2223,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:^2.39.3":
-  version: 2.39.3
-  resolution: "@supabase/supabase-js@npm:2.39.3"
+"@supabase/supabase-js@npm:^2.39.7":
+  version: 2.39.7
+  resolution: "@supabase/supabase-js@npm:2.39.7"
   dependencies:
-    "@supabase/functions-js": "npm:^2.1.5"
-    "@supabase/gotrue-js": "npm:^2.60.0"
-    "@supabase/node-fetch": "npm:^2.6.14"
-    "@supabase/postgrest-js": "npm:^1.9.0"
-    "@supabase/realtime-js": "npm:^2.9.3"
-    "@supabase/storage-js": "npm:^2.5.4"
-  checksum: b36f685579ed3fb35e7073105d99937b3e09762df93da9db40fb1c925388cf9b3a20b3e22a1b5e57e65ad0ecf93a602373d63f9aef7c4302f3557b0ffb3c82e3
+    "@supabase/functions-js": "npm:2.1.5"
+    "@supabase/gotrue-js": "npm:2.62.2"
+    "@supabase/node-fetch": "npm:2.6.15"
+    "@supabase/postgrest-js": "npm:1.9.2"
+    "@supabase/realtime-js": "npm:2.9.3"
+    "@supabase/storage-js": "npm:2.5.5"
+  checksum: dfa931bba8e30ac8541783c6e527fda3df5c86b4ad5b5f5a9b02b459a21dca2bf4eab8c18648f3c7f409cf98a03f0479a96cac299420e221b7c63f7566ed2301
   languageName: node
   linkType: hard
 
@@ -2299,14 +2299,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^18.2.51":
-  version: 18.2.51
-  resolution: "@types/react@npm:18.2.51"
+"@types/react@npm:^18.2.56":
+  version: 18.2.56
+  resolution: "@types/react@npm:18.2.56"
   dependencies:
     "@types/prop-types": "npm:*"
     "@types/scheduler": "npm:*"
     csstype: "npm:^3.0.2"
-  checksum: 409f684dc1cb03ed542e1f185da7e84f81186d7945119adb553fe0e4e28bad3468213fce9096e1867b358c87fb57fc80b53a3e544a3779f7080ddde7c1b99eb1
+  checksum: a6dab9569799538a9e01d340a721ef1a6f5532bd11cae8d8ab9af00dab2edcafaa00950f7bf2f9ae5bbb1839d890e9ac6eb1ea1186200894b7178dde7b503269
   languageName: node
   linkType: hard
 
@@ -2780,16 +2780,16 @@ __metadata:
     "@supabase/auth-ui-react": "npm:^0.4.7"
     "@supabase/auth-ui-shared": "npm:^0.1.8"
     "@supabase/ssr": "npm:^0.1.0"
-    "@supabase/supabase-js": "npm:^2.39.3"
-    "@types/react": "npm:^18.2.51"
+    "@supabase/supabase-js": "npm:^2.39.7"
+    "@types/react": "npm:^18.2.56"
     date-fns: "npm:^3.3.1"
     eslint: "npm:^8.56.0"
     eslint-config-next: "npm:14.1.0"
-    framer-motion: "npm:^11.0.3"
+    framer-motion: "npm:^11.0.5"
     lottie-react: "npm:^2.4.0"
-    lucide-react: "npm:^0.321.0"
+    lucide-react: "npm:^0.334.0"
     next: "npm:14.1.0"
-    nuqs: "npm:^1.16.1"
+    nuqs: "npm:^1.17.0"
     react: "npm:^18.2.0"
     react-day-picker: "npm:^8.10.0"
     react-dom: "npm:^18.2.0"
@@ -3942,9 +3942,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"framer-motion@npm:^11.0.3":
-  version: 11.0.3
-  resolution: "framer-motion@npm:11.0.3"
+"framer-motion@npm:^11.0.5":
+  version: 11.0.5
+  resolution: "framer-motion@npm:11.0.5"
   dependencies:
     "@emotion/is-prop-valid": "npm:^0.8.2"
     tslib: "npm:^2.4.0"
@@ -3959,7 +3959,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: a9a70196ea5d264f749a7dea1ccb7c33decf969680a907c595eb48d84510b60fb51e3e0d16d5bcac0997eea041f796f2cba4a5505e0a00f373ffbadfb5f36564
+  checksum: a7ed2c56f2d25b610a11a7056304c2ed92cb37ca448c820432db162ae05c920fb3853b703130fbaded534099d4bced8af34168bd2b464d93f5bb8897951ce057
   languageName: node
   linkType: hard
 
@@ -5156,12 +5156,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide-react@npm:^0.321.0":
-  version: 0.321.0
-  resolution: "lucide-react@npm:0.321.0"
+"lucide-react@npm:^0.334.0":
+  version: 0.334.0
+  resolution: "lucide-react@npm:0.334.0"
   peerDependencies:
     react: ^16.5.1 || ^17.0.0 || ^18.0.0
-  checksum: 3d735cbc3101bb2f2b6ed4669e42bd323afced99f5ff7419bc2bd58110c0fced0bda1c97d14253f9fe7b07c188de401822b5b4a15695be2924a65dc029d01b40
+  checksum: 3e860832f2eb0f6ba1152e33de31cd66cb33de3e4d73b4014c51df30726f3801f1efe3ecdf462332b9ca5316c0f29db49d7da8fa089e0df2b76f9c96cabc5602
   languageName: node
   linkType: hard
 
@@ -5646,14 +5646,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nuqs@npm:^1.16.1":
-  version: 1.16.1
-  resolution: "nuqs@npm:1.16.1"
+"nuqs@npm:^1.17.0":
+  version: 1.17.0
+  resolution: "nuqs@npm:1.17.0"
   dependencies:
     mitt: "npm:^3.0.1"
   peerDependencies:
     next: ">=13.4 <14.0.2 || ^14.0.3"
-  checksum: adc8b7680bdd92515b6cf941d838bb94e5206a325e9d3270c54d3d1ba7d02198e30a70007a9ae3ab5adcbbcdd35f97b5396607426d19b62839df5805c30f095a
+  checksum: 98e26518fdeda9518defe8abb34fd722f9fbc6d62dc7713dbc7bf365b5afc4c7c934088d7c7ed528621c222017841411241f0cfe97c615a3e7fb4d80354e8349
   languageName: node
   linkType: hard
 

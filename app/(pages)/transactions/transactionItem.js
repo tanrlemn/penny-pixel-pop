@@ -20,8 +20,16 @@ export default function TransactionItem({ txn }) {
   const setCurrentTxn = useSetRecoilState(currentTxnState);
 
   return (
-    <Tr key={txn.id}>
-      <Td>
+    <Tr
+      cursor={'pointer'}
+      key={txn.id}
+      onClick={() => {
+        setCurrentTxn(txn);
+        onOpen();
+      }}>
+      <Td
+        py={'0.75rem'}
+        px={'0.5rem'}>
         <DataText>{txn.envelope_name}</DataText>
       </Td>
       <Td isNumeric>
@@ -45,15 +53,6 @@ export default function TransactionItem({ txn }) {
         maxW={{ base: '250px' }}
         whiteSpace={'pre-wrap'}>
         <DataText>{txn.note}</DataText>
-      </Td>
-      <Td
-        cursor={'pointer'}
-        color={'gray.500'}
-        onClick={() => {
-          setCurrentTxn(txn);
-          onOpen();
-        }}>
-        <MoreHorizontal />
       </Td>
     </Tr>
   );

@@ -62,21 +62,33 @@ export default function TransactionDrawer() {
     onClose: onAlertClose,
   } = useDisclosure();
 
+  const handleClose = () => {
+    onClose();
+    currentTxn.id && resetCurrentTxn();
+  };
+
   return (
     <>
       <Drawer
         isOpen={isOpen}
-        placement={{ base: 'bottom', md: 'right' }}
-        size={{ base: 'lg', md: 'sm' }}
-        onClose={onClose}>
+        placement={'bottom'}
+        onClose={handleClose}>
         <DrawerOverlay />
-        <DrawerContent minH={'80vh'}>
+        <DrawerContent
+          minH={'80vh'}
+          maxH={'80vh'}
+          pb={'1rem'}>
           <DrawerCloseButton />
 
           {envelopes && (
             <>
-              <DrawerHeader>
-                <Text fontSize={'1.5rem'}>Transaction</Text>
+              <DrawerHeader
+                pb={'0.5rem'}
+                borderBottom={'1px solid'}
+                borderBottomColor={'gray.200'}>
+                <Text fontSize={'1.25rem'}>
+                  {currentTxn.id ? 'Edit Transaction' : 'Transaction'}
+                </Text>
               </DrawerHeader>
               <DrawerBody pt={'2rem'}>
                 <FormControl>
@@ -159,9 +171,13 @@ export default function TransactionDrawer() {
               </DrawerBody>
 
               <DrawerFooter
+                pb={0}
+                mb={0}
                 borderTop={'1px solid'}
                 borderTopColor={'gray.200'}>
-                <Flex gap={'1rem'}>
+                <Flex
+                  gap={'1rem'}
+                  p={0}>
                   <Button
                     onClick={() => {
                       setIsLoading(true);

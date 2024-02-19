@@ -28,13 +28,13 @@ export default function TransactionsList({ transactions }) {
       minW={'max-content'}
       w={'100%'}>
       <Table
-        variant='simple'
+        variant='striped'
         size={'sm'}>
         <Thead
           fontSize={'0.8rem'}
           color={'gray.500'}>
           <Tr>
-            <Th>
+            <Th px={'0.5rem'}>
               <DataTitle>Envelope name</DataTitle>
             </Th>
             <Th isNumeric>

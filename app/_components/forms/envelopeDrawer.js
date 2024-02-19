@@ -58,15 +58,19 @@ export default function EnvelopeDrawer() {
         autoFocus={false}
         trapFocus={false}
         isOpen={isOpen}
-        placement={{ base: 'bottom', md: 'right' }}
-        size={{ base: 'lg', md: 'sm' }}
+        placement={'bottom'}
         onClose={onClose}>
         <DrawerOverlay />
-        <DrawerContent minH={'80vh'}>
+        <DrawerContent
+          minH={'80vh'}
+          maxH={'85vh'}>
           <DrawerCloseButton />
 
-          <DrawerHeader>
-            <Text fontSize={'1.5rem'}>
+          <DrawerHeader
+            pb={'0.5rem'}
+            borderBottom={'1px solid'}
+            borderBottomColor={'gray.200'}>
+            <Text fontSize={'1.25rem'}>
               {currentEnvelope.id ? 'Edit envelope' : 'Envelope'}
             </Text>
           </DrawerHeader>
