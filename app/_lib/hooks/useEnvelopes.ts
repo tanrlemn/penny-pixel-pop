@@ -2,11 +2,6 @@
 import { useRecoilValue, useResetRecoilState, useRecoilState } from 'recoil';
 import {
   envelopesState,
-  envelopeNameWidthState,
-  budgetAmountWidthState,
-  amountSpentWidthState,
-  amountLeftWidthState,
-  categoryWidthState,
   envelopeDrawerState,
   currentEnvelopeState,
   userState,
@@ -41,6 +36,7 @@ export function useEnvelopes() {
   useEffect(() => {
     const fetchEnvelopes = async () => {
       if (!user) return;
+      console.log('fetching envelopes');
       const data = await fetchEnvelopesAPI();
       setEnvelopes(data);
 
@@ -54,7 +50,7 @@ export function useEnvelopes() {
       setCategoryList(categorizedEnvelopes);
     };
 
-    envelopes === null && fetchEnvelopes();
+    !envelopes && fetchEnvelopes();
   }, [user, setEnvelopes, envelopes]);
 
   const resetCurrentEnvelope = useResetRecoilState(currentEnvelopeState);
@@ -257,34 +253,6 @@ export function useEnvelopes() {
     currentEnvelope,
     setCurrentEnvelope,
     resetCurrentEnvelope,
-  };
-}
-
-export function useEnvelopeWidths() {
-  const [envelopeNameWidth, setEnvelopeNameWidth] = useRecoilState(
-    envelopeNameWidthState
-  );
-  const [budgetAmountWidth, setBudgetAmountWidth] = useRecoilState(
-    budgetAmountWidthState
-  );
-  const [amountSpentWidth, setAmountSpentWidth] = useRecoilState(
-    amountSpentWidthState
-  );
-  const [amountLeftWidth, setAmountLeftWidth] =
-    useRecoilState(amountLeftWidthState);
-  const [categoryWidth, setCategoryWidth] = useRecoilState(categoryWidthState);
-
-  return {
-    envelopeNameWidth,
-    setEnvelopeNameWidth,
-    budgetAmountWidth,
-    setBudgetAmountWidth,
-    amountSpentWidth,
-    setAmountSpentWidth,
-    amountLeftWidth,
-    setAmountLeftWidth,
-    categoryWidth,
-    setCategoryWidth,
   };
 }
 

@@ -104,7 +104,7 @@ function LoggedInLayout({ profile, signOut }) {
             lineHeight={1.2}
             size={'xs'}
             fontWeight={500}
-            color={'purple.600'}
+            color={'orange.600'}
           >
             {profile?.full_name}
           </Heading>

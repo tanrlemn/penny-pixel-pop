@@ -65,28 +65,3 @@ export const envelopeDrawerState = atom({
   key: 'newEnvelopeDrawerState',
   default: false,
 });
-
-export const envelopeNameWidthState = atom({
-  key: 'envelopeNameWidthState',
-  default: 0,
-});
-
-export const budgetAmountWidthState = atom({
-  key: 'budgetAmountWidthState',
-  default: 0,
-});
-
-export const amountSpentWidthState = atom({
-  key: 'amountSpentWidthState',
-  default: 0,
-});
-
-export const amountLeftWidthState = atom({
-  key: 'amountLeftWidthState',
-  default: 0,
-});
-
-export const categoryWidthState = atom({
-  key: 'categoryWidthState',
-  default: 0,
-});

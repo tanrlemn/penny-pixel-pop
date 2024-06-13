@@ -12,7 +12,7 @@ import Logo from './logo';
 export default function LinkedLogo({
   link = '/',
   text = false,
-  color = 'purple.500',
+  color = 'orange.500',
 }) {
   return (
     <Link href={link}>

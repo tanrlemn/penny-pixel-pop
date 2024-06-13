@@ -1,18 +1,21 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { userState, profileState } from '@/app/_state/atoms';
 import { createClient } from '@/app/_lib/utils/supabase/client';
 
 export const useAuth = () => {
-  const setUser = useSetRecoilState(userState);
-  const setProfile = useSetRecoilState(profileState);
+  const [user, setUser] = useRecoilState(userState);
+  const [profile, setProfile] = useRecoilState(profileState);
+  const [loadingProfile, setLoadingProfile] = useState(false);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
 
   useEffect(() => {
-    const fetchProfile = async (userId) => {
+    const fetchProfile = async (userId: string) => {
+      setLoadingProfile(true);
+      console.log('fetching profile');
       const res = await fetch(`/api/auth/getProfile?userId=${userId}`);
       const { data, error } = await res.json();
 
@@ -25,18 +28,30 @@ export const useAuth = () => {
     };
 
     supabase.auth.onAuthStateChange(async (event, session) => {
-      const user = session?.user ?? null;
-      setUser(user);
-
-      if (user) {
-        await fetchProfile(user.id);
-      } else {
+      if (event === 'SIGNED_OUT') {
+        setUser(null);
         setProfile(null);
-      }
 
-      setLoading(false);
+        return;
+      } else if (event === 'INITIAL_SESSION' && !session) {
+        setLoading(false);
+        return;
+      } else if (
+        (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') &&
+        !user &&
+        session
+      ) {
+        const sessionUser = session?.user ?? null;
+        setUser(sessionUser);
+
+        return;
+      }
     });
-  }, [setUser, setProfile, supabase.auth]);
+
+    if (user && !profile && !loadingProfile) {
+      fetchProfile(user.id);
+    }
+  }, [user, setUser, profile, setProfile, supabase.auth, loadingProfile]);
 
   return { loading };
 };

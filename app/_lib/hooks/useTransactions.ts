@@ -31,19 +31,20 @@ export function useTransactions() {
   const toast = useToast();
 
   const user = useRecoilValue(userState);
-  const setTransactions = useSetRecoilState(transactionsState);
+  const [transactions, setTransactions] = useRecoilState(transactionsState);
   const resetCurrentTxn = useResetRecoilState(currentTxnState);
 
   // Fetch Transactions
   useEffect(() => {
     const fetchTransactions = async () => {
       if (!user) return;
+      console.log('fetching transactions');
       const data = await fetchTransactionsAPI();
       setTransactions(data);
     };
 
-    fetchTransactions();
-  }, [user, setTransactions]);
+    !transactions && fetchTransactions();
+  }, [user, transactions, setTransactions]);
 
   const createUpdateTransaction = useCallback(
     async ({ transactionId, transaction, setIsLoading }) => {
@@ -60,7 +61,7 @@ export function useTransactions() {
                 .catch((error) => reject(error));
             })
           : new Promise((resolve, reject) => {
-              updateTransactionAPI({ transaction })
+              updateTransactionAPI({ transactionId, transaction })
                 .then(() =>
                   setTimeout(() => {
                     resolve(200);
