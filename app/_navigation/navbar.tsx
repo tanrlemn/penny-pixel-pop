@@ -23,9 +23,10 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/react';
+import { Link } from '@chakra-ui/next-js';
 
 // Icons
-import { LogOut, MoreHorizontal } from 'lucide-react';
+import { LogOut, MoreHorizontal, Settings } from 'lucide-react';
 
 // Local components
 import MenuDrawer from './menuDrawer';
@@ -143,21 +144,18 @@ function UserMenu({ signOut }) {
         </Box>
       </MenuButton>
       <MenuList fontSize={'0.85rem'}>
-        {/* <MenuItem
+        <MenuItem
           py={'1rem'}
           borderBottom={'1px solid'}
-          borderBottomColor={'gray.200'}>
-          <Link
-            href={'/settings'}
-            w={'100%'}>
-            <Flex
-              justify={'space-between'}
-              align={'center'}>
+          borderBottomColor={'gray.200'}
+        >
+          <Link href={'/settings'} w={'100%'}>
+            <Flex justify={'space-between'} align={'center'}>
               Settings
               <Settings size={15} />
             </Flex>
           </Link>
-        </MenuItem> */}
+        </MenuItem>
         <MenuItem w={'100%'} color={'red.500'} py={'1rem'} onClick={signOut}>
           <Flex
             w={'100%'}

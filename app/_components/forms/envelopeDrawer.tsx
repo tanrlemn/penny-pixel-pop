@@ -58,9 +58,10 @@ export default function EnvelopeDrawer() {
         autoFocus={false}
         trapFocus={false}
         isOpen={isOpen}
-        placement={{ base: 'bottom', md: 'right' }}
+        placement={'right'}
         size={{ base: 'lg', md: 'sm' }}
-        onClose={onClose}>
+        onClose={onClose}
+      >
         <DrawerOverlay />
         <DrawerContent minH={'80vh'}>
           <DrawerCloseButton />
@@ -101,9 +102,7 @@ export default function EnvelopeDrawer() {
                     });
                   }}
                 />
-                <Flex
-                  align={'center'}
-                  gap={'1rem'}>
+                <Flex align={'center'} gap={'1rem'}>
                   <Text minW={'fit-content'}>Budget amount:</Text>
                   <Input
                     placeholder='$0.00'
@@ -113,14 +112,12 @@ export default function EnvelopeDrawer() {
                     onChange={(e) =>
                       setCurrentEnvelope({
                         ...currentEnvelope,
-                        budget_amount: e.target.value,
+                        budget_amount: Number(e.target.value),
                       })
                     }
                   />
                 </Flex>
-                <Flex
-                  align={'center'}
-                  gap={'1rem'}>
+                <Flex align={'center'} gap={'1rem'}>
                   <Text minW={'fit-content'}>Category:</Text>
                   <Select
                     onChange={(e) => {
@@ -133,12 +130,11 @@ export default function EnvelopeDrawer() {
                     iconColor='gray.400'
                     color={'gray.700'}
                     defaultValue={currentEnvelope.category || 'Necessities'}
-                    minW={'max-content'}>
+                    minW={'max-content'}
+                  >
                     {categories.map((category) => {
                       return (
-                        <option
-                          key={category.name}
-                          value={category.name}>
+                        <option key={category.name} value={category.name}>
                           {category.name}
                         </option>
                       );
@@ -148,9 +144,7 @@ export default function EnvelopeDrawer() {
               </Stack>
             </FormControl>
           </DrawerBody>
-          <DrawerFooter
-            borderTop={'1px solid'}
-            borderTopColor={'gray.200'}>
+          <DrawerFooter borderTop={'1px solid'} borderTopColor={'gray.200'}>
             <Flex gap={'1rem'}>
               {currentEnvelope.id ? (
                 <Button
@@ -159,7 +153,8 @@ export default function EnvelopeDrawer() {
                   variant={'outline'}
                   onClick={() => {
                     onAlertOpen();
-                  }}>
+                  }}
+                >
                   Delete envelope
                 </Button>
               ) : (
@@ -169,7 +164,8 @@ export default function EnvelopeDrawer() {
                   variant={'outline'}
                   onClick={() => {
                     onClose();
-                  }}>
+                  }}
+                >
                   Cancel
                 </Button>
               )}
@@ -186,7 +182,8 @@ export default function EnvelopeDrawer() {
                 }}
                 isLoading={isLoading}
                 colorScheme={'purple'}
-                size={'sm'}>
+                size={'sm'}
+              >
                 Save envelope
               </Button>
             </Flex>
@@ -198,12 +195,11 @@ export default function EnvelopeDrawer() {
         isCentered
         isOpen={isAlertOpen}
         leastDestructiveRef={cancelRef}
-        onClose={onAlertClose}>
+        onClose={onAlertClose}
+      >
         <AlertDialogOverlay>
           <AlertDialogContent m={'1rem'}>
-            <AlertDialogHeader
-              fontSize='lg'
-              fontWeight='bold'>
+            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
               Delete Envelope
             </AlertDialogHeader>
 
@@ -212,9 +208,7 @@ export default function EnvelopeDrawer() {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button
-                ref={cancelRef}
-                onClick={onAlertClose}>
+              <Button ref={cancelRef} onClick={onAlertClose}>
                 Cancel
               </Button>
               <Button
@@ -228,7 +222,8 @@ export default function EnvelopeDrawer() {
                   onClose();
                   onAlertClose();
                 }}
-                ml={3}>
+                ml={3}
+              >
                 Delete
               </Button>
             </AlertDialogFooter>

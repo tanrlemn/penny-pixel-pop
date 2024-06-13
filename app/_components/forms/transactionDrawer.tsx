@@ -66,9 +66,10 @@ export default function TransactionDrawer() {
     <>
       <Drawer
         isOpen={isOpen}
-        placement={{ base: 'bottom', md: 'right' }}
+        placement={'right'}
         size={{ base: 'lg', md: 'sm' }}
-        onClose={onClose}>
+        onClose={onClose}
+      >
         <DrawerOverlay />
         <DrawerContent minH={'80vh'}>
           <DrawerCloseButton />
@@ -81,9 +82,7 @@ export default function TransactionDrawer() {
               <DrawerBody pt={'2rem'}>
                 <FormControl>
                   <Stack spacing={3}>
-                    <Flex
-                      align={'center'}
-                      gap={'1rem'}>
+                    <Flex align={'center'} gap={'1rem'}>
                       <Text minW={'fit-content'}>Envelope:</Text>
                       <Select
                         onChange={(e) => {
@@ -97,21 +96,21 @@ export default function TransactionDrawer() {
                         color={'gray.700'}
                         placeholder='Select an envelope'
                         defaultValue={currentTxn.envelope_name}
-                        minW={'max-content'}>
+                        minW={'max-content'}
+                      >
                         {envelopes.map((envelope) => {
                           return (
                             <option
                               key={envelope.envelope_name}
-                              value={envelope.envelope_name}>
+                              value={envelope.envelope_name}
+                            >
                               {envelope.envelope_name}
                             </option>
                           );
                         })}
                       </Select>
                     </Flex>
-                    <Flex
-                      align={'center'}
-                      gap={'1rem'}>
+                    <Flex align={'center'} gap={'1rem'}>
                       <Text minW={'fit-content'}>Amount:</Text>
                       <Input
                         placeholder='$0.00'
@@ -121,7 +120,7 @@ export default function TransactionDrawer() {
                         onChange={(e) =>
                           setCurrentTxn({
                             ...currentTxn,
-                            amount: e.target.value,
+                            amount: Number(e.target.value),
                           })
                         }
                       />
@@ -158,9 +157,7 @@ export default function TransactionDrawer() {
                 </FormControl>
               </DrawerBody>
 
-              <DrawerFooter
-                borderTop={'1px solid'}
-                borderTopColor={'gray.200'}>
+              <DrawerFooter borderTop={'1px solid'} borderTopColor={'gray.200'}>
                 <Flex gap={'1rem'}>
                   <Button
                     onClick={() => {
@@ -169,7 +166,8 @@ export default function TransactionDrawer() {
                     }}
                     variant={'outline'}
                     colorScheme={'red'}
-                    size={'sm'}>
+                    size={'sm'}
+                  >
                     Delete transaction
                   </Button>
                   <Button
@@ -184,7 +182,8 @@ export default function TransactionDrawer() {
                     }}
                     isLoading={isLoading}
                     colorScheme={'purple'}
-                    size={'sm'}>
+                    size={'sm'}
+                  >
                     Save transaction
                   </Button>
                 </Flex>
@@ -197,12 +196,11 @@ export default function TransactionDrawer() {
         isCentered
         isOpen={isAlertOpen}
         leastDestructiveRef={cancelRef}
-        onClose={onAlertClose}>
+        onClose={onAlertClose}
+      >
         <AlertDialogOverlay>
           <AlertDialogContent m={'1rem'}>
-            <AlertDialogHeader
-              fontSize='lg'
-              fontWeight='bold'>
+            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
               Delete Transaction
             </AlertDialogHeader>
 
@@ -211,9 +209,7 @@ export default function TransactionDrawer() {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button
-                ref={cancelRef}
-                onClick={onAlertClose}>
+              <Button ref={cancelRef} onClick={onAlertClose}>
                 Cancel
               </Button>
               <Button
@@ -228,7 +224,8 @@ export default function TransactionDrawer() {
                   onAlertClose();
                   resetCurrentTxn();
                 }}
-                ml={3}>
+                ml={3}
+              >
                 Delete
               </Button>
             </AlertDialogFooter>

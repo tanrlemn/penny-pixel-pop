@@ -1,7 +1,7 @@
 'use client';
 
 // hooks
-import { useIsMobile } from '@/app/_lib/hooks/useIsMobile';
+import { useIsMobile } from '@/app/_lib/hooks/useWindowSize';
 
 // chakra-ui
 import { Flex, Heading, Link } from '@chakra-ui/react';
