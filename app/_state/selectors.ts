@@ -13,7 +13,7 @@ export const userProfileSelector = selector({
   key: 'userProfileSelector',
   get: ({ get }) => {
     const profile = get(profileState);
-    return profile ? { name: profile.name, email: profile.email } : null;
+    return profile ? profile : null;
   },
 });
 

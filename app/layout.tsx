@@ -11,9 +11,6 @@ import Providers from './_lib/providers';
 import { Suspense } from 'react';
 
 // local components
-import Navbar from './_navigation/navbar';
-import EnvelopeDrawer from './_components/forms/envelopeDrawer';
-import TransactionDrawer from './_components/forms/transactionDrawer';
 import LoadingDiv from './_components/interactive/loadingDiv';
 
 const APP_NAME = 'Penny Pixel Pop';
@@ -58,10 +55,7 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <Providers>
           <Suspense fallback={<LoadingDiv id={'layout'} isLoading={true} />}>
-            <Navbar />
             {children}
-            <EnvelopeDrawer />
-            <TransactionDrawer />
           </Suspense>
         </Providers>
       </body>

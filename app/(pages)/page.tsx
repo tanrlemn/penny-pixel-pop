@@ -1,8 +1,5 @@
 'use client';
 
-// hooks
-import { useQueryState } from 'nuqs';
-
 // chakra-ui
 import {
   Box,
@@ -17,12 +14,9 @@ import {
 } from '@chakra-ui/react';
 
 // local components
-import LoadingDiv from './_components/interactive/loadingDiv';
-import HowItWorks from './_components/sections/howItWorks';
+import HowItWorks from '@/app/_components/sections/howItWorks';
 
 export default function Home() {
-  const [code] = useQueryState('code');
-
   return (
     <Container maxW={'100%'} mb={'10rem'} p={0}>
       <Flex

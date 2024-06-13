@@ -7,7 +7,7 @@ export async function GET() {
 
   const supabase = createClient(cookieStore);
 
-  const { data, error } = await supabase.from('profiles').select('*');
+  const { data, error } = await supabase.from('profiles').select('*').single();
 
   if (error) {
     console.error(error);

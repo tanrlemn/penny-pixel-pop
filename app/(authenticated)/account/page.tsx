@@ -1,13 +1,15 @@
+import Account from './account';
+
 // images
 const images = ['https://i.imgur.com/BFWf7kuh.jpg'];
 
 // metadata
 export const metadata = {
-  title: 'Settings',
+  title: 'Account',
   description:
     'Adjust account settings, notification preferences, and privacy settings.',
   openGraph: {
-    title: 'Settings',
+    title: 'Account',
     images: images,
     description:
       'Adjust account settings, notification preferences, and privacy settings',
@@ -17,5 +19,5 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <></>;
+  return <Account />;
 }

@@ -19,12 +19,15 @@ export const useAuth = () => {
       const res = await fetch(`/api/auth/getProfile?userId=${userId}`);
       const { data, error } = await res.json();
 
-      if (!error && data) {
-        setProfile(data[0]);
+      if (data) {
+        setProfile(data);
       } else {
-        console.error(error);
+        error && console.error(error);
         setProfile(null);
       }
+
+      setLoading(false);
+      setLoadingProfile(false);
     };
 
     supabase.auth.onAuthStateChange(async (event, session) => {

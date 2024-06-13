@@ -40,30 +40,23 @@ export default function Envelopes() {
   }, [categoryList, setIsLoading]);
 
   return (
-    <Box
-      h={'fit-content'}
-      mt={'1rem'}
-      mb={'5rem'}>
-      <Container
-        maxW={{ base: '100vw', md: '900px' }}
-        p={'0.5rem'}>
+    <Box h={'fit-content'} mt={'1rem'} mb={'5rem'}>
+      <Container maxW={{ base: '100vw', md: '900px' }} p={'0.5rem'}>
         <Heading mb={'1rem'}>Envelopes</Heading>
         <Flex
           position={'sticky'}
-          zIndex={1000}
+          zIndex={10}
           bg={'white'}
           top={'0'}
           borderBottom={'1px solid'}
           borderBottomColor={'gray.200'}
           p={'0.5rem 0'}
           justify={'space-between'}
-          align={'center'}>
+          align={'center'}
+        >
           <Heading size={'sm'}>All envelopes</Heading>
           {categoryList && (
-            <Button
-              onClick={() => onOpen()}
-              colorScheme={'blue'}
-              size={'xs'}>
+            <Button onClick={() => onOpen()} colorScheme={'blue'} size={'xs'}>
               + New Envelope
             </Button>
           )}
@@ -71,10 +64,7 @@ export default function Envelopes() {
         <TableContainer pt={'1rem'}>
           {isLoading && (
             <Box m={'0 auto'}>
-              <LoadingDiv
-                id={'budget'}
-                isLoading={isLoading}
-              />
+              <LoadingDiv id={'budget'} isLoading={isLoading} />
             </Box>
           )}
           {categoryList &&
@@ -90,16 +80,8 @@ export default function Envelopes() {
             })}
           {totals && (
             <>
-              <Totals
-                totals={totals}
-                title={'Budgeted'}
-                color={'gray'}
-              />
-              <Totals
-                totals={totals}
-                title={'Actual'}
-                color={'red'}
-              />
+              <Totals totals={totals} title={'Budgeted'} color={'gray'} />
+              <Totals totals={totals} title={'Actual'} color={'red'} />
             </>
           )}
         </TableContainer>
