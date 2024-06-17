@@ -19,6 +19,11 @@ export default function EnvelopeItem({ envelope, color }) {
 
   const { updateEnvelopeCategory, setCurrentEnvelope } = useEnvelopes();
 
+  const handleClick = () => {
+    setCurrentEnvelope(envelope);
+    onOpen();
+  };
+
   return (
     <Tr
       cursor={'pointer'}
@@ -34,36 +39,18 @@ export default function EnvelopeItem({ envelope, color }) {
         position={'sticky'}
         left={0}
         bg={'white'}
-        onClick={() => {
-          setCurrentEnvelope(envelope);
-          onOpen();
-        }}
+        onClick={handleClick}
       >
         <DataText>{envelope.envelope_name}</DataText>
       </Td>
-      <Td
-        onClick={() => {
-          setCurrentEnvelope(envelope);
-          onOpen();
-        }}
-        isNumeric
-      >
+      <Td onClick={handleClick} isNumeric>
         <DataText>{formatCurrency(envelope.budget_amount)}</DataText>
       </Td>
-      <Td
-        onClick={() => {
-          setCurrentEnvelope(envelope);
-          onOpen();
-        }}
-        isNumeric
-      >
+      <Td onClick={handleClick} isNumeric>
         <DataText>{formatCurrency(envelope.totalSpent)}</DataText>
       </Td>
       <Td
-        onClick={() => {
-          setCurrentEnvelope(envelope);
-          onOpen();
-        }}
+        onClick={handleClick}
         isNumeric
         color={envelope.isOver ? 'red.500' : null}
       >

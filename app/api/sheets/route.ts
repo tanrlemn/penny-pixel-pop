@@ -7,10 +7,14 @@ export async function GET() {
 
   const supabase = createClient(cookieStore);
 
-  const { data, error } = await supabase.from('transactions').select('*');
+  const { data, error } = await supabase
+    .from('sheets')
+    .select('*')
+    .order('updated_at', { ascending: true });
 
   if (error) {
     console.error(error);
+    return NextResponse.error();
   }
 
   return NextResponse.json({ data });

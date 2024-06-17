@@ -1,6 +1,6 @@
 export const fetchEnvelopesAPI = async () => {
   try {
-    const res = await fetch('/api/envelopes/getEnvelopes', {
+    const res = await fetch('/api/envelopes', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -16,7 +16,7 @@ export const fetchEnvelopesAPI = async () => {
 
 export const updateEnvelopeCategoryAPI = async ({ envelopeId, category }) => {
   try {
-    const res = await fetch('/api/envelopes/updateEnvelopeCategory', {
+    const res = await fetch('/api/envelopes/update/category', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ envelopeId, category }),
@@ -39,7 +39,7 @@ export const createUpdateEnvelopeAPI = async ({
     const { envelope_name, budget_amount, category } = envelope;
 
     envelopeId
-      ? await fetch('/api/envelopes/updateEnvelope', {
+      ? await fetch('/api/envelopes/update', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export const createUpdateEnvelopeAPI = async ({
             category: category,
           }),
         })
-      : await fetch('/api/envelopes/createEnvelope', {
+      : await fetch('/api/envelopes/create', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ export const createUpdateEnvelopeAPI = async ({
 
 export const deleteEnvelopeAPI = async ({ envelopeId }) => {
   try {
-    await fetch('/api/envelopes/deleteEnvelope', {
+    await fetch('/api/envelopes/delete', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

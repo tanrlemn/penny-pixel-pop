@@ -1,6 +1,6 @@
 export const fetchTransactionsAPI = async () => {
   try {
-    const res = await fetch('/api/transactions/getTransactions', {
+    const res = await fetch('/api/transactions', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -19,7 +19,7 @@ export const updateTransactionAPI = async ({ transactionId, transaction }) => {
 
   try {
     const updatedTransactions = transactionId
-      ? await fetch('/api/transactions/updateTransaction', {
+      ? await fetch('/api/transactions/update', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ export const updateTransactionAPI = async ({ transactionId, transaction }) => {
             date,
           }),
         })
-      : await fetch('/api/transactions/createTransaction', {
+      : await fetch('/api/transactions/create', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ export const updateTransactionAPI = async ({ transactionId, transaction }) => {
 
 export const deleteTransactionAPI = async ({ transactionId }) => {
   try {
-    const data = await fetch('/api/transactions/deleteTransaction', {
+    const data = await fetch('/api/transactions/delete', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

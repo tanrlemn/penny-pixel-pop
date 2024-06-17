@@ -1,7 +1,7 @@
 'use client';
 
 // recoil
-import { currentTxnState, envelopesState } from '@/app/_state/atoms';
+import { currentTransactionState, envelopesState } from '@/app/_state/atoms';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { currentTransactionSelector } from '@/app/_state/selectors';
 
@@ -48,7 +48,7 @@ export default function TransactionDrawer() {
   const envelopes = useRecoilValue(envelopesState);
   const { createUpdateTransaction, deleteTransaction, resetCurrentTxn } =
     useTransactions();
-  const setCurrentTxn = useSetRecoilState(currentTxnState);
+  const setCurrentTxn = useSetRecoilState(currentTransactionState);
   const currentTxn = useRecoilValue(currentTransactionSelector);
   const { isOpen, onClose } = useTransactionsDrawer();
 

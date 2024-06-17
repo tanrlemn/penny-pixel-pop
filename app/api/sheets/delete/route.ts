@@ -2,20 +2,20 @@ import { cookies } from 'next/headers';
 import { NextResponse, NextRequest } from 'next/server';
 import { createClient } from '@/app/_lib/utils/supabase/server';
 
-export async function GET(request: NextRequest, { params }) {
-  const id = params.id;
-
+export async function POST(request: NextRequest) {
   const cookieStore = cookies();
 
   const supabase = createClient(cookieStore);
-  const { data, error } = await supabase
-    .from('envelopes')
-    .select('*')
-    .eq('id', id);
+
+  const req = await request.json();
+  const { id } = req;
+
+  const { error } = await supabase.from('sheets').delete().eq('id', id);
 
   if (error) {
     console.error(error);
+    return NextResponse.error();
   }
 
-  return NextResponse.json({ data });
+  return NextResponse.json({ error });
 }

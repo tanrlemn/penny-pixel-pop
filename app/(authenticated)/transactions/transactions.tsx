@@ -22,6 +22,7 @@ import {
 // local components
 import TransactionsList from './transactionsList';
 import LoadingDiv from '@/app/_components/interactive/loadingDiv';
+import { History } from 'lucide-react';
 
 export default function Transactions() {
   const transactions = useRecoilValue(enrichedTransactionsSelector);
@@ -36,9 +37,7 @@ export default function Transactions() {
   }, [transactions, setIsLoading]);
 
   return (
-    <Box
-      mt={'1rem'}
-      mb={'5rem'}>
+    <Box mt={'1rem'} mb={'5rem'}>
       <Container maxW={'900px'}>
         <Heading mb={'1rem'}>Transactions</Heading>
         <Flex
@@ -50,13 +49,14 @@ export default function Transactions() {
           borderBottomColor={'gray.200'}
           p={'0.5rem 0'}
           justify={'space-between'}
-          align={'center'}>
-          <Heading size={'sm'}>All transactions</Heading>
+          align={'center'}
+        >
+          <Flex align={'center'} gap={'0.5rem'}>
+            <History size={17} />
+            <Heading size={'sm'}>All transactions</Heading>
+          </Flex>
           {transactions && (
-            <Button
-              onClick={() => onOpen()}
-              colorScheme={'purple'}
-              size={'xs'}>
+            <Button onClick={() => onOpen()} colorScheme={'purple'} size={'xs'}>
               + New Transaction
             </Button>
           )}
@@ -64,10 +64,7 @@ export default function Transactions() {
         <TableContainer pt={'1rem'}>
           {isLoading && (
             <Box m={'0 auto'}>
-              <LoadingDiv
-                id={'budget'}
-                isLoading={isLoading}
-              />
+              <LoadingDiv id={'budget'} isLoading={isLoading} />
             </Box>
           )}
           {transactions && <TransactionsList transactions={transactions} />}

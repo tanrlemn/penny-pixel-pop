@@ -4,7 +4,7 @@ import {
   profileState,
   transactionsState,
   envelopesState,
-  currentTxnState,
+  currentTransactionState,
 } from './atoms';
 import { categories } from './constants';
 
@@ -147,7 +147,7 @@ export const enrichedTransactionsSelector = selector({
 export const currentTransactionSelector = selector({
   key: 'currentTransactionSelector',
   get: ({ get }) => {
-    const currentTxn = get(currentTxnState);
+    const currentTxn = get(currentTransactionState);
     const envelopes = get(envelopesState);
 
     if (!currentTxn || !envelopes) return null;

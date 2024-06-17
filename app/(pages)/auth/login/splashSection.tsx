@@ -30,7 +30,6 @@ export default function AuthSplashSection() {
     <>
       {randomIndex && (
         <Box
-          background={'var(--lightBlue)'}
           h={{ base: '40vh', md: '93vh' }}
           mb={{ base: '2rem', md: 0 }}
           w={'100%'}

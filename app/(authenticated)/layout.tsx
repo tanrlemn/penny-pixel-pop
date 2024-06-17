@@ -11,6 +11,8 @@ import { userProfileSelector } from '@/app/_state/selectors';
 
 // supabase
 import { createClient } from '@/app/_lib/utils/supabase/client';
+
+// chakra-ui
 import {
   Flex,
   Box,
@@ -31,6 +33,7 @@ import MenuTabs from '@/app/_navigation/menuTabs';
 import Logo from '@/app/_components/branding/logo';
 import EnvelopeDrawer from '@/app/_components/forms/envelopeDrawer';
 import TransactionDrawer from '@/app/_components/forms/transactionDrawer';
+import SheetDrawer from '@/app/_components/forms/sheetDrawer';
 
 export default function AuthenticatedLayout({ children }) {
   const { loading } = useAuth();
@@ -42,7 +45,6 @@ export default function AuthenticatedLayout({ children }) {
   const router = useRouter();
   const supabase = createClient();
 
-  const isAuth = pathname.includes('/auth');
   const isUserPage =
     pathname.includes('/envelopes') ||
     pathname.includes('/settings') ||
@@ -50,16 +52,13 @@ export default function AuthenticatedLayout({ children }) {
     pathname.includes('/transactions');
 
   useEffect(() => {
-    if (!loading && !loggedIn && !isAuth && isUserPage) {
+    if (!loading && !loggedIn && isUserPage) {
       console.log('redirecting to login');
       router.replace(
         '/auth/login?message=You must be logged in to view that page'
       );
-    } else if (!loading && loggedIn && isAuth && !isUserPage) {
-      console.log('redirecting to dashboard');
-      router.replace('/envelopes');
     }
-  }, [loading, user, loggedIn, router, isAuth, isUserPage, pathname]);
+  }, [loading, user, loggedIn, router, isUserPage, pathname]);
 
   const signOut = async () => {
     await supabase.auth.signOut({ scope: 'local' });
@@ -104,6 +103,7 @@ export default function AuthenticatedLayout({ children }) {
         </Flex>
       </Box>
       {children}
+      <SheetDrawer />
       <EnvelopeDrawer />
       <TransactionDrawer />
     </>

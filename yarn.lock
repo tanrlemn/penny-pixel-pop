@@ -1696,12 +1696,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/functions-js@npm:2.3.1":
-  version: 2.3.1
-  resolution: "@supabase/functions-js@npm:2.3.1"
+"@supabase/functions-js@npm:2.4.1":
+  version: 2.4.1
+  resolution: "@supabase/functions-js@npm:2.4.1"
   dependencies:
     "@supabase/node-fetch": "npm:^2.6.14"
-  checksum: 10c0/3d3ceadcb059c00c573a9f03ff91f7a6a9c60258ecd598e85a917cc7972ba0f2c537ae3b558ea34c0d1231cda4b0636f4d784cc71e37fa48664b7fd738b65916
+  checksum: 10c0/18c672aa9fc9f04ae662e596463d1bc7a4f01780533dbaecef85576caa56e4a3c6a90a727d64afc56a25f028bdc91ee89072b7c86d2492a93ab9a4ce00a7626b
   languageName: node
   linkType: hard
 
@@ -1714,12 +1714,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/postgrest-js@npm:1.15.2":
-  version: 1.15.2
-  resolution: "@supabase/postgrest-js@npm:1.15.2"
+"@supabase/postgrest-js@npm:1.15.5":
+  version: 1.15.5
+  resolution: "@supabase/postgrest-js@npm:1.15.5"
   dependencies:
     "@supabase/node-fetch": "npm:^2.6.14"
-  checksum: 10c0/a7dd2ef25a9b73f6fcd374b84c45ce610cfd9c2e565cb7a1c978601b62a6ec6cffa32751ef0857f850dc212acc9971aa6f0612aa9f8c0c0cb54cfb8b4d9a3cdb
+  checksum: 10c0/d57edc36158a7b2271b4889c12c8ae7d3c9630dd0ff2433f4a1702360825b08a0d93d3b5855eb49348a02f9d411ffd9da8df03fc00bad6b6ef2102358e2ec76e
   languageName: node
   linkType: hard
 
@@ -1747,26 +1747,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/storage-js@npm:2.5.5":
-  version: 2.5.5
-  resolution: "@supabase/storage-js@npm:2.5.5"
+"@supabase/storage-js@npm:2.6.0":
+  version: 2.6.0
+  resolution: "@supabase/storage-js@npm:2.6.0"
   dependencies:
     "@supabase/node-fetch": "npm:^2.6.14"
-  checksum: 10c0/5a81f0d21a1094187390d60d6d993b7fbcaef355611b3ec74fe6f333921703d6e7f7e8000c1e729b25fba11b91f6b40ffbff7c64af3b961403b50dc01808cbd1
+  checksum: 10c0/f086f4553fb9b3cfdd38ca8595cd71eb4d2e4dae6bf8e9cc2bbd6b4945be339c3f931c101f623250890520730ca500bb84afaf190a5d857e01603af93c6a29f7
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:^2.43.4":
-  version: 2.43.4
-  resolution: "@supabase/supabase-js@npm:2.43.4"
+"@supabase/supabase-js@npm:^2.43.5":
+  version: 2.43.5
+  resolution: "@supabase/supabase-js@npm:2.43.5"
   dependencies:
     "@supabase/auth-js": "npm:2.64.2"
-    "@supabase/functions-js": "npm:2.3.1"
+    "@supabase/functions-js": "npm:2.4.1"
     "@supabase/node-fetch": "npm:2.6.15"
-    "@supabase/postgrest-js": "npm:1.15.2"
+    "@supabase/postgrest-js": "npm:1.15.5"
     "@supabase/realtime-js": "npm:2.9.5"
-    "@supabase/storage-js": "npm:2.5.5"
-  checksum: 10c0/466efc6f9d9353c2d9d0881acb4aeaf441b06a97ee099d8eff6c8602ba6cbeef0b409808f36b39e0b843159f0ca2e9476d2b3c25547c103e51ce55c42dce84f8
+    "@supabase/storage-js": "npm:2.6.0"
+  checksum: 10c0/9234d0a5c06a7c246ee2cdaddfd7e026e3c0e582ddf1c316d7a01a9bd5f0f75e5cc22649ef06dccb2b2028925c529e8001f0d6002f7d1d68bc8699660699da4d
   languageName: node
   linkType: hard
 
@@ -3837,12 +3837,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide-react@npm:^0.394.0":
-  version: 0.394.0
-  resolution: "lucide-react@npm:0.394.0"
+"lucide-react@npm:^0.395.0":
+  version: 0.395.0
+  resolution: "lucide-react@npm:0.395.0"
   peerDependencies:
     react: ^16.5.1 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/63d040a4ce3789b2aca0e6206ff05aa4620e93f888f6dadf09a0946dcbbcab384410ea3761b32d4afd3a5cd041e3d3f4149c1d83d1680b3502bb552d7620f716
+  checksum: 10c0/e3ae8865da0e20514e6058f908c9b0686b9117e63c53ea42bdcdbc45e87a09054be35b4698c8f185dbd57fd110e6730c9c308b50e99f7170f498372b5fbac772
   languageName: node
   linkType: hard
 
@@ -4208,14 +4208,14 @@ __metadata:
     "@supabase/auth-ui-react": "npm:^0.4.7"
     "@supabase/auth-ui-shared": "npm:^0.1.8"
     "@supabase/ssr": "npm:^0.3.0"
-    "@supabase/supabase-js": "npm:^2.43.4"
+    "@supabase/supabase-js": "npm:^2.43.5"
     "@types/react": "npm:^18.3.3"
     date-fns: "npm:^3.6.0"
     eslint: "npm:^8.57.0"
     eslint-config-next: "npm:14.2.4"
     framer-motion: "npm:^11.2.10"
     lottie-react: "npm:^2.4.0"
-    lucide-react: "npm:^0.394.0"
+    lucide-react: "npm:^0.395.0"
     next: "npm:14.2.4"
     nuqs: "npm:^1.17.4"
     react: "npm:^18.3.1"

@@ -24,32 +24,26 @@ export default function AuthUI() {
 
   return (
     <Flex
-      background={'blue.50'}
       minH={'93vh'}
       maxW={'100%'}
       direction={{ base: 'column', md: 'row' }}
-      align={'center'}>
+      align={'center'}
+    >
       <AuthSplashSection />
       <Box
         p={{ base: '1rem', md: '3rem' }}
         minW={{ base: '100%', md: '400px' }}
-        w={{ base: '100%', md: '450px' }}>
+        w={{ base: '100%', md: '450px' }}
+      >
         {loading ? (
-          <LoadingDiv
-            id={'auth loader'}
-            isLoading={loading}
-          />
+          <LoadingDiv id={'auth loader'} isLoading={loading} />
         ) : (
           <>
-            <Heading
-              size={'lg'}
-              mb={'0.5rem'}>
+            <Heading size={'lg'} mb={'0.5rem'}>
               Welcome back!
             </Heading>
             <Text>Sign in to your account to continue.</Text>
-            <Box
-              w={'100%'}
-              mb={'2rem'}>
+            <Box w={'100%'} mb={'2rem'}>
               <Auth
                 supabaseClient={supabase}
                 appearance={{
@@ -61,19 +55,13 @@ export default function AuthUI() {
                 redirectTo={`${callbackUrl}/auth/callback`}
               />
             </Box>
-            <Text
-              textAlign={'center'}
-              fontSize={'0.75rem'}>
+            <Text textAlign={'center'} fontSize={'0.75rem'}>
               By continuing, you agree to Thought Soda&apos;s{' '}
-              <Link
-                textDecoration={'underline'}
-                href={'/terms'}>
+              <Link textDecoration={'underline'} href={'/terms'}>
                 Terms of Service
               </Link>{' '}
               and{' '}
-              <Link
-                textDecoration={'underline'}
-                href={'/privacy'}>
+              <Link textDecoration={'underline'} href={'/privacy'}>
                 Privacy Policy
               </Link>
               , and to receive periodic emails with updates.

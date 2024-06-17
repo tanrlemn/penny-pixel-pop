@@ -9,9 +9,9 @@ import {
 } from 'recoil';
 import {
   transactionsState,
-  currentTxnState,
+  currentTransactionState,
   userState,
-  transactionsDrawerState,
+  transactionDrawerState,
 } from '../../_state/atoms';
 
 // services
@@ -32,7 +32,7 @@ export function useTransactions() {
 
   const user = useRecoilValue(userState);
   const [transactions, setTransactions] = useRecoilState(transactionsState);
-  const resetCurrentTxn = useResetRecoilState(currentTxnState);
+  const resetCurrentTxn = useResetRecoilState(currentTransactionState);
 
   // Fetch Transactions
   useEffect(() => {
@@ -177,7 +177,7 @@ export function useTransactions() {
 }
 
 export function useTransactionsDrawer() {
-  const [isOpen, setIsOpen] = useRecoilState(transactionsDrawerState);
+  const [isOpen, setIsOpen] = useRecoilState(transactionDrawerState);
 
   const onClose = () => {
     setIsOpen(false);

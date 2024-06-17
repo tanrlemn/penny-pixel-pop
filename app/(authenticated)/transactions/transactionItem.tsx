@@ -4,7 +4,7 @@ import { formatDistance, subDays } from 'date-fns';
 
 // recoil
 import { useSetRecoilState } from 'recoil';
-import { currentTxnState } from '@/app/_state/atoms';
+import { currentTransactionState } from '@/app/_state/atoms';
 
 // hooks
 import { useTransactionsDrawer } from '@/app/_lib/hooks/useTransactions';
@@ -12,15 +12,16 @@ import { useTransactionsDrawer } from '@/app/_lib/hooks/useTransactions';
 // chakra-ui
 import { Td, Text, Tr } from '@chakra-ui/react';
 
-// local components
-import { MoreHorizontal } from 'lucide-react';
-
 export default function TransactionItem({ txn }) {
   const { onOpen } = useTransactionsDrawer();
-  const setCurrentTxn = useSetRecoilState(currentTxnState);
+  const setCurrentTransaction = useSetRecoilState(currentTransactionState);
 
+  const handleClick = () => {
+    setCurrentTransaction(txn);
+    onOpen();
+  };
   return (
-    <Tr key={txn.id}>
+    <Tr key={txn.id} onClick={handleClick} cursor={'pointer'}>
       <Td>
         <DataText>{txn.envelope_name}</DataText>
       </Td>
@@ -43,16 +44,6 @@ export default function TransactionItem({ txn }) {
       </Td>
       <Td maxW={{ base: '250px' }} whiteSpace={'pre-wrap'}>
         <DataText>{txn.note}</DataText>
-      </Td>
-      <Td
-        cursor={'pointer'}
-        color={'gray.500'}
-        onClick={() => {
-          setCurrentTxn(txn);
-          onOpen();
-        }}
-      >
-        <MoreHorizontal />
       </Td>
     </Tr>
   );

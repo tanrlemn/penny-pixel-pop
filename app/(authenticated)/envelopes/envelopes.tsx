@@ -26,6 +26,7 @@ import {
 import CategoryList from './categoryList';
 import Totals from './totals';
 import LoadingDiv from '@/app/_components/interactive/loadingDiv';
+import { List } from 'lucide-react';
 
 export default function Envelopes() {
   const { onOpen } = useEnvelopeDrawer();
@@ -54,7 +55,10 @@ export default function Envelopes() {
           justify={'space-between'}
           align={'center'}
         >
-          <Heading size={'sm'}>All envelopes</Heading>
+          <Flex align={'center'} gap={'0.5rem'}>
+            <List size={17} />
+            <Heading size={'sm'}>All envelopes</Heading>
+          </Flex>
           {categoryList && (
             <Button onClick={() => onOpen()} colorScheme={'blue'} size={'xs'}>
               + New Envelope

@@ -13,6 +13,21 @@ export const profileState = atom({
 });
 
 // budget atoms
+export const sheetsState = atom({
+  key: 'sheetsState',
+  default: null,
+});
+
+export const currentSheetState = atom({
+  key: 'currentSheetState',
+  default: {
+    id: null,
+    title: '',
+    start_date: null,
+    end_date: null,
+  },
+});
+
 export const envelopesState = atom({
   key: 'envelopesState',
   default: null,
@@ -38,8 +53,8 @@ export const transactionsState = atom({
   default: null,
 });
 
-export const currentTxnState = atom({
-  key: 'currentTxnState',
+export const currentTransactionState = atom({
+  key: 'currentTransactionState',
   default: {
     id: null,
     envelope_id: null,
@@ -56,12 +71,17 @@ export const isloadingState = atom({
   default: true,
 });
 
-export const transactionsDrawerState = atom({
-  key: 'transactionsDrawerState',
+export const sheetDrawerState = atom({
+  key: 'sheetDrawerState',
+  default: false,
+});
+
+export const transactionDrawerState = atom({
+  key: 'transactionDrawerState',
   default: false,
 });
 
 export const envelopeDrawerState = atom({
-  key: 'newEnvelopeDrawerState',
+  key: 'envelopeDrawerState',
   default: false,
 });
