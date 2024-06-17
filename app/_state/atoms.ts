@@ -45,6 +45,7 @@ export const currentEnvelopeState = atom({
     envelope_name: '',
     budget_amount: 0,
     category: 'Necessities',
+    sheet_id: null,
   },
 });
 
@@ -62,6 +63,7 @@ export const currentTransactionState = atom({
     amount: 0,
     note: '',
     date: new Date(),
+    sheet_id: null,
   },
 });
 

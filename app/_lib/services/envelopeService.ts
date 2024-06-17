@@ -30,25 +30,22 @@ export const updateEnvelopeCategoryAPI = async ({ envelopeId, category }) => {
   }
 };
 
-export const createUpdateEnvelopeAPI = async ({
-  envelopeId,
-  envelope,
-  setIsLoading,
-}) => {
+export const createUpdateEnvelopeAPI = async ({ envelope, setIsLoading }) => {
   try {
-    const { envelope_name, budget_amount, category } = envelope;
+    const { envelope_name, budget_amount, category, sheet_id, id } = envelope;
 
-    envelopeId
+    id
       ? await fetch('/api/envelopes/update', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            envelopeId,
+            id,
             envelope_name,
             budget_amount,
-            category: category,
+            category,
+            sheet_id,
           }),
         })
       : await fetch('/api/envelopes/create', {
@@ -59,7 +56,8 @@ export const createUpdateEnvelopeAPI = async ({
           body: JSON.stringify({
             envelope_name,
             budget_amount,
-            category: category,
+            category,
+            sheet_id,
           }),
         });
 

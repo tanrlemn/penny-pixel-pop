@@ -1,5 +1,8 @@
 'use client';
 
+// recoil
+import { useRecoilValue } from 'recoil';
+import { sheetsState } from '@/app/_state/atoms';
 // hooks
 import { useRef, useState } from 'react';
 import { useEnvelopeDrawer, useEnvelopes } from '@/app/_lib/hooks/useEnvelopes';
@@ -33,6 +36,8 @@ import { categories } from '@/app/_state/constants';
 
 export default function EnvelopeDrawer() {
   const cancelRef = useRef();
+
+  const sheets = useRecoilValue(sheetsState);
 
   const {
     currentEnvelope,
@@ -141,6 +146,37 @@ export default function EnvelopeDrawer() {
                     })}
                   </Select>
                 </Flex>
+                <Flex align={'center'} gap={'1rem'}>
+                  <Text minW={'fit-content'}>Sheet:</Text>
+                  {sheets && (
+                    <Select
+                      onChange={(e) => {
+                        setCurrentEnvelope({
+                          ...currentEnvelope,
+                          sheet_id: e.target.value,
+                        });
+                      }}
+                      variant={'filled'}
+                      iconColor='gray.400'
+                      color={'gray.700'}
+                      defaultValue={
+                        currentEnvelope.sheet_id || 'Select a sheet'
+                      }
+                      minW={'max-content'}
+                    >
+                      <option value={'Select a sheet'} disabled={true}>
+                        Select a sheet
+                      </option>
+                      {sheets.map((s) => {
+                        return (
+                          <option key={s.title} value={s.id}>
+                            {s.title}
+                          </option>
+                        );
+                      })}
+                    </Select>
+                  )}
+                </Flex>
               </Stack>
             </FormControl>
           </DrawerBody>
@@ -173,7 +209,6 @@ export default function EnvelopeDrawer() {
                 onClick={() => {
                   setIsLoading(true);
                   createUpdateEnvelope({
-                    envelopeId: currentEnvelope.id,
                     envelope: currentEnvelope,
                     setIsLoading,
                   });

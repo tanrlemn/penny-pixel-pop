@@ -5,6 +5,8 @@ import {
   envelopeDrawerState,
   currentEnvelopeState,
   userState,
+  sheetsState,
+  currentSheetState,
 } from '@/app/_state/atoms';
 import { categories } from '@/app/_state/constants';
 
@@ -26,6 +28,8 @@ export function useEnvelopes() {
   const toast = useToast();
 
   const user = useRecoilValue(userState);
+  const sheets = useRecoilValue(sheetsState);
+  const currentSheet = useRecoilValue(currentSheetState);
   const [envelopes, setEnvelopes] = useRecoilState(envelopesState);
 
   const [currentEnvelope, setCurrentEnvelope] =
@@ -35,14 +39,17 @@ export function useEnvelopes() {
 
   useEffect(() => {
     const fetchEnvelopes = async () => {
-      if (!user) return;
+      if (!user || !sheets || !currentSheet) return;
       console.log('fetching envelopes');
       const data = await fetchEnvelopesAPI();
-      setEnvelopes(data);
+      const filteredEnvelopes = data.filter(
+        (envelope) => envelope.sheet_id === currentSheet.id
+      );
+      setEnvelopes(filteredEnvelopes);
 
       const categorizedEnvelopes = categories.map((category) => ({
         ...category,
-        envelopes: data.filter(
+        envelopes: filteredEnvelopes.filter(
           (envelope) => envelope.category === category.name
         ),
       }));
@@ -51,7 +58,7 @@ export function useEnvelopes() {
     };
 
     !envelopes && fetchEnvelopes();
-  }, [user, setEnvelopes, envelopes]);
+  }, [user, setEnvelopes, envelopes, sheets, currentSheet]);
 
   const resetCurrentEnvelope = useResetRecoilState(currentEnvelopeState);
 
@@ -114,13 +121,13 @@ export function useEnvelopes() {
   );
 
   const createUpdateEnvelope = useCallback(
-    async ({ envelopeId, envelope, setIsLoading }) => {
+    async ({ envelope, setIsLoading }) => {
       setIsLoading(true);
+      const { id } = envelope;
       try {
-        const newEnvelope = envelopeId
+        const newEnvelope = id
           ? new Promise((resolve, reject) => {
               createUpdateEnvelopeAPI({
-                envelopeId,
                 envelope,
                 setIsLoading,
               })
@@ -133,7 +140,6 @@ export function useEnvelopes() {
             })
           : new Promise((resolve, reject) => {
               createUpdateEnvelopeAPI({
-                envelopeId,
                 envelope,
                 setIsLoading,
               })
@@ -154,7 +160,7 @@ export function useEnvelopes() {
         toast.promise(newEnvelope, {
           success: {
             position: 'top',
-            title: `Envelope ${envelopeId ? 'updated' : 'created'}`,
+            title: `Envelope ${id ? 'updated' : 'created'}`,
             duration: 3000,
             isClosable: true,
           },
@@ -164,9 +170,9 @@ export function useEnvelopes() {
           },
           error: {
             position: 'top',
-            title: `Envelope ${envelopeId ? 'update' : 'create'} failed`,
+            title: `Envelope ${id ? 'update' : 'create'} failed`,
             description: `There was an error ${
-              envelopeId ? 'updating' : 'creating'
+              id ? 'updating' : 'creating'
             } the envelope. Please try again.`,
             duration: 3000,
             isClosable: true,
@@ -176,9 +182,9 @@ export function useEnvelopes() {
         console.error('Envelope update/create error:', error);
         toast({
           position: 'top',
-          title: `Envelope ${envelopeId ? 'update' : 'create'} failed`,
+          title: `Envelope ${id ? 'update' : 'create'} failed`,
           description: `There was an error ${
-            envelopeId ? 'updating' : 'creating'
+            id ? 'updating' : 'creating'
           } the envelope. Please try again.`,
           status: 'error',
           duration: 3000,
