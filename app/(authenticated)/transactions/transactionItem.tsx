@@ -12,28 +12,29 @@ import { useTransactionsDrawer } from '@/app/_lib/hooks/useTransactions';
 // chakra-ui
 import { Td, Text, Tr } from '@chakra-ui/react';
 
-export default function TransactionItem({ txn }) {
+export default function TransactionItem({ transaction }) {
   const { onOpen } = useTransactionsDrawer();
   const setCurrentTransaction = useSetRecoilState(currentTransactionState);
 
   const handleClick = () => {
-    setCurrentTransaction(txn);
+    setCurrentTransaction(transaction);
     onOpen();
   };
   return (
-    <Tr key={txn.id} onClick={handleClick} cursor={'pointer'}>
+    <Tr key={transaction.id} onClick={handleClick} cursor={'pointer'}>
       <Td>
-        <DataText>{txn.envelope_name}</DataText>
+        <DataText>{transaction.envelope_name}</DataText>
       </Td>
       <Td isNumeric>
-        <DataText>{formatCurrency(txn.amount)}</DataText>
+        <DataText>{formatCurrency(transaction.amount)}</DataText>
       </Td>
       <Td>
         <DataText>
           {formatDistance(
             subDays(
-              new Date(txn.date),
-              new Date(txn.date).getTime() - new Date(txn.date).getTime()
+              new Date(transaction.date),
+              new Date(transaction.date).getTime() -
+                new Date(transaction.date).getTime()
             ),
             new Date(),
             {
@@ -43,7 +44,7 @@ export default function TransactionItem({ txn }) {
         </DataText>
       </Td>
       <Td maxW={{ base: '250px' }} whiteSpace={'pre-wrap'}>
-        <DataText>{txn.note}</DataText>
+        <DataText>{transaction.note}</DataText>
       </Td>
     </Tr>
   );

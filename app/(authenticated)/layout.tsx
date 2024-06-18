@@ -48,7 +48,7 @@ export default function AuthenticatedLayout({ children }) {
   const isUserPage =
     pathname.includes('/envelopes') ||
     pathname.includes('/settings') ||
-    pathname.includes('/dashboard') ||
+    pathname.includes('/sheets') ||
     pathname.includes('/transactions');
 
   useEffect(() => {

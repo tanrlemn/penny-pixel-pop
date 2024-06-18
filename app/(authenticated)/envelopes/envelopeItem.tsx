@@ -39,6 +39,8 @@ export default function EnvelopeItem({ envelope, color }) {
         position={'sticky'}
         left={0}
         bg={'white'}
+        maxW={'35vw'}
+        overflowX={'hidden'}
         onClick={handleClick}
       >
         <DataText>{envelope.envelope_name}</DataText>
@@ -64,7 +66,7 @@ export default function EnvelopeItem({ envelope, color }) {
             onChange={(e) => {
               setIsLoading(true);
               updateEnvelopeCategory({
-                envelopeId: envelope.id,
+                id: envelope.id,
                 category: e.target.value,
                 setIsLoading,
               });

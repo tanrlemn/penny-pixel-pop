@@ -5,8 +5,12 @@ import {
   transactionsState,
   envelopesState,
   currentTransactionState,
+  currentSheetState,
 } from './atoms';
 import { categories } from './constants';
+
+// utils
+import { format } from 'date-fns';
 
 // auth selectors
 export const userProfileSelector = selector({
@@ -17,16 +21,36 @@ export const userProfileSelector = selector({
   },
 });
 
+// sheet selectors
+export const currentSheetStringSelector = selector({
+  key: 'currentSheetStringSelector',
+  get: ({ get }) => {
+    const currentSheet = get(currentSheetState);
+
+    return currentSheet?.id
+      ? `${currentSheet.title}, ${format(
+          currentSheet.start_date,
+          'MMM d'
+        )}-${format(currentSheet.end_date, 'MMM d')}`
+      : null;
+  },
+});
+
 // envelope selectors
 export const enrichedEnvelopesSelector = selector({
   key: 'enrichedEnvelopesSelector',
   get: ({ get }) => {
-    const transactions = get(transactionsState);
+    const transactions = get(enrichedTransactionsSelector);
     const envelopes = get(envelopesState);
+    const currentSheet = get(currentSheetState);
 
-    if (!transactions || !envelopes) return null;
+    if (!transactions || !envelopes || !currentSheet) return null;
 
-    const enrichedEnvelopes = envelopes
+    const filteredEnvelopes = envelopes.filter(
+      (env) => env.sheet_id === currentSheet.id
+    );
+
+    const enrichedEnvelopes = filteredEnvelopes
       .map((envelope) => {
         const envelopeTransactions = transactions.filter(
           (t) => t.envelope_id === envelope.id
@@ -95,13 +119,13 @@ export const envelopeTotalsSelector = selector({
 
     const totalSpent = transactions
       ? transactions
-          .filter((txn) => !txn.isIncome)
+          .filter((t) => !t.isIncome)
           .reduce((acc, cur) => acc + cur.amount, 0)
       : 0;
 
     const totalIncome = transactions
       ? transactions
-          .filter((txn) => txn.isIncome)
+          .filter((t) => t.isIncome)
           .reduce((acc, cur) => acc + cur.amount, 0)
       : 0;
 
@@ -124,21 +148,26 @@ export const enrichedTransactionsSelector = selector({
   get: ({ get }) => {
     const transactions = get(transactionsState);
     const envelopes = get(envelopesState);
+    const currentSheet = get(currentSheetState);
 
-    if (!transactions || !envelopes) return null;
+    if (!transactions || !envelopes || !currentSheet) return null;
     if (transactions.length === 0 || envelopes.length === 0) return [];
+
+    const filteredTransactions = transactions.filter(
+      (t) => t.sheet_id === currentSheet.id
+    );
 
     const incomeEnvelopes = envelopes.filter(
       (env) => env.category === 'Income'
     );
 
-    return transactions
-      .map((txn) => ({
-        ...txn,
+    return filteredTransactions
+      .map((t) => ({
+        ...t,
         envelope_name:
-          envelopes.find((env) => env.id === txn.envelope_id)?.envelope_name ||
+          envelopes.find((env) => env.id === t.envelope_id)?.envelope_name ||
           'Unknown',
-        isIncome: incomeEnvelopes.some((env) => env.id === txn.envelope_id),
+        isIncome: incomeEnvelopes.some((env) => env.id === t.envelope_id),
       }))
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   },
@@ -147,16 +176,18 @@ export const enrichedTransactionsSelector = selector({
 export const currentTransactionSelector = selector({
   key: 'currentTransactionSelector',
   get: ({ get }) => {
-    const currentTxn = get(currentTransactionState);
+    const currentSheet = get(currentSheetState);
+    const currentTransaction = get(currentTransactionState);
     const envelopes = get(envelopesState);
 
-    if (!currentTxn || !envelopes) return null;
+    if (!currentTransaction || !envelopes || !currentSheet) return null;
 
     return {
-      ...currentTxn,
+      ...currentTransaction,
       envelope_id: envelopes.find(
-        (env) => env.envelope_name === currentTxn.envelope_name
+        (env) => env.envelope_name === currentTransaction.envelope_name
       )?.id,
+      sheet_id: currentSheet.id,
     };
   },
 });

@@ -1,9 +1,9 @@
 'use client';
 
 // recoil
-import { useRecoilValue, useRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState, useResetRecoilState } from 'recoil';
 import { enrichedTransactionsSelector } from '@/app/_state/selectors';
-import { isloadingState } from '@/app/_state/atoms';
+import { isloadingState, currentTransactionState } from '@/app/_state/atoms';
 
 // hooks
 import { useEffect } from 'react';
@@ -22,10 +22,11 @@ import {
 // local components
 import TransactionsList from './transactionsList';
 import LoadingDiv from '@/app/_components/interactive/loadingDiv';
-import { History } from 'lucide-react';
+import SheetSelect from '../sheets/sheetSelect';
 
 export default function Transactions() {
   const transactions = useRecoilValue(enrichedTransactionsSelector);
+  const resetCurrentTransaction = useResetRecoilState(currentTransactionState);
   const [isLoading, setIsLoading] = useRecoilState(isloadingState);
 
   const { onOpen } = useTransactionsDrawer();
@@ -38,7 +39,8 @@ export default function Transactions() {
 
   return (
     <Box mt={'1rem'} mb={'5rem'}>
-      <Container maxW={'900px'}>
+      <Container maxW={'700px'}>
+        <SheetSelect />
         <Heading mb={'1rem'}>Transactions</Heading>
         <Flex
           position={'sticky'}
@@ -52,11 +54,17 @@ export default function Transactions() {
           align={'center'}
         >
           <Flex align={'center'} gap={'0.5rem'}>
-            <History size={17} />
             <Heading size={'sm'}>All transactions</Heading>
           </Flex>
           {transactions && (
-            <Button onClick={() => onOpen()} colorScheme={'purple'} size={'xs'}>
+            <Button
+              onClick={() => {
+                resetCurrentTransaction;
+                onOpen();
+              }}
+              colorScheme={'purple'}
+              size={'xs'}
+            >
               + New Transaction
             </Button>
           )}

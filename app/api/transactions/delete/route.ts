@@ -8,12 +8,9 @@ export async function POST(request: NextRequest) {
   const supabase = createClient(cookieStore);
 
   const req = await request.json();
-  const { transactionId } = req;
+  const { id } = req;
 
-  const { error } = await supabase
-    .from('transactions')
-    .delete()
-    .eq('id', transactionId);
+  const { error } = await supabase.from('transactions').delete().eq('id', id);
 
   if (error) {
     console.error(error);

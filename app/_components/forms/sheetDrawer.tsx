@@ -50,10 +50,17 @@ export default function SheetDrawer() {
     onClose: onAlertClose,
   } = useDisclosure();
 
-  const [range, setRange] = useState({
-    from: currentSheet.start_date,
-    to: currentSheet.end_date,
-  });
+  const range = {
+    from: currentSheet?.start_date,
+    to: currentSheet?.end_date,
+  };
+  const setRange = (newRange) => {
+    setCurrentSheet({
+      ...currentSheet,
+      start_date: newRange.from,
+      end_date: newRange.to,
+    });
+  };
 
   return (
     <>
@@ -71,7 +78,7 @@ export default function SheetDrawer() {
 
           <DrawerHeader>
             <Text fontSize={'1.5rem'}>
-              {currentSheet.id ? 'Edit sheet' : 'Sheet'}
+              {currentSheet?.id ? 'Edit sheet' : 'Sheet'}
             </Text>
           </DrawerHeader>
 
@@ -97,7 +104,7 @@ export default function SheetDrawer() {
                   mb={'1rem'}
                   h={'auto'}
                   fontWeight={500}
-                  value={currentSheet.title}
+                  value={currentSheet?.title}
                   onChange={(e) => {
                     setCurrentSheet({
                       ...currentSheet,
@@ -125,7 +132,7 @@ export default function SheetDrawer() {
           </DrawerBody>
           <DrawerFooter borderTop={'1px solid'} borderTopColor={'gray.200'}>
             <Flex gap={'1rem'}>
-              {currentSheet.id ? (
+              {currentSheet?.id ? (
                 <Button
                   size={'sm'}
                   colorScheme='red'

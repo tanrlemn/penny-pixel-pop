@@ -11,25 +11,28 @@ export const fetchTransactionsAPI = async () => {
     return data;
   } catch (error) {
     console.error('Transaction fetch error:', error);
+    throw new Error(error);
   }
 };
 
-export const updateTransactionAPI = async ({ transactionId, transaction }) => {
-  const { envelope_id, amount, note, date } = transaction;
+export const createUpdateTransactionAPI = async ({ transaction }) => {
+  console.log('transaction', transaction);
+  const { envelope_id, amount, note, date, sheet_id, id } = transaction;
 
   try {
-    const updatedTransactions = transactionId
+    const updatedTransactions = id
       ? await fetch('/api/transactions/update', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            transactionId,
+            id,
             envelope_id,
             amount,
             note,
             date,
+            sheet_id,
           }),
         })
       : await fetch('/api/transactions/create', {
@@ -42,16 +45,18 @@ export const updateTransactionAPI = async ({ transactionId, transaction }) => {
             amount,
             note,
             date,
+            sheet_id,
           }),
         });
 
     return updatedTransactions.json();
   } catch (error) {
     console.error('Transaction update/create error:', error);
+    throw new Error(error);
   }
 };
 
-export const deleteTransactionAPI = async ({ transactionId }) => {
+export const deleteTransactionAPI = async ({ id }) => {
   try {
     const data = await fetch('/api/transactions/delete', {
       method: 'POST',
@@ -59,12 +64,13 @@ export const deleteTransactionAPI = async ({ transactionId }) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        transactionId,
+        id,
       }),
     });
 
     return data.json();
   } catch (error) {
     console.error('Transaction delete error:', error);
+    throw new Error(error);
   }
 };

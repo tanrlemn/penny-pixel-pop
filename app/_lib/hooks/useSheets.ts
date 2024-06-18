@@ -34,7 +34,7 @@ export function useSheets() {
 
   const [loading, setLoading] = useState(true);
 
-  const setUserCurrentSheet = useCallback(
+  const setCurrentUserSheet = useCallback(
     async ({ id }) => {
       console.log('setting user current sheet', id);
       const updatedProfile = {
@@ -47,8 +47,6 @@ export function useSheets() {
           profile: updatedProfile,
         });
 
-        console.log('updatedProfile', updatedProfile);
-        console.log('updated', updated);
         return updated.current_sheet_id;
       } catch (error) {
         console.error('Error setting user current sheet:', error);
@@ -62,19 +60,21 @@ export function useSheets() {
       if (!user || !profile) return;
       console.log('fetching sheets');
       const data = await fetchSheetsAPI();
-      const userCurrentSheet = await fetchSingleSheetAPI({
-        id: profile.current_sheet_id
-          ? profile.current_sheet_id
-          : setUserCurrentSheet({ id: data[0].id }),
-      });
-      setCurrentSheet(userCurrentSheet);
+
+      setCurrentSheet(
+        await fetchSingleSheetAPI({
+          id: profile.current_sheet_id
+            ? profile.current_sheet_id
+            : await setCurrentUserSheet({ id: data[0].id }),
+        })
+      );
       setSheets(data);
 
       setLoading(false);
     };
 
     !sheets && fetchSheets();
-  }, [user, setSheets, sheets, profile, setCurrentSheet, setUserCurrentSheet]);
+  }, [user, setSheets, sheets, profile, setCurrentSheet, setCurrentUserSheet]);
 
   const resetCurrentSheet = useResetRecoilState(currentSheetState);
 
@@ -87,10 +87,10 @@ export function useSheets() {
             id,
             sheet,
           })
-            .then(() => setTimeout(() => resolve(200), 1000))
             .then(async () => {
               const data = await fetchSheetsAPI();
               setSheets(data);
+              resolve(data);
             })
             .catch((error) => reject(error))
             .finally(() => setLoading(false));
@@ -120,6 +120,8 @@ export function useSheets() {
           },
         });
 
+        await setCurrentUserSheet({ id: sheet.id });
+
         setLoading(false);
       } catch (error) {
         console.error('Sheet update/create error:', error);
@@ -138,7 +140,7 @@ export function useSheets() {
         setLoading(false);
       }
     },
-    [resetCurrentSheet, setSheets, toast]
+    [resetCurrentSheet, setSheets, toast, setCurrentUserSheet]
   );
 
   const deleteSheet = useCallback(
@@ -146,12 +148,12 @@ export function useSheets() {
       try {
         const deletedSheet = new Promise((resolve, reject) => {
           deleteSheetAPI({ id })
-            .then(() => setTimeout(() => resolve(200), 1000))
             .then(async () => {
               const updateSheets = await fetchSheetsAPI();
               setSheets(updateSheets);
 
               resetCurrentSheet();
+              resolve(updateSheets);
             })
             .catch((error) => reject(error));
         });
@@ -177,6 +179,10 @@ export function useSheets() {
           },
         });
 
+        if (currentSheet.id === id) {
+          await setCurrentUserSheet({ id: sheets[0].id });
+        }
+
         setLoading(false);
       } catch (error) {
         console.error('Sheet delete error:', error);
@@ -192,7 +198,14 @@ export function useSheets() {
         });
       }
     },
-    [resetCurrentSheet, setSheets, toast]
+    [
+      resetCurrentSheet,
+      setSheets,
+      toast,
+      setCurrentUserSheet,
+      currentSheet,
+      sheets,
+    ]
   );
 
   return {
@@ -202,6 +215,7 @@ export function useSheets() {
     createUpdateSheet,
     deleteSheet,
     loading,
+    setCurrentUserSheet,
   };
 }
 

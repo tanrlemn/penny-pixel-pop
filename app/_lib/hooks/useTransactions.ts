@@ -12,12 +12,14 @@ import {
   currentTransactionState,
   userState,
   transactionDrawerState,
-} from '../../_state/atoms';
+  sheetsState,
+  currentSheetState,
+} from '@/app/_state/atoms';
 
 // services
 import {
   fetchTransactionsAPI,
-  updateTransactionAPI,
+  createUpdateTransactionAPI,
   deleteTransactionAPI,
 } from '../services/transactionService'; // Assuming these are implemented
 
@@ -31,55 +33,45 @@ export function useTransactions() {
   const toast = useToast();
 
   const user = useRecoilValue(userState);
+  const sheets = useRecoilValue(sheetsState);
+  const currentSheet = useRecoilValue(currentSheetState);
   const [transactions, setTransactions] = useRecoilState(transactionsState);
-  const resetCurrentTxn = useResetRecoilState(currentTransactionState);
+  const resetCurrentTransaction = useResetRecoilState(currentTransactionState);
 
   // Fetch Transactions
   useEffect(() => {
     const fetchTransactions = async () => {
-      if (!user) return;
+      if (!user || !sheets) return;
       console.log('fetching transactions');
       const data = await fetchTransactionsAPI();
+
       setTransactions(data);
     };
 
     !transactions && fetchTransactions();
-  }, [user, transactions, setTransactions]);
+  }, [user, transactions, setTransactions, sheets, currentSheet]);
 
   const createUpdateTransaction = useCallback(
-    async ({ transactionId, transaction, setIsLoading }) => {
+    async ({ transaction, setIsLoading }) => {
       setIsLoading(true);
+      const { id } = transaction;
       try {
-        const newTransaction = transactionId
-          ? new Promise((resolve, reject) => {
-              updateTransactionAPI({ transactionId, transaction })
-                .then(() => setTimeout(() => resolve(200), 500))
-                .then(async () => {
-                  const updatedTransactions = await fetchTransactionsAPI();
-                  setTransactions(updatedTransactions);
-                })
-                .catch((error) => reject(error));
+        const newTransaction = new Promise((resolve, reject) => {
+          createUpdateTransactionAPI({ transaction })
+            .then(async () => {
+              const updatedTransactions = await fetchTransactionsAPI();
+              setTransactions(updatedTransactions);
+              resolve(updatedTransactions);
             })
-          : new Promise((resolve, reject) => {
-              updateTransactionAPI({ transactionId, transaction })
-                .then(() =>
-                  setTimeout(() => {
-                    resolve(200);
-                  }, 500)
-                )
-                .then(async () => {
-                  const updatedTransactions = await fetchTransactionsAPI();
-                  setTransactions(updatedTransactions);
-                })
-                .catch((error) => reject(error));
-            });
+            .catch((error) => reject(error));
+        });
 
-        resetCurrentTxn();
+        resetCurrentTransaction();
 
         toast.promise(newTransaction, {
           success: {
             position: 'top',
-            title: `Transaction ${transactionId ? 'updated' : 'created'}`,
+            title: `Transaction ${id ? 'updated' : 'created'}`,
             duration: 3000,
             isClosable: true,
           },
@@ -89,9 +81,9 @@ export function useTransactions() {
           },
           error: {
             position: 'top',
-            title: `Transaction ${transactionId ? 'update' : 'create'} failed`,
+            title: `Transaction ${id ? 'update' : 'create'} failed`,
             description: `There was an error ${
-              transactionId ? 'updating' : 'creating'
+              id ? 'updating' : 'creating'
             } the transaction. Please try again.`,
             duration: 3000,
             isClosable: true,
@@ -101,9 +93,9 @@ export function useTransactions() {
         console.error('Transaction update/create error:', error);
         toast({
           position: 'top',
-          title: `Transaction ${transactionId ? 'update' : 'create'} failed`,
+          title: `Transaction ${id ? 'update' : 'create'} failed`,
           description: `There was an error ${
-            transactionId ? 'updating' : 'creating'
+            id ? 'updating' : 'creating'
           } the transaction. Please try again.`,
           status: 'error',
           duration: 5000,
@@ -113,18 +105,18 @@ export function useTransactions() {
         setIsLoading(false);
       }
     },
-    [setTransactions, resetCurrentTxn, toast]
+    [setTransactions, resetCurrentTransaction, toast]
   );
 
   const deleteTransaction = useCallback(
-    async ({ transactionId, setIsLoading }) => {
+    async ({ id, setIsLoading }) => {
       try {
         const deletedTransaction = new Promise((resolve, reject) => {
-          deleteTransactionAPI({ transactionId })
-            .then(() => setTimeout(() => resolve(200), 500))
+          deleteTransactionAPI({ id })
             .then(async () => {
               const updatedTransactions = await fetchTransactionsAPI();
               setTransactions(updatedTransactions);
+              resolve(updatedTransactions);
             })
             .catch((error) => reject(error));
         });
@@ -150,7 +142,7 @@ export function useTransactions() {
           },
         });
 
-        resetCurrentTxn();
+        resetCurrentTransaction();
         setIsLoading(false);
       } catch (error) {
         console.error('Transaction delete error:', error);
@@ -166,13 +158,13 @@ export function useTransactions() {
         });
       }
     },
-    [setTransactions, toast, resetCurrentTxn]
+    [setTransactions, toast, resetCurrentTransaction]
   );
 
   return {
     createUpdateTransaction,
     deleteTransaction,
-    resetCurrentTxn,
+    resetCurrentTransaction,
   };
 }
 

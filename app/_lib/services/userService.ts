@@ -22,12 +22,12 @@ export const updateUserProfileAPI = async ({ profile }) => {
 
     if (error) {
       console.error('updateUserProfileAPI error:', error);
-      throw error;
+      throw new Error(error.message);
     }
 
     return data;
   } catch (error) {
     console.error('User service fetch error:', error);
-    throw error;
+    throw new Error(error);
   }
 };

@@ -63,18 +63,18 @@ export function useEnvelopes() {
   const resetCurrentEnvelope = useResetRecoilState(currentEnvelopeState);
 
   const updateEnvelopeCategory = useCallback(
-    async ({ envelopeId, category, setIsLoading }) => {
+    async ({ id, category, setIsLoading }) => {
       setIsLoading(true);
       try {
         const updatedEnvelope = new Promise((resolve, reject) => {
           updateEnvelopeCategoryAPI({
-            envelopeId,
+            id,
             category,
           })
-            .then(() => setTimeout(() => resolve(200), 1000))
             .then(async () => {
               const data = await fetchEnvelopesAPI();
               setEnvelopes(data);
+              resolve(data);
             })
             .catch((error) => reject(error));
         });
@@ -131,10 +131,10 @@ export function useEnvelopes() {
                 envelope,
                 setIsLoading,
               })
-                .then(() => setTimeout(() => resolve(200), 1000))
                 .then(async () => {
                   const data = await fetchEnvelopesAPI();
                   setEnvelopes(data);
+                  resolve(data);
                 })
                 .catch((error) => reject(error));
             })
@@ -143,14 +143,10 @@ export function useEnvelopes() {
                 envelope,
                 setIsLoading,
               })
-                .then(() =>
-                  setTimeout(() => {
-                    resolve(200);
-                  }, 1000)
-                )
                 .then(async () => {
                   const data = await fetchEnvelopesAPI();
                   setEnvelopes(data);
+                  resolve(data);
                 })
                 .catch((error) => reject(error));
             });
@@ -198,16 +194,16 @@ export function useEnvelopes() {
   );
 
   const deleteEnvelope = useCallback(
-    async ({ envelopeId, setIsLoading }) => {
+    async ({ id, setIsLoading }) => {
       try {
         const deletedEnvelope = new Promise((resolve, reject) => {
-          deleteEnvelopeAPI({ envelopeId })
-            .then(() => setTimeout(() => resolve(200), 1000))
+          deleteEnvelopeAPI({ id })
             .then(async () => {
               const updateEnvelopes = await fetchEnvelopesAPI();
               setEnvelopes(updateEnvelopes);
 
               resetCurrentEnvelope();
+              resolve(updateEnvelopes);
             })
             .catch((error) => reject(error));
         });

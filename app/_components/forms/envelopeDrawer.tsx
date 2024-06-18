@@ -33,6 +33,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { categories } from '@/app/_state/constants';
+import { NumericFormat } from 'react-number-format';
 
 export default function EnvelopeDrawer() {
   const cancelRef = useRef();
@@ -56,6 +57,17 @@ export default function EnvelopeDrawer() {
     onOpen: onAlertOpen,
     onClose: onAlertClose,
   } = useDisclosure();
+
+  const inputProps = {
+    placeholder: '$0.00',
+    style: {
+      borderRadius: 'var(--chakra-radii-md)',
+      padding: '0.25rem 1rem',
+      border: '1px solid',
+      borderColor: 'var(--chakra-colors-gray-200)',
+      fontSize: '0.9rem',
+    },
+  };
 
   return (
     <>
@@ -94,7 +106,7 @@ export default function EnvelopeDrawer() {
                   }}
                   focusBorderColor='green.300'
                   placeholder='Untitled'
-                  fontSize={'2rem'}
+                  fontSize={'1.5rem'}
                   p={'0.5rem 0'}
                   mb={'1rem'}
                   h={'auto'}
@@ -109,17 +121,18 @@ export default function EnvelopeDrawer() {
                 />
                 <Flex align={'center'} gap={'1rem'}>
                   <Text minW={'fit-content'}>Budget amount:</Text>
-                  <Input
-                    placeholder='$0.00'
-                    size='md'
+                  <NumericFormat
                     value={currentEnvelope.budget_amount}
-                    type='number'
-                    onChange={(e) =>
+                    {...inputProps}
+                    prefix='$'
+                    thousandSeparator
+                    onValueChange={(values) => {
+                      const { floatValue } = values;
                       setCurrentEnvelope({
                         ...currentEnvelope,
-                        budget_amount: Number(e.target.value),
-                      })
-                    }
+                        budget_amount: floatValue,
+                      });
+                    }}
                   />
                 </Flex>
                 <Flex align={'center'} gap={'1rem'}>
@@ -135,7 +148,9 @@ export default function EnvelopeDrawer() {
                     iconColor='gray.400'
                     color={'gray.700'}
                     defaultValue={currentEnvelope.category || 'Necessities'}
-                    minW={'max-content'}
+                    maxW={'fit-content'}
+                    size={'sm'}
+                    borderRadius={'md'}
                   >
                     {categories.map((category) => {
                       return (
@@ -146,7 +161,7 @@ export default function EnvelopeDrawer() {
                     })}
                   </Select>
                 </Flex>
-                <Flex align={'center'} gap={'1rem'}>
+                {/* <Flex align={'center'} gap={'1rem'}>
                   <Text minW={'fit-content'}>Sheet:</Text>
                   {sheets && (
                     <Select
@@ -162,7 +177,9 @@ export default function EnvelopeDrawer() {
                       defaultValue={
                         currentEnvelope.sheet_id || 'Select a sheet'
                       }
-                      minW={'max-content'}
+                      maxW={'fit-content'}
+                      size={'sm'}
+                      borderRadius={'md'}
                     >
                       <option value={'Select a sheet'} disabled={true}>
                         Select a sheet
@@ -176,7 +193,7 @@ export default function EnvelopeDrawer() {
                       })}
                     </Select>
                   )}
-                </Flex>
+                </Flex> */}
               </Stack>
             </FormControl>
           </DrawerBody>
@@ -251,7 +268,7 @@ export default function EnvelopeDrawer() {
                 onClick={() => {
                   setIsLoading(true);
                   deleteEnvelope({
-                    envelopeId: currentEnvelope.id,
+                    id: currentEnvelope.id,
                     setIsLoading,
                   });
                   onClose();

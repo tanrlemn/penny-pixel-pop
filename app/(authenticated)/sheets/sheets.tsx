@@ -52,7 +52,6 @@ export default function Sheets() {
           align={'center'}
         >
           <Flex align={'center'} gap={'0.5rem'}>
-            <Layers3 size={17} />
             <Heading size={'sm'}>All sheets</Heading>
           </Flex>
           <Button onClick={onOpen} colorScheme={'orange'} size={'xs'}>

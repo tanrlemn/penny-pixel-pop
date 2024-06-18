@@ -1,9 +1,12 @@
 'use client';
 
 // recoil
-import { currentTransactionState, envelopesState } from '@/app/_state/atoms';
+import { currentTransactionState } from '@/app/_state/atoms';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { currentTransactionSelector } from '@/app/_state/selectors';
+import {
+  currentTransactionSelector,
+  enrichedEnvelopesSelector,
+} from '@/app/_state/selectors';
 
 // hooks
 import { useRef, useState } from 'react';
@@ -38,6 +41,7 @@ import {
   Textarea,
   useDisclosure,
 } from '@chakra-ui/react';
+import { NumericFormat } from 'react-number-format';
 
 // local components
 import DatePicker from '@/app/_components/forms/datePicker';
@@ -45,22 +49,43 @@ import DatePicker from '@/app/_components/forms/datePicker';
 export default function TransactionDrawer() {
   const cancelRef = useRef();
 
-  const envelopes = useRecoilValue(envelopesState);
-  const { createUpdateTransaction, deleteTransaction, resetCurrentTxn } =
-    useTransactions();
-  const setCurrentTxn = useSetRecoilState(currentTransactionState);
-  const currentTxn = useRecoilValue(currentTransactionSelector);
+  const categories = useRecoilValue(enrichedEnvelopesSelector);
+
+  const {
+    createUpdateTransaction,
+    deleteTransaction,
+    resetCurrentTransaction,
+  } = useTransactions();
+  const setCurrentTransaction = useSetRecoilState(currentTransactionState);
+  const currentTransaction = useRecoilValue(currentTransactionSelector);
   const { isOpen, onClose } = useTransactionsDrawer();
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [date, setDate] = useState(new Date());
+  const date = new Date(currentTransaction?.date);
+  const setDate = (newDate) => {
+    setCurrentTransaction({
+      ...currentTransaction,
+      date: newDate,
+    });
+  };
 
   const {
     isOpen: isAlertOpen,
     onOpen: onAlertOpen,
     onClose: onAlertClose,
   } = useDisclosure();
+
+  const inputProps = {
+    placeholder: '$0.00',
+    style: {
+      borderRadius: 'var(--chakra-radii-md)',
+      padding: '0.25rem 1rem',
+      border: '1px solid',
+      borderColor: 'var(--chakra-colors-gray-200)',
+      fontSize: '0.9rem',
+    },
+  };
 
   return (
     <>
@@ -74,7 +99,7 @@ export default function TransactionDrawer() {
         <DrawerContent minH={'80vh'}>
           <DrawerCloseButton />
 
-          {envelopes && (
+          {categories && (
             <>
               <DrawerHeader>
                 <Text fontSize={'1.5rem'}>Transaction</Text>
@@ -86,43 +111,51 @@ export default function TransactionDrawer() {
                       <Text minW={'fit-content'}>Envelope:</Text>
                       <Select
                         onChange={(e) => {
-                          setCurrentTxn({
-                            ...currentTxn,
+                          setCurrentTransaction({
+                            ...currentTransaction,
                             envelope_name: e.target.value,
                           });
                         }}
                         variant={'filled'}
                         iconColor='gray.400'
                         color={'gray.700'}
-                        placeholder='Select an envelope'
-                        defaultValue={currentTxn.envelope_name}
-                        minW={'max-content'}
+                        defaultValue={
+                          currentTransaction.envelope_name ||
+                          'Select an envelope'
+                        }
+                        maxW={'fit-content'}
+                        size={'sm'}
+                        borderRadius={'md'}
                       >
-                        {envelopes.map((envelope) => {
-                          return (
+                        <option value={'Select an envelope'} disabled={true}>
+                          Select an envelope
+                        </option>
+                        {categories.map((category) =>
+                          category.envelopes.map((envelope) => (
                             <option
                               key={envelope.envelope_name}
                               value={envelope.envelope_name}
                             >
                               {envelope.envelope_name}
                             </option>
-                          );
-                        })}
+                          ))
+                        )}
                       </Select>
                     </Flex>
                     <Flex align={'center'} gap={'1rem'}>
                       <Text minW={'fit-content'}>Amount:</Text>
-                      <Input
-                        placeholder='$0.00'
-                        size='md'
-                        value={currentTxn.amount}
-                        type='number'
-                        onChange={(e) =>
-                          setCurrentTxn({
-                            ...currentTxn,
-                            amount: Number(e.target.value),
-                          })
-                        }
+                      <NumericFormat
+                        value={currentTransaction.amount}
+                        {...inputProps}
+                        prefix='$'
+                        thousandSeparator
+                        onValueChange={(values) => {
+                          const { floatValue } = values;
+                          setCurrentTransaction({
+                            ...currentTransaction,
+                            amount: floatValue,
+                          });
+                        }}
                       />
                     </Flex>
 
@@ -132,8 +165,8 @@ export default function TransactionDrawer() {
                         date={date}
                         setDate={setDate}
                         setCurrent={(newDate) => {
-                          setCurrentTxn({
-                            ...currentTxn,
+                          setCurrentTransaction({
+                            ...currentTransaction,
                             date: newDate,
                           });
                         }}
@@ -142,10 +175,10 @@ export default function TransactionDrawer() {
                     <Box mt={'2rem'}>
                       <Text minW={'fit-content'}>Note:</Text>
                       <Textarea
-                        value={currentTxn.note}
+                        value={currentTransaction.note}
                         onChange={(e) =>
-                          setCurrentTxn({
-                            ...currentTxn,
+                          setCurrentTransaction({
+                            ...currentTransaction,
                             note: e.target.value,
                           })
                         }
@@ -159,23 +192,36 @@ export default function TransactionDrawer() {
 
               <DrawerFooter borderTop={'1px solid'} borderTopColor={'gray.200'}>
                 <Flex gap={'1rem'}>
-                  <Button
-                    onClick={() => {
-                      setIsLoading(true);
-                      onAlertOpen();
-                    }}
-                    variant={'outline'}
-                    colorScheme={'red'}
-                    size={'sm'}
-                  >
-                    Delete transaction
-                  </Button>
+                  {currentTransaction.id ? (
+                    <Button
+                      onClick={() => {
+                        setIsLoading(true);
+                        onAlertOpen();
+                      }}
+                      variant={'outline'}
+                      colorScheme={'red'}
+                      size={'sm'}
+                    >
+                      Delete transaction
+                    </Button>
+                  ) : (
+                    <Button
+                      size={'sm'}
+                      colorScheme='gray'
+                      variant={'outline'}
+                      onClick={() => {
+                        onClose();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  )}
+
                   <Button
                     onClick={() => {
                       setIsLoading(true);
                       createUpdateTransaction({
-                        transactionId: currentTxn.id,
-                        transaction: currentTxn,
+                        transaction: currentTransaction,
                         setIsLoading,
                       });
                       onClose();
@@ -183,6 +229,11 @@ export default function TransactionDrawer() {
                     isLoading={isLoading}
                     colorScheme={'purple'}
                     size={'sm'}
+                    isDisabled={
+                      currentTransaction.amount === 0 ||
+                      !date ||
+                      !currentTransaction.envelope_name
+                    }
                   >
                     Save transaction
                   </Button>
@@ -217,12 +268,12 @@ export default function TransactionDrawer() {
                 onClick={() => {
                   setIsLoading(true);
                   deleteTransaction({
-                    transactionId: currentTxn.id,
+                    id: currentTransaction.id,
                     setIsLoading,
                   });
                   onClose();
                   onAlertClose();
-                  resetCurrentTxn();
+                  resetCurrentTransaction();
                 }}
                 ml={3}
               >

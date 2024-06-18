@@ -11,15 +11,16 @@ export const fetchEnvelopesAPI = async () => {
     return data;
   } catch (error) {
     console.error('Envelope service fetch error:', error);
+    throw new Error(error);
   }
 };
 
-export const updateEnvelopeCategoryAPI = async ({ envelopeId, category }) => {
+export const updateEnvelopeCategoryAPI = async ({ id, category }) => {
   try {
     const res = await fetch('/api/envelopes/update/category', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ envelopeId, category }),
+      body: JSON.stringify({ id, category }),
     });
 
     const { data } = await res.json();
@@ -27,6 +28,7 @@ export const updateEnvelopeCategoryAPI = async ({ envelopeId, category }) => {
     return data;
   } catch (error) {
     console.error('Envelope service update category error:', error);
+    throw new Error(error);
   }
 };
 
@@ -64,12 +66,13 @@ export const createUpdateEnvelopeAPI = async ({ envelope, setIsLoading }) => {
     setIsLoading(false);
   } catch (error) {
     console.error('Envelope service update/create error:', error);
+    throw new Error(error);
   } finally {
     setIsLoading(false);
   }
 };
 
-export const deleteEnvelopeAPI = async ({ envelopeId }) => {
+export const deleteEnvelopeAPI = async ({ id }) => {
   try {
     await fetch('/api/envelopes/delete', {
       method: 'POST',
@@ -77,13 +80,13 @@ export const deleteEnvelopeAPI = async ({ envelopeId }) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        envelopeId,
+        id,
       }),
     });
 
-    return envelopeId;
+    return id;
   } catch (error) {
     console.error('Envelope service delete error:', error);
-    return error;
+    throw new Error(error);
   }
 };

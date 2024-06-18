@@ -11,7 +11,7 @@ export const fetchSheetsAPI = async () => {
     return data;
   } catch (error) {
     console.error('Sheet service fetch error:', error);
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -29,7 +29,7 @@ export const fetchSingleSheetAPI = async ({ id }) => {
     return data;
   } catch (error) {
     console.error('Sheet service fetch error:', error);
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -70,7 +70,7 @@ export const createUpdateSheetAPI = async ({ id, sheet }) => {
     return data;
   } catch (error) {
     console.error('Sheet service update/create error:', error);
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -89,6 +89,6 @@ export const deleteSheetAPI = async ({ id }) => {
     return id;
   } catch (error) {
     console.error('Sheet service delete error:', error);
-    throw error;
+    throw new Error(error);
   }
 };

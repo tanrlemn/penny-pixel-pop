@@ -26,7 +26,7 @@ import {
 import CategoryList from './categoryList';
 import Totals from './totals';
 import LoadingDiv from '@/app/_components/interactive/loadingDiv';
-import { List } from 'lucide-react';
+import SheetSelect from '../sheets/sheetSelect';
 
 export default function Envelopes() {
   const { onOpen } = useEnvelopeDrawer();
@@ -42,7 +42,8 @@ export default function Envelopes() {
 
   return (
     <Box h={'fit-content'} mt={'1rem'} mb={'5rem'}>
-      <Container maxW={{ base: '100vw', md: '900px' }} p={'0.5rem'}>
+      <Container maxW={{ base: '100vw', md: '700px' }} p={'0.5rem'}>
+        <SheetSelect />
         <Heading mb={'1rem'}>Envelopes</Heading>
         <Flex
           position={'sticky'}
@@ -56,7 +57,6 @@ export default function Envelopes() {
           align={'center'}
         >
           <Flex align={'center'} gap={'0.5rem'}>
-            <List size={17} />
             <Heading size={'sm'}>All envelopes</Heading>
           </Flex>
           {categoryList && (
