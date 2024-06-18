@@ -2,7 +2,7 @@
 
 // hooks
 import { usePathname } from 'next/navigation';
-import { useAuth } from '../_lib/hooks/useAuth';
+import { useAuth } from '../_lib/hooks/auth';
 
 // chakra-ui
 import { Box, Flex, Link, Text, VStack } from '@chakra-ui/react';
@@ -50,7 +50,7 @@ export default function MenuTabs() {
 const MenuTab = ({ isCurrent, link, icon, title }) => {
   return (
     <Link
-      color={isCurrent ? 'purple.600' : 'gray.400'}
+      color={isCurrent ? 'orange.600' : 'gray.500'}
       href={link}
       p={'0.5rem'}
     >

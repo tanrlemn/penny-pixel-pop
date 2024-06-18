@@ -1,6 +1,12 @@
+// recoil
+import { useSetRecoilState, useRecoilState } from 'recoil';
+import {
+  currentEnvelopeState,
+  loadingSingleEnvelopeState,
+} from '@/app/_state/atoms';
+
 // hooks
-import { useState } from 'react';
-import { useEnvelopeDrawer, useEnvelopes } from '@/app/_lib/hooks/useEnvelopes';
+import { useEnvelopeDrawer, useEnvelopes } from '@/app/_lib/hooks/envelopes';
 
 // utils
 import { formatCurrency } from '@/app/_lib/utils/currencyFormater';
@@ -13,11 +19,14 @@ import { Select, Td, Text, Tr } from '@chakra-ui/react';
 import LoadingDiv from '@/app/_components/interactive/loadingDiv';
 
 export default function EnvelopeItem({ envelope, color }) {
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadingEnvelope, setLoadingEnvelope] = useRecoilState(
+    loadingSingleEnvelopeState
+  );
 
   const { onOpen } = useEnvelopeDrawer();
 
-  const { updateEnvelopeCategory, setCurrentEnvelope } = useEnvelopes();
+  const setCurrentEnvelope = useSetRecoilState(currentEnvelopeState);
+  const { updateEnvelopeCategory } = useEnvelopes();
 
   const handleClick = () => {
     setCurrentEnvelope(envelope);
@@ -31,6 +40,7 @@ export default function EnvelopeItem({ envelope, color }) {
       onClick={() => {
         setCurrentEnvelope(envelope);
       }}
+      bg={envelope.isOver ? 'red.50' : 'white'}
     >
       <Td
         px={'0.5rem'}
@@ -38,7 +48,7 @@ export default function EnvelopeItem({ envelope, color }) {
         borderColor={'gray.100'}
         position={'sticky'}
         left={0}
-        bg={'white'}
+        bg={envelope.isOver ? 'red.50' : 'white'}
         maxW={'35vw'}
         overflowX={'hidden'}
         onClick={handleClick}
@@ -59,16 +69,15 @@ export default function EnvelopeItem({ envelope, color }) {
         <DataText>{formatCurrency(envelope.amountLeft)}</DataText>
       </Td>
       <Td>
-        {isLoading ? (
-          <LoadingDiv id={envelope.id} isLoading={isLoading} />
+        {loadingEnvelope === envelope.id ? (
+          <LoadingDiv id={envelope.id} isLoading={loadingEnvelope} />
         ) : (
           <Select
             onChange={(e) => {
-              setIsLoading(true);
+              setLoadingEnvelope(envelope.id);
               updateEnvelopeCategory({
                 id: envelope.id,
                 category: e.target.value,
-                setIsLoading,
               });
             }}
             variant={'filled'}

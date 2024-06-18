@@ -1,11 +1,13 @@
 'use client';
 
 // recoil
-import { useRecoilValue } from 'recoil';
-import { sheetsState } from '@/app/_state/atoms';
+import { useRecoilValue, useRecoilState, useResetRecoilState } from 'recoil';
+import { sheetsState, currentEnvelopeState } from '@/app/_state/atoms';
+
 // hooks
 import { useRef, useState } from 'react';
-import { useEnvelopeDrawer, useEnvelopes } from '@/app/_lib/hooks/useEnvelopes';
+import { useEnvelopeDrawer, useEnvelopes } from '@/app/_lib/hooks/envelopes';
+import { useSheetDrawer, useSheets } from '@/app/_lib/hooks/sheets';
 
 // chakra-ui
 import {
@@ -40,17 +42,15 @@ export default function EnvelopeDrawer() {
 
   const sheets = useRecoilValue(sheetsState);
 
-  const {
-    currentEnvelope,
-    createUpdateEnvelope,
-    setCurrentEnvelope,
-    resetCurrentEnvelope,
-    deleteEnvelope,
-  } = useEnvelopes();
+  const { onOpen: onSheetsOpen } = useSheetDrawer();
+
+  const [currentEnvelope, setCurrentEnvelope] =
+    useRecoilState(currentEnvelopeState);
+  const resetCurrentEnvelope = useResetRecoilState(currentEnvelopeState);
+
+  const { createUpdateEnvelope, deleteEnvelope, loading } = useEnvelopes();
 
   const { isOpen, onClose } = useEnvelopeDrawer();
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const {
     isOpen: isAlertOpen,
@@ -161,39 +161,56 @@ export default function EnvelopeDrawer() {
                     })}
                   </Select>
                 </Flex>
-                {/* <Flex align={'center'} gap={'1rem'}>
-                  <Text minW={'fit-content'}>Sheet:</Text>
-                  {sheets && (
-                    <Select
-                      onChange={(e) => {
-                        setCurrentEnvelope({
-                          ...currentEnvelope,
-                          sheet_id: e.target.value,
-                        });
-                      }}
-                      variant={'filled'}
-                      iconColor='gray.400'
-                      color={'gray.700'}
-                      defaultValue={
-                        currentEnvelope.sheet_id || 'Select a sheet'
-                      }
-                      maxW={'fit-content'}
-                      size={'sm'}
-                      borderRadius={'md'}
-                    >
-                      <option value={'Select a sheet'} disabled={true}>
-                        Select a sheet
-                      </option>
-                      {sheets.map((s) => {
-                        return (
-                          <option key={s.title} value={s.id}>
-                            {s.title}
-                          </option>
-                        );
-                      })}
-                    </Select>
-                  )}
-                </Flex> */}
+                {!currentEnvelope.sheet_id && (
+                  <Flex align={'center'} gap={'1rem'}>
+                    <Text minW={'fit-content'}>Sheet:</Text>
+                    {sheets && (
+                      <>
+                        {sheets.length > 0 ? (
+                          <Select
+                            onChange={(e) => {
+                              setCurrentEnvelope({
+                                ...currentEnvelope,
+                                sheet_id: e.target.value,
+                              });
+                            }}
+                            variant={'filled'}
+                            iconColor='gray.400'
+                            color={'gray.700'}
+                            defaultValue={
+                              currentEnvelope.sheet_id || 'Select a sheet'
+                            }
+                            maxW={'fit-content'}
+                            size={'sm'}
+                            borderRadius={'md'}
+                          >
+                            <option value={'Select a sheet'} disabled={true}>
+                              Select a sheet
+                            </option>
+                            {sheets.map((s) => {
+                              return (
+                                <option key={s.title} value={s.id}>
+                                  {s.title}
+                                </option>
+                              );
+                            })}
+                          </Select>
+                        ) : (
+                          <Button
+                            onClick={() => {
+                              onClose();
+                              onSheetsOpen();
+                            }}
+                            colorScheme={'gray'}
+                            size={'xs'}
+                          >
+                            Create a Sheet
+                          </Button>
+                        )}
+                      </>
+                    )}
+                  </Flex>
+                )}
               </Stack>
             </FormControl>
           </DrawerBody>
@@ -224,16 +241,14 @@ export default function EnvelopeDrawer() {
               )}
               <Button
                 onClick={() => {
-                  setIsLoading(true);
                   createUpdateEnvelope({
                     envelope: currentEnvelope,
-                    setIsLoading,
                   });
                   resetCurrentEnvelope();
                   onClose();
                 }}
-                isLoading={isLoading}
-                colorScheme={'purple'}
+                isLoading={loading}
+                colorScheme={'orange'}
                 size={'sm'}
               >
                 Save envelope
@@ -266,10 +281,8 @@ export default function EnvelopeDrawer() {
               <Button
                 colorScheme='red'
                 onClick={() => {
-                  setIsLoading(true);
                   deleteEnvelope({
                     id: currentEnvelope.id,
-                    setIsLoading,
                   });
                   onClose();
                   onAlertClose();

@@ -1,19 +1,15 @@
 'use client';
 
 // recoil
-import {
-  useRecoilValue,
-  useSetRecoilState,
-  useRecoilState,
-  useResetRecoilState,
-} from 'recoil';
+import { useRecoilValue, useRecoilState, useResetRecoilState } from 'recoil';
 import {
   transactionsState,
   currentTransactionState,
   userState,
   transactionDrawerState,
   sheetsState,
-  currentSheetState,
+  currentUserSheetState,
+  loadingTransactionsState,
 } from '@/app/_state/atoms';
 
 // services
@@ -34,11 +30,11 @@ export function useTransactions() {
 
   const user = useRecoilValue(userState);
   const sheets = useRecoilValue(sheetsState);
-  const currentSheet = useRecoilValue(currentSheetState);
+  const currentUserSheet = useRecoilValue(currentUserSheetState);
   const [transactions, setTransactions] = useRecoilState(transactionsState);
+  const [loading, setLoading] = useRecoilState(loadingTransactionsState);
   const resetCurrentTransaction = useResetRecoilState(currentTransactionState);
 
-  // Fetch Transactions
   useEffect(() => {
     const fetchTransactions = async () => {
       if (!user || !sheets) return;
@@ -46,15 +42,24 @@ export function useTransactions() {
       const data = await fetchTransactionsAPI();
 
       setTransactions(data);
+      setLoading(false);
     };
 
     !transactions && fetchTransactions();
-  }, [user, transactions, setTransactions, sheets, currentSheet]);
+  }, [
+    user,
+    transactions,
+    setTransactions,
+    sheets,
+    currentUserSheet,
+    setLoading,
+  ]);
 
   const createUpdateTransaction = useCallback(
-    async ({ transaction, setIsLoading }) => {
-      setIsLoading(true);
+    async ({ transaction }) => {
+      setLoading(true);
       const { id } = transaction;
+      console.log('createUpdateTransaction', transaction);
       try {
         const newTransaction = new Promise((resolve, reject) => {
           createUpdateTransactionAPI({ transaction })
@@ -102,15 +107,16 @@ export function useTransactions() {
           isClosable: true,
         });
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     },
-    [setTransactions, resetCurrentTransaction, toast]
+    [setTransactions, resetCurrentTransaction, toast, setLoading]
   );
 
   const deleteTransaction = useCallback(
-    async ({ id, setIsLoading }) => {
+    async ({ id }) => {
       try {
+        setLoading(true);
         const deletedTransaction = new Promise((resolve, reject) => {
           deleteTransactionAPI({ id })
             .then(async () => {
@@ -143,7 +149,7 @@ export function useTransactions() {
         });
 
         resetCurrentTransaction();
-        setIsLoading(false);
+        setLoading(false);
       } catch (error) {
         console.error('Transaction delete error:', error);
 
@@ -158,13 +164,13 @@ export function useTransactions() {
         });
       }
     },
-    [setTransactions, toast, resetCurrentTransaction]
+    [setTransactions, toast, resetCurrentTransaction, setLoading]
   );
 
   return {
     createUpdateTransaction,
     deleteTransaction,
-    resetCurrentTransaction,
+    loading,
   };
 }
 

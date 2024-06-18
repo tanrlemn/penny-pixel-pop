@@ -3,11 +3,13 @@
 // recoil
 import { useRecoilValue, useRecoilState, useResetRecoilState } from 'recoil';
 import { enrichedTransactionsSelector } from '@/app/_state/selectors';
-import { isloadingState, currentTransactionState } from '@/app/_state/atoms';
+import {
+  currentTransactionState,
+  loadingTransactionsState,
+} from '@/app/_state/atoms';
 
 // hooks
-import { useEffect } from 'react';
-import { useTransactionsDrawer } from '@/app/_lib/hooks/useTransactions';
+import { useTransactionsDrawer } from '@/app/_lib/hooks/transactions';
 
 // chakra-ui
 import {
@@ -27,15 +29,9 @@ import SheetSelect from '../sheets/sheetSelect';
 export default function Transactions() {
   const transactions = useRecoilValue(enrichedTransactionsSelector);
   const resetCurrentTransaction = useResetRecoilState(currentTransactionState);
-  const [isLoading, setIsLoading] = useRecoilState(isloadingState);
+  const loading = useRecoilValue(loadingTransactionsState);
 
   const { onOpen } = useTransactionsDrawer();
-
-  useEffect(() => {
-    if (transactions) {
-      setIsLoading(false);
-    }
-  }, [transactions, setIsLoading]);
 
   return (
     <Box mt={'1rem'} mb={'5rem'}>
@@ -62,7 +58,7 @@ export default function Transactions() {
                 resetCurrentTransaction;
                 onOpen();
               }}
-              colorScheme={'purple'}
+              colorScheme={'orange'}
               size={'xs'}
             >
               + New Transaction
@@ -70,9 +66,9 @@ export default function Transactions() {
           )}
         </Flex>
         <TableContainer pt={'1rem'}>
-          {isLoading && (
+          {loading && (
             <Box m={'0 auto'}>
-              <LoadingDiv id={'budget'} isLoading={isLoading} />
+              <LoadingDiv id={'budget'} isLoading={loading} />
             </Box>
           )}
           {transactions && <TransactionsList transactions={transactions} />}

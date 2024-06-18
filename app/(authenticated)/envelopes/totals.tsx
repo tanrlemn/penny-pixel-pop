@@ -1,5 +1,5 @@
 // hooks
-import { useEnvelopeDrawer } from '@/app/_lib/hooks/useEnvelopes';
+import { useEnvelopeDrawer } from '@/app/_lib/hooks/envelopes';
 
 // chakra-ui
 import {
@@ -62,23 +62,15 @@ export default function Totals({ title, totals, color }) {
       left={'0'}
       mb={'1rem'}
       p={'1rem 0'}
-      pt={'2rem'}>
-      <Flex
-        mb={'1rem'}
-        align={'center'}
-        gap={'1rem'}>
-        <Tag
-          size={'sm'}
-          colorScheme={color}>
+      pt={'2rem'}
+    >
+      <Flex mb={'1rem'} align={'center'} gap={'1rem'}>
+        <Tag size={'sm'} colorScheme={color}>
           {title} Totals
         </Tag>
       </Flex>
-      <Table
-        variant='simple'
-        size={'sm'}>
-        <Tbody
-          fontSize={'0.8rem'}
-          color={'gray.500'}>
+      <Table variant='simple' size={'sm'}>
+        <Tbody fontSize={'0.8rem'} color={'gray.500'}>
           <Tr>
             <Th>
               <DataTitle>{formattedTotals.income.title}</DataTitle>
@@ -99,9 +91,7 @@ export default function Totals({ title, totals, color }) {
             <Th>
               <DataTitle>{formattedTotals.difference.title}</DataTitle>
             </Th>
-            <Td
-              isNumeric
-              color={formattedTotals.difference.color}>
+            <Td isNumeric color={formattedTotals.difference.color}>
               <DataText>{formattedTotals.difference.value}</DataText>
             </Td>
           </Tr>
@@ -113,10 +103,7 @@ export default function Totals({ title, totals, color }) {
 
 const DataTitle = ({ children }) => {
   return (
-    <Text
-      color={'gray.500'}
-      fontWeight={500}
-      fontSize={'0.65rem'}>
+    <Text color={'gray.500'} fontWeight={500} fontSize={'0.65rem'}>
       {children}
     </Text>
   );

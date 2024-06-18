@@ -1,8 +1,12 @@
 'use client';
 
+// recoil
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentUserSheetState, activeSheetState } from '@/app/_state/atoms';
+
 // hooks
-import { useRef, useState } from 'react';
-import { useSheets, useSheetDrawer } from '@/app/_lib/hooks/useSheets';
+import { useRef } from 'react';
+import { useSheets, useSheetDrawer } from '@/app/_lib/hooks/sheets';
 
 // chakra-ui
 import {
@@ -24,22 +28,26 @@ import {
   Flex,
   FormControl,
   Input,
-  Select,
   Stack,
+  Tag,
+  TagLabel,
+  TagLeftIcon,
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import DateRangePicker from './dateRangePicker';
+import DateRangePicker from '@/app/_components/forms/dateRangePicker';
+import { Check, MousePointer2 } from 'lucide-react';
 
 export default function SheetDrawer() {
   const cancelRef = useRef();
 
+  const [activeSheet, setActiveSheet] = useRecoilState(activeSheetState);
+  const currentUserSheet = useRecoilValue(currentUserSheetState);
   const {
     deleteSheet,
     createUpdateSheet,
-    currentSheet,
-    setCurrentSheet,
     loading,
+    handleChangeCurrentUserSheet,
   } = useSheets();
 
   const { isOpen, onClose } = useSheetDrawer();
@@ -51,12 +59,12 @@ export default function SheetDrawer() {
   } = useDisclosure();
 
   const range = {
-    from: currentSheet?.start_date,
-    to: currentSheet?.end_date,
+    from: activeSheet?.start_date,
+    to: activeSheet?.end_date,
   };
   const setRange = (newRange) => {
-    setCurrentSheet({
-      ...currentSheet,
+    setActiveSheet({
+      ...activeSheet,
       start_date: newRange.from,
       end_date: newRange.to,
     });
@@ -78,11 +86,36 @@ export default function SheetDrawer() {
 
           <DrawerHeader>
             <Text fontSize={'1.5rem'}>
-              {currentSheet?.id ? 'Edit sheet' : 'Sheet'}
+              {activeSheet?.id ? 'Edit sheet' : 'New Sheet'}
             </Text>
           </DrawerHeader>
 
-          <DrawerBody pt={'2rem'}>
+          <DrawerBody>
+            <Tag
+              cursor={'pointer'}
+              onClick={() => {
+                if (currentUserSheet.id !== activeSheet.id) {
+                  handleChangeCurrentUserSheet(activeSheet);
+                  onClose();
+                }
+              }}
+              colorScheme={
+                currentUserSheet?.id === activeSheet?.id ? 'green' : 'gray'
+              }
+            >
+              <TagLeftIcon>
+                {currentUserSheet?.id === activeSheet?.id ? (
+                  <Check />
+                ) : (
+                  <MousePointer2 />
+                )}
+              </TagLeftIcon>
+              <TagLabel>
+                {currentUserSheet?.id === activeSheet?.id
+                  ? 'Current'
+                  : 'Use this sheet'}
+              </TagLabel>
+            </Tag>
             <FormControl>
               <Stack spacing={3}>
                 <Input
@@ -99,15 +132,15 @@ export default function SheetDrawer() {
                   }}
                   focusBorderColor='green.300'
                   placeholder='Untitled'
-                  fontSize={'2rem'}
+                  fontSize={'1.5rem'}
                   p={'0.5rem 0'}
                   mb={'1rem'}
                   h={'auto'}
                   fontWeight={500}
-                  value={currentSheet?.title}
+                  value={activeSheet?.title}
                   onChange={(e) => {
-                    setCurrentSheet({
-                      ...currentSheet,
+                    setActiveSheet({
+                      ...activeSheet,
                       title: e.target.value,
                     });
                   }}
@@ -119,8 +152,8 @@ export default function SheetDrawer() {
                     setRange={setRange}
                     setCurrent={(newRange) => {
                       newRange &&
-                        setCurrentSheet({
-                          ...currentSheet,
+                        setActiveSheet({
+                          ...activeSheet,
                           start_date: newRange.from,
                           end_date: newRange.to,
                         });
@@ -132,7 +165,7 @@ export default function SheetDrawer() {
           </DrawerBody>
           <DrawerFooter borderTop={'1px solid'} borderTopColor={'gray.200'}>
             <Flex gap={'1rem'}>
-              {currentSheet?.id ? (
+              {activeSheet?.id ? (
                 <Button
                   size={'sm'}
                   colorScheme='red'
@@ -158,14 +191,13 @@ export default function SheetDrawer() {
               <Button
                 onClick={() => {
                   createUpdateSheet({
-                    id: currentSheet.id,
-                    sheet: currentSheet,
+                    id: activeSheet.id,
+                    sheet: activeSheet,
                   });
-                  // resetCurrentEnvelope();
                   onClose();
                 }}
                 isLoading={loading}
-                colorScheme={'purple'}
+                colorScheme={'orange'}
                 size={'sm'}
               >
                 Save sheet
@@ -199,7 +231,7 @@ export default function SheetDrawer() {
                 colorScheme='red'
                 onClick={() => {
                   deleteSheet({
-                    id: currentSheet.id,
+                    id: activeSheet.id,
                   });
                   onClose();
                   onAlertClose();

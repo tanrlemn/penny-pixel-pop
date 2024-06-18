@@ -3,7 +3,7 @@
 // hooks
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { useAuth } from '@/app/_lib/hooks/useAuth';
+import { useAuth } from '@/app/_lib/hooks/auth';
 
 // recoil
 import { useRecoilValue } from 'recoil';
@@ -25,7 +25,7 @@ export default function PagesLayout({ children }) {
   useEffect(() => {
     if (!loading && loggedIn && isAuth) {
       console.log('redirecting to sheets');
-      router.replace('/sheets');
+      router.replace('/envelopes');
     }
   }, [loading, user, loggedIn, router, isAuth, pathname]);
 

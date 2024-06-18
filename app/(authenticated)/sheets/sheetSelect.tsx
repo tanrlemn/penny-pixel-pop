@@ -1,73 +1,60 @@
 'use client';
 
 // recoil
-import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
-import { sheetsState, currentSheetState } from '@/app/_state/atoms';
-import { currentSheetStringSelector } from '@/app/_state/selectors';
+import { useRecoilValue } from 'recoil';
+import { sheetsState, currentUserSheetState } from '@/app/_state/atoms';
 
 // hooks
-import { useSheets } from '@/app/_lib/hooks/useSheets';
-
-// utils
-import { format } from 'date-fns';
+import { useSheets } from '@/app/_lib/hooks/sheets';
 
 // chakra-ui
-import { Flex, Select, Skeleton, Tag, Text } from '@chakra-ui/react';
+import { Flex, Select, Tag, Text } from '@chakra-ui/react';
 
 export default function SheetSelect() {
   const sheets = useRecoilValue(sheetsState);
-  const { setCurrentUserSheet } = useSheets();
-  const setCurrentSheet = useSetRecoilState(currentSheetState);
-  const currentSheetString = useRecoilValue(currentSheetStringSelector);
+  const { handleChangeCurrentUserSheet } = useSheets();
+  const currentUserSheet = useRecoilValue(currentUserSheetState);
 
   return (
     <>
-      <Flex align={'center'} gap={'0.2rem'}>
+      <Flex align={'center'} gap={'0.5rem'} mb={'1rem'}>
         <Text fontSize={'0.8rem'} fontWeight={500}>
           Sheet:
-        </Text>{' '}
-        <Skeleton
-          isLoaded={sheets}
-          h={'2rem'}
-          w={'7rem'}
-          minH={'fit-content'}
-          minW={'fit-content'}
-          borderRadius={'md'}
-          speed={1.5}
-          startColor={'gray.50'}
-          endColor={'gray.200'}
-        >
-          {sheets && (
-            <Tag size={'sm'} colorScheme={'purple'} maxW={'fit-content'} p={0}>
-              <Select
-                borderRadius={'md'}
-                size={'sm'}
-                onChange={(e) => {
-                  setCurrentSheet(sheets.find((s) => s.id === e.target.value));
-                  setCurrentUserSheet({ id: e.target.value });
-                }}
-                defaultValue={currentSheetString || 'Select a sheet'}
+        </Text>
+        {sheets && (
+          <>
+            {sheets.length > 0 && (
+              <Tag
+                size={'xs'}
+                colorScheme={'orange'}
                 maxW={'fit-content'}
-                border={'none'}
+                p={0}
               >
-                <option value={'Select a sheet'} disabled={true}>
-                  Select a sheet
-                </option>
-                {sheets.map((s) => {
-                  const sheetString = `${s.title}, ${format(
-                    s.start_date,
-                    'MMM d'
-                  )}-${format(s.end_date, 'MMM d')}`;
-                  return (
-                    <option key={s.title} value={s.id}>
-                      {sheetString}
+                <Select
+                  borderRadius={'md'}
+                  size={'xs'}
+                  onChange={(e) => {
+                    handleChangeCurrentUserSheet(
+                      sheets.find((s) => s.id === e.target.value)
+                    );
+                  }}
+                  value={currentUserSheet.id}
+                  maxW={'fit-content'}
+                  border={'none'}
+                >
+                  <option value={'Select a sheet'} disabled={true}>
+                    Select a sheet
+                  </option>
+                  {sheets.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.title}
                     </option>
-                  );
-                })}
-              </Select>
-            </Tag>
-          )}
-        </Skeleton>
+                  ))}
+                </Select>
+              </Tag>
+            )}
+          </>
+        )}
       </Flex>
     </>
   );

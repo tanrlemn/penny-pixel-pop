@@ -6,8 +6,8 @@ import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { createClient } from '@/app/_lib/utils/supabase/client';
 
 // hooks
-import { useOrigin } from '@/app/_lib/hooks/useOrigin';
-import { useAuth } from '@/app/_lib/hooks/useAuth';
+import { useOrigin } from '@/app/_lib/hooks/window';
+import { useAuth } from '@/app/_lib/hooks/auth';
 
 // chakra-ui
 import { Box, Heading, Text, Flex, Link } from '@chakra-ui/react';

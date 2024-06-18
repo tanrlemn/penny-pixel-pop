@@ -1,17 +1,23 @@
 // recoil
-import { useRecoilValue, useResetRecoilState, useRecoilState } from 'recoil';
+import {
+  useRecoilValue,
+  useResetRecoilState,
+  useRecoilState,
+  useSetRecoilState,
+} from 'recoil';
 import {
   envelopesState,
   envelopeDrawerState,
   currentEnvelopeState,
   userState,
   sheetsState,
-  currentSheetState,
+  currentUserSheetState,
+  loadingEnvelopesState,
+  loadingSingleEnvelopeState,
 } from '@/app/_state/atoms';
-import { categories } from '@/app/_state/constants';
 
 // hooks
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 
 // services
 import {
@@ -29,42 +35,35 @@ export function useEnvelopes() {
 
   const user = useRecoilValue(userState);
   const sheets = useRecoilValue(sheetsState);
-  const currentSheet = useRecoilValue(currentSheetState);
+  const currentUserSheet = useRecoilValue(currentUserSheetState);
   const [envelopes, setEnvelopes] = useRecoilState(envelopesState);
 
-  const [currentEnvelope, setCurrentEnvelope] =
-    useRecoilState(currentEnvelopeState);
-
-  const [categoryList, setCategoryList] = useState([]);
+  const [loading, setLoading] = useRecoilState(loadingEnvelopesState);
+  const setLoadingSingleEnvelope = useSetRecoilState(
+    loadingSingleEnvelopeState
+  );
 
   useEffect(() => {
     const fetchEnvelopes = async () => {
-      if (!user || !sheets || !currentSheet) return;
+      if (!user || !sheets || !currentUserSheet) return;
+      setLoading(true);
       console.log('fetching envelopes');
       const data = await fetchEnvelopesAPI();
       const filteredEnvelopes = data.filter(
-        (envelope) => envelope.sheet_id === currentSheet.id
+        (envelope) => envelope.sheet_id === currentUserSheet.id
       );
       setEnvelopes(filteredEnvelopes);
-
-      const categorizedEnvelopes = categories.map((category) => ({
-        ...category,
-        envelopes: filteredEnvelopes.filter(
-          (envelope) => envelope.category === category.name
-        ),
-      }));
-
-      setCategoryList(categorizedEnvelopes);
+      setLoading(false);
     };
 
     !envelopes && fetchEnvelopes();
-  }, [user, setEnvelopes, envelopes, sheets, currentSheet]);
+  }, [user, setEnvelopes, envelopes, sheets, currentUserSheet, setLoading]);
 
   const resetCurrentEnvelope = useResetRecoilState(currentEnvelopeState);
 
   const updateEnvelopeCategory = useCallback(
-    async ({ id, category, setIsLoading }) => {
-      setIsLoading(true);
+    async ({ id, category }) => {
+      setLoading(true);
       try {
         const updatedEnvelope = new Promise((resolve, reject) => {
           updateEnvelopeCategoryAPI({
@@ -114,22 +113,28 @@ export function useEnvelopes() {
           isClosable: true,
         });
       } finally {
-        setIsLoading(false);
+        setLoading(false);
+        setLoadingSingleEnvelope(null);
       }
     },
-    [resetCurrentEnvelope, setEnvelopes, toast]
+    [
+      resetCurrentEnvelope,
+      setEnvelopes,
+      toast,
+      setLoading,
+      setLoadingSingleEnvelope,
+    ]
   );
 
   const createUpdateEnvelope = useCallback(
-    async ({ envelope, setIsLoading }) => {
-      setIsLoading(true);
+    async ({ envelope }) => {
+      setLoading(true);
       const { id } = envelope;
       try {
         const newEnvelope = id
           ? new Promise((resolve, reject) => {
               createUpdateEnvelopeAPI({
                 envelope,
-                setIsLoading,
               })
                 .then(async () => {
                   const data = await fetchEnvelopesAPI();
@@ -141,7 +146,6 @@ export function useEnvelopes() {
           : new Promise((resolve, reject) => {
               createUpdateEnvelopeAPI({
                 envelope,
-                setIsLoading,
               })
                 .then(async () => {
                   const data = await fetchEnvelopesAPI();
@@ -187,15 +191,16 @@ export function useEnvelopes() {
           isClosable: true,
         });
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     },
-    [resetCurrentEnvelope, setEnvelopes, toast]
+    [resetCurrentEnvelope, setEnvelopes, toast, setLoading]
   );
 
   const deleteEnvelope = useCallback(
-    async ({ id, setIsLoading }) => {
+    async ({ id }) => {
       try {
+        setLoading(true);
         const deletedEnvelope = new Promise((resolve, reject) => {
           deleteEnvelopeAPI({ id })
             .then(async () => {
@@ -229,7 +234,7 @@ export function useEnvelopes() {
           },
         });
 
-        setIsLoading(false);
+        setLoading(false);
       } catch (error) {
         console.error('Envelope delete error:', error);
 
@@ -244,17 +249,14 @@ export function useEnvelopes() {
         });
       }
     },
-    [resetCurrentEnvelope, setEnvelopes, toast]
+    [resetCurrentEnvelope, setEnvelopes, toast, setLoading]
   );
 
   return {
-    categoryList,
     updateEnvelopeCategory,
     createUpdateEnvelope,
     deleteEnvelope,
-    currentEnvelope,
-    setCurrentEnvelope,
-    resetCurrentEnvelope,
+    loading,
   };
 }
 

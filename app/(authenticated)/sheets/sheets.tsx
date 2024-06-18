@@ -1,12 +1,20 @@
 'use client';
 
 // recoil
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { sheetsState } from '@/app/_state/atoms';
+import {
+  useResetRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+  useRecoilState,
+} from 'recoil';
+import {
+  sheetsState,
+  currentUserSheetState,
+  activeSheetState,
+} from '@/app/_state/atoms';
 
 // hooks
-import { useEffect } from 'react';
-import { useSheets, useSheetDrawer } from '@/app/_lib/hooks/useSheets';
+import { useSheets, useSheetDrawer } from '@/app/_lib/hooks/sheets';
 
 // utils
 import { format } from 'date-fns';
@@ -30,10 +38,14 @@ import {
 
 // local components
 import LoadingDiv from '@/app/_components/interactive/loadingDiv';
-import { Layers3 } from 'lucide-react';
+import { CircleCheck } from 'lucide-react';
 
 export default function Sheets() {
-  const { loading, sheets, setCurrentSheet } = useSheets();
+  const sheets = useRecoilValue(sheetsState);
+  const resetActiveSheet = useResetRecoilState(activeSheetState);
+  const setActiveSheet = useSetRecoilState(activeSheetState);
+  const currentUserSheet = useRecoilValue(currentUserSheetState);
+  const { loading } = useSheets();
   const { onOpen } = useSheetDrawer();
 
   return (
@@ -54,7 +66,14 @@ export default function Sheets() {
           <Flex align={'center'} gap={'0.5rem'}>
             <Heading size={'sm'}>All sheets</Heading>
           </Flex>
-          <Button onClick={onOpen} colorScheme={'orange'} size={'xs'}>
+          <Button
+            onClick={() => {
+              resetActiveSheet();
+              onOpen();
+            }}
+            colorScheme={'orange'}
+            size={'xs'}
+          >
             + New Sheet
           </Button>
         </Flex>
@@ -81,6 +100,9 @@ export default function Sheets() {
                   <Th>
                     <DataTitle>Date range</DataTitle>
                   </Th>
+                  <Th>
+                    <DataTitle>Current</DataTitle>
+                  </Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -90,7 +112,8 @@ export default function Sheets() {
                       cursor={'pointer'}
                       key={sheet.id}
                       onClick={() => {
-                        setCurrentSheet(sheet);
+                        setActiveSheet(sheet);
+                        onOpen();
                       }}
                     >
                       <Td
@@ -98,27 +121,26 @@ export default function Sheets() {
                         position={'sticky'}
                         left={0}
                         bg={'white'}
-                        onClick={() => {
-                          setCurrentSheet(sheet);
-                          onOpen();
-                        }}
                       >
                         <DataText>{sheet.title}</DataText>
                       </Td>
-                      <Td
-                        px={'0.5rem'}
-                        position={'sticky'}
-                        left={0}
-                        bg={'white'}
-                        onClick={() => {
-                          setCurrentSheet(sheet);
-                          onOpen();
-                        }}
-                      >
+                      <Td px={'0.5rem'} bg={'white'}>
                         <DataText>
                           {format(sheet.start_date, 'MMM d')} -
                           {format(sheet.end_date, 'MMM d')}
                         </DataText>
+                      </Td>
+                      <Td
+                        px={'0.5rem'}
+                        bg={'white'}
+                        color={'green.500'}
+                        isNumeric
+                      >
+                        <Flex w={'100%'} justify={'center'} align={'center'}>
+                          {currentUserSheet.id === sheet.id && (
+                            <CircleCheck size={17} />
+                          )}
+                        </Flex>
                       </Td>
                     </Tr>
                   ))

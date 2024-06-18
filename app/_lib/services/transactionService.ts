@@ -16,7 +16,6 @@ export const fetchTransactionsAPI = async () => {
 };
 
 export const createUpdateTransactionAPI = async ({ transaction }) => {
-  console.log('transaction', transaction);
   const { envelope_id, amount, note, date, sheet_id, id } = transaction;
 
   try {

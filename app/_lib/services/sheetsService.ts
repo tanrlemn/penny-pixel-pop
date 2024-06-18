@@ -33,8 +33,8 @@ export const fetchSingleSheetAPI = async ({ id }) => {
   }
 };
 
-export const createUpdateSheetAPI = async ({ id, sheet }) => {
-  console.log('createUpdateSheetAPI', id, sheet);
+export const createUpdateSheetAPI = async ({ sheet }) => {
+  const id = sheet.id;
   try {
     const { title, start_date, end_date } = sheet;
     const updated_at = new Date().toISOString();

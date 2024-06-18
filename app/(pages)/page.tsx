@@ -31,16 +31,16 @@ export default function Home() {
           alt='A futuristic computer room with bubbles floating around.'
         />
         <Box p={{ base: '2rem 1rem', md: '2rem' }}>
-          <Tag mb={'0.5rem'} colorScheme={'green'} size={'md'}>
+          <Tag mb={'0.5rem'} colorScheme={'purple'} size={'md'}>
             Beta
           </Tag>
           <Heading
             mb={'1rem'}
             size={'2xl'}
             fontWeight={900}
-            color={'purple.600'}
+            color={'orange.600'}
           >
-            Manage Your Money Effortlessly with Conversational AI.
+            Manage Your Budget with Conversational AI.
           </Heading>
           <Text mb={'1rem'}>
             Discover financial freedom with Penny Pixel Pop, your AI-powered
@@ -49,7 +49,7 @@ export default function Home() {
             finance today.
           </Text>
           <Link href={'/auth/login'}>
-            <Button colorScheme={'purple'}>Get Started</Button>
+            <Button colorScheme={'orange'}>Get Started</Button>
           </Link>
         </Box>
       </Flex>

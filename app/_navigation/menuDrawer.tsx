@@ -6,7 +6,7 @@ import { userState } from '../_state/atoms';
 
 // hooks
 import { useRef } from 'react';
-import { useAuth } from '../_lib/hooks/useAuth';
+import { useAuth } from '../_lib/hooks/auth';
 
 // chakra-ui
 import {
@@ -39,8 +39,14 @@ export default function MenuDrawer() {
 
   return (
     <>
-      <Button isLoading={loading} onClick={onOpen}>
-        <Menu size={17} ref={btnRef} color={'#6B46C1'} cursor={'pointer'} />
+      <Button
+        isLoading={loading}
+        onClick={onOpen}
+        colorScheme={'orange'}
+        variant={'outline'}
+        p={0}
+      >
+        <Menu size={17} ref={btnRef} cursor={'pointer'} />
       </Button>
 
       <Drawer
@@ -54,17 +60,17 @@ export default function MenuDrawer() {
           w={'100%'}
           maxH={{ base: '100vh' }}
           color={'white'}
-          background={'purple.600'}
+          background={'orange.600'}
         >
           <DrawerCloseButton p={'2rem'} />
           <DrawerHeader>
-            <LinkedLogo text color='purple.50' />
+            <LinkedLogo text color='orange.50' />
           </DrawerHeader>
 
           <DrawerBody p={{ base: '2rem', md: '2rem 3rem' }} w={'100%'}>
             <VStack h={'100%'} align={'flex-start'} justify={'space-between'}>
               <Box mb={'3rem'}>
-                <Heading color={'purple.50'} size={'md'} mb={'1rem'}>
+                <Heading color={'orange.50'} size={'md'} mb={'1rem'}>
                   Transform your finances with chat <br />– budgeting made so
                   simple, it feels like talking to a friend.
                 </Heading>

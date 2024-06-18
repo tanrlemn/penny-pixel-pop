@@ -41,7 +41,7 @@ export default function Error({ error, reset }) {
           We couldn&apos;t make that request. Please try again.
         </Text>
         <Box>
-          <Button colorScheme={'purple'} onClick={() => reset()} mr={'1rem'}>
+          <Button colorScheme={'orange'} onClick={() => reset()} mr={'1rem'}>
             Try again
           </Button>
           <Link mb={'2rem'} maxW={'fit-content'} href={'/'}>

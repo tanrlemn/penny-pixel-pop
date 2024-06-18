@@ -1,5 +1,5 @@
 // hooks
-import { useTransactionsDrawer } from '@/app/_lib/hooks/useTransactions';
+import { useTransactionsDrawer } from '@/app/_lib/hooks/transactions';
 
 // chakra-ui
 import {
@@ -26,7 +26,7 @@ export default function TransactionsList({ transactions }) {
         <Thead fontSize={'0.8rem'} color={'gray.500'}>
           <Tr>
             <Th>
-              <DataTitle>Envelope name</DataTitle>
+              <DataTitle>Note</DataTitle>
             </Th>
             <Th isNumeric>
               <DataTitle>Amount spent</DataTitle>
@@ -35,7 +35,7 @@ export default function TransactionsList({ transactions }) {
               <DataTitle>Date</DataTitle>
             </Th>
             <Th>
-              <DataTitle>Note</DataTitle>
+              <DataTitle>Envelope name</DataTitle>
             </Th>
           </Tr>
         </Thead>

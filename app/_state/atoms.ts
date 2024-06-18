@@ -18,8 +18,18 @@ export const sheetsState = atom({
   default: null,
 });
 
-export const currentSheetState = atom({
-  key: 'currentSheetState',
+export const activeSheetState = atom({
+  key: 'activeSheetState',
+  default: {
+    id: null,
+    title: '',
+    start_date: null,
+    end_date: null,
+  },
+});
+
+export const currentUserSheetState = atom({
+  key: 'currentUserSheetState',
   default: {
     id: null,
     title: '',
@@ -68,8 +78,28 @@ export const currentTransactionState = atom({
 });
 
 // ui atoms
-export const isloadingState = atom({
-  key: 'isLoadingState',
+export const loadingAuthState = atom({
+  key: 'loadingAuthState',
+  default: true,
+});
+
+export const loadingSheetsState = atom({
+  key: 'loadingSheetsState',
+  default: false,
+});
+
+export const loadingEnvelopesState = atom({
+  key: 'loadingEnvelopesState',
+  default: true,
+});
+
+export const loadingSingleEnvelopeState = atom({
+  key: 'loadingSingleEnvelopeState',
+  default: null,
+});
+
+export const loadingTransactionsState = atom({
+  key: 'loadingTransactionsState',
   default: true,
 });
 

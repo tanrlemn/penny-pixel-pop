@@ -2,9 +2,13 @@
 import { useRecoilValue, useResetRecoilState, useRecoilState } from 'recoil';
 import {
   sheetsState,
-  currentSheetState,
+  currentUserSheetState,
   userState,
   sheetDrawerState,
+  loadingSheetsState,
+  envelopesState,
+  transactionsState,
+  activeSheetState,
 } from '@/app/_state/atoms';
 import { userProfileSelector } from '@/app/_state/selectors';
 
@@ -18,10 +22,18 @@ import {
   fetchSheetsAPI,
   fetchSingleSheetAPI,
 } from '../services/sheetsService';
+import {
+  fetchEnvelopesAPI,
+  createUpdateEnvelopeAPI,
+} from '../services/envelopeService';
+import {
+  fetchTransactionsAPI,
+  createUpdateTransactionAPI,
+} from '../services/transactionService';
+import { updateUserProfileAPI } from '../services/userService';
 
 // chakra-ui
 import { useToast } from '@chakra-ui/react';
-import { updateUserProfileAPI } from '../services/userService';
 
 export function useSheets() {
   const toast = useToast();
@@ -30,11 +42,15 @@ export function useSheets() {
   const profile = useRecoilValue(userProfileSelector);
   const [sheets, setSheets] = useRecoilState(sheetsState);
 
-  const [currentSheet, setCurrentSheet] = useRecoilState(currentSheetState);
+  const [currentUserSheet, setCurrentUserSheet] = useRecoilState(
+    currentUserSheetState
+  );
+  const resetEnvelopes = useResetRecoilState(envelopesState);
+  const resetTransactions = useResetRecoilState(transactionsState);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useRecoilState(loadingSheetsState);
 
-  const setCurrentUserSheet = useCallback(
+  const updateCurrentUserSheet = useCallback(
     async ({ id }) => {
       console.log('setting user current sheet', id);
       const updatedProfile = {
@@ -56,49 +72,112 @@ export function useSheets() {
   );
 
   useEffect(() => {
+    const handleNoSheets = async () => {
+      if (user && !sheets && !loading) {
+        console.log('no sheets, creating');
+
+        const today = new Date();
+        const thirtyDaysFromNow = new Date();
+        thirtyDaysFromNow.setDate(today.getDate() + 30);
+
+        const data = await createUpdateSheetAPI({
+          sheet: {
+            title: 'Untitled Sheet',
+            start_date: today.toISOString(),
+            end_date: thirtyDaysFromNow.toISOString(),
+          },
+        });
+        setCurrentUserSheet(await updateCurrentUserSheet({ id: data[0].id }));
+        setSheets(data);
+
+        const envelopes = await fetchEnvelopesAPI();
+        const transactions = await fetchTransactionsAPI();
+
+        for (const e of envelopes) {
+          await createUpdateEnvelopeAPI({
+            envelope: {
+              ...e,
+              sheet_id: data[0].id,
+            },
+          });
+        }
+
+        for (const t of transactions) {
+          await createUpdateTransactionAPI({
+            transaction: {
+              ...t,
+              sheet_id: data[0].id,
+            },
+          });
+        }
+
+        return data;
+      }
+    };
+
     const fetchSheets = async () => {
-      if (!user || !profile) return;
+      if (!user || !profile || loading) return;
       console.log('fetching sheets');
+      setLoading(true);
       const data = await fetchSheetsAPI();
 
-      setCurrentSheet(
-        await fetchSingleSheetAPI({
-          id: profile.current_sheet_id
-            ? profile.current_sheet_id
-            : await setCurrentUserSheet({ id: data[0].id }),
-        })
+      setCurrentUserSheet(
+        data.length > 0
+          ? await fetchSingleSheetAPI({
+              id: profile.current_sheet_id
+                ? profile.current_sheet_id
+                : await updateCurrentUserSheet({ id: data[0].id }),
+            })
+          : await handleNoSheets()
       );
       setSheets(data);
-
       setLoading(false);
     };
 
     !sheets && fetchSheets();
-  }, [user, setSheets, sheets, profile, setCurrentSheet, setCurrentUserSheet]);
+  }, [
+    user,
+    setSheets,
+    sheets,
+    profile,
+    setCurrentUserSheet,
+    updateCurrentUserSheet,
+    loading,
+    setLoading,
+  ]);
 
-  const resetCurrentSheet = useResetRecoilState(currentSheetState);
+  const resetCurrentUserSheet = useResetRecoilState(currentUserSheetState);
 
   const createUpdateSheet = useCallback(
     async ({ id, sheet }) => {
       setLoading(true);
       try {
-        const newSheet = new Promise((resolve, reject) => {
-          createUpdateSheetAPI({
-            id,
-            sheet,
-          })
-            .then(async () => {
-              const data = await fetchSheetsAPI();
-              setSheets(data);
-              resolve(data);
+        const sheetPromise = new Promise((resolve, reject) => {
+          resolve(
+            createUpdateSheetAPI({
+              sheet,
             })
-            .catch((error) => reject(error))
-            .finally(() => setLoading(false));
+          );
         });
 
-        resetCurrentSheet();
+        sheetPromise.then(async (data) => {
+          const updateSheets = await fetchSheetsAPI();
+          setSheets(updateSheets);
 
-        toast.promise(newSheet, {
+          if (id) {
+            const updatedSheet = await fetchSingleSheetAPI({ id });
+            setCurrentUserSheet(updatedSheet);
+          } else {
+            const updatedSheet = await fetchSingleSheetAPI({
+              id: await updateCurrentUserSheet({ id: data[0].id }),
+            });
+            setCurrentUserSheet(updatedSheet);
+          }
+        });
+
+        resetCurrentUserSheet();
+
+        toast.promise(sheetPromise, {
           success: {
             position: 'top',
             title: `Sheet ${id ? 'updated' : 'created'}`,
@@ -120,8 +199,6 @@ export function useSheets() {
           },
         });
 
-        await setCurrentUserSheet({ id: sheet.id });
-
         setLoading(false);
       } catch (error) {
         console.error('Sheet update/create error:', error);
@@ -140,7 +217,14 @@ export function useSheets() {
         setLoading(false);
       }
     },
-    [resetCurrentSheet, setSheets, toast, setCurrentUserSheet]
+    [
+      resetCurrentUserSheet,
+      setSheets,
+      toast,
+      updateCurrentUserSheet,
+      setLoading,
+      setCurrentUserSheet,
+    ]
   );
 
   const deleteSheet = useCallback(
@@ -152,7 +236,7 @@ export function useSheets() {
               const updateSheets = await fetchSheetsAPI();
               setSheets(updateSheets);
 
-              resetCurrentSheet();
+              resetCurrentUserSheet();
               resolve(updateSheets);
             })
             .catch((error) => reject(error));
@@ -179,8 +263,8 @@ export function useSheets() {
           },
         });
 
-        if (currentSheet.id === id) {
-          await setCurrentUserSheet({ id: sheets[0].id });
+        if (currentUserSheet.id === id) {
+          await updateCurrentUserSheet({ id: sheets[0].id });
         }
 
         setLoading(false);
@@ -199,36 +283,41 @@ export function useSheets() {
       }
     },
     [
-      resetCurrentSheet,
+      resetCurrentUserSheet,
       setSheets,
       toast,
-      setCurrentUserSheet,
-      currentSheet,
+      updateCurrentUserSheet,
+      currentUserSheet,
       sheets,
+      setLoading,
     ]
   );
 
+  const handleChangeCurrentUserSheet = async (sheet) => {
+    setCurrentUserSheet(sheet);
+    updateCurrentUserSheet({ id: sheet.id });
+    resetEnvelopes();
+    resetTransactions();
+  };
+
   return {
-    sheets,
-    currentSheet,
-    setCurrentSheet,
     createUpdateSheet,
     deleteSheet,
+    updateCurrentUserSheet,
+    handleChangeCurrentUserSheet,
     loading,
-    setCurrentUserSheet,
   };
 }
 
 export function useSheetDrawer() {
   const [isOpen, setIsOpen] = useRecoilState(sheetDrawerState);
-  const resetCurrentSheet = useResetRecoilState(currentSheetState);
+  const resetActiveSheet = useResetRecoilState(activeSheetState);
 
   const onClose = () => {
     setIsOpen(false);
-    resetCurrentSheet();
+    resetActiveSheet();
   };
   const onOpen = () => {
-    console.log('opening sheet drawer');
     setIsOpen(true);
   };
 

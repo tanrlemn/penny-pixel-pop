@@ -75,14 +75,8 @@ export default function HowItWorks() {
           isReversed
         />
       </List>
-      <Box
-        m={'auto'}
-        maxW={'700px'}
-        pt={'2rem'}>
-        <Heading
-          mb={'1rem'}
-          color={'purple.600'}
-          fontWeight={900}>
+      <Box m={'auto'} maxW={'700px'} pt={'2rem'}>
+        <Heading mb={'1rem'} color={'orange.600'} fontWeight={900}>
           Where budgeting meets innovation, that&apos;s where you&apos;ll find
           Penny Pixel Pop.
         </Heading>
@@ -91,7 +85,7 @@ export default function HowItWorks() {
           your finances through AI-driven conversations.
         </Text>
         <Link href={'/auth/login'}>
-          <Button colorScheme={'purple'}>Sign up now</Button>
+          <Button colorScheme={'orange'}>Sign up now</Button>
         </Link>
       </Box>
     </Container>
@@ -104,26 +98,16 @@ const StepItem = ({ step, title, description, isReversed = false }) => {
       <Flex
         gap={'2rem'}
         align={'center'}
-        direction={{ base: 'column', md: isReversed ? 'row-reverse' : 'row' }}>
-        <AspectRatio
-          ratio={1}
-          w={{ base: '100%', md: '40%' }}>
-          <Image
-            src={images[step - 1]}
-            objectFit={'cover'}
-            alt={title}
-          />
+        direction={{ base: 'column', md: isReversed ? 'row-reverse' : 'row' }}
+      >
+        <AspectRatio ratio={1} w={{ base: '100%', md: '40%' }}>
+          <Image src={images[step - 1]} objectFit={'cover'} alt={title} />
         </AspectRatio>
         <Box maxW={'400px'}>
-          <Tag
-            mb={'0.5rem'}
-            colorScheme={'purple'}
-            size={'lg'}>
+          <Tag mb={'0.5rem'} colorScheme={'orange'} size={'lg'}>
             {step}
           </Tag>
-          <Heading
-            mb={'0.5rem'}
-            size={'md'}>
+          <Heading mb={'0.5rem'} size={'md'}>
             {title}
           </Heading>
           <Text>{description}</Text>

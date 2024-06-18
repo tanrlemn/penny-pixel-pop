@@ -5,7 +5,8 @@ import {
   transactionsState,
   envelopesState,
   currentTransactionState,
-  currentSheetState,
+  activeSheetState,
+  currentUserSheetState,
 } from './atoms';
 import { categories } from './constants';
 
@@ -21,33 +22,18 @@ export const userProfileSelector = selector({
   },
 });
 
-// sheet selectors
-export const currentSheetStringSelector = selector({
-  key: 'currentSheetStringSelector',
-  get: ({ get }) => {
-    const currentSheet = get(currentSheetState);
-
-    return currentSheet?.id
-      ? `${currentSheet.title}, ${format(
-          currentSheet.start_date,
-          'MMM d'
-        )}-${format(currentSheet.end_date, 'MMM d')}`
-      : null;
-  },
-});
-
 // envelope selectors
 export const enrichedEnvelopesSelector = selector({
   key: 'enrichedEnvelopesSelector',
   get: ({ get }) => {
     const transactions = get(enrichedTransactionsSelector);
     const envelopes = get(envelopesState);
-    const currentSheet = get(currentSheetState);
+    const currentUserSheet = get(currentUserSheetState);
 
-    if (!transactions || !envelopes || !currentSheet) return null;
+    if (!transactions || !envelopes || !currentUserSheet) return null;
 
     const filteredEnvelopes = envelopes.filter(
-      (env) => env.sheet_id === currentSheet.id
+      (env) => env.sheet_id === currentUserSheet.id
     );
 
     const enrichedEnvelopes = filteredEnvelopes
@@ -73,6 +59,15 @@ export const enrichedEnvelopesSelector = selector({
       envelopes: enrichedEnvelopes.filter(
         (envelope) => envelope.category === category.name
       ),
+      total: enrichedEnvelopes
+        .filter((envelope) => envelope.category === category.name)
+        .reduce((acc, cur) => acc + cur.budget_amount, 0),
+      amountSpent: enrichedEnvelopes
+        .filter((envelope) => envelope.category === category.name)
+        .reduce((acc, cur) => acc + Number(cur.totalSpent), 0),
+      amountLeft: enrichedEnvelopes
+        .filter((envelope) => envelope.category === category.name)
+        .reduce((acc, cur) => acc + Number(cur.amountLeft), 0),
     }));
 
     return categorizedEnvelopes;
@@ -148,13 +143,13 @@ export const enrichedTransactionsSelector = selector({
   get: ({ get }) => {
     const transactions = get(transactionsState);
     const envelopes = get(envelopesState);
-    const currentSheet = get(currentSheetState);
+    const currentUserSheet = get(currentUserSheetState);
 
-    if (!transactions || !envelopes || !currentSheet) return null;
+    if (!transactions || !envelopes || !currentUserSheet) return null;
     if (transactions.length === 0 || envelopes.length === 0) return [];
 
     const filteredTransactions = transactions.filter(
-      (t) => t.sheet_id === currentSheet.id
+      (t) => t.sheet_id === currentUserSheet.id
     );
 
     const incomeEnvelopes = envelopes.filter(
@@ -176,18 +171,26 @@ export const enrichedTransactionsSelector = selector({
 export const currentTransactionSelector = selector({
   key: 'currentTransactionSelector',
   get: ({ get }) => {
-    const currentSheet = get(currentSheetState);
+    const currentUserSheet = get(currentUserSheetState);
     const currentTransaction = get(currentTransactionState);
     const envelopes = get(envelopesState);
 
-    if (!currentTransaction || !envelopes || !currentSheet) return null;
+    if (!currentTransaction || !envelopes || !currentUserSheet) return null;
 
     return {
       ...currentTransaction,
       envelope_id: envelopes.find(
         (env) => env.envelope_name === currentTransaction.envelope_name
       )?.id,
-      sheet_id: currentSheet.id,
+      sheet_id: currentUserSheet.id,
     };
+  },
+  set: ({ set, get }, newTransaction) => {
+    const currentUserSheet = get(currentUserSheetState);
+
+    set(currentTransactionState, {
+      ...newTransaction,
+      sheet_id: currentUserSheet.id,
+    });
   },
 });

@@ -2,7 +2,7 @@
 // hooks
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { useAuth } from '@/app/_lib/hooks/useAuth';
+import { useAuth } from '@/app/_lib/hooks/auth';
 
 // recoil
 import { useRecoilValue } from 'recoil';
@@ -31,9 +31,9 @@ import { CircleUser, LogOut, MoreHorizontal, Settings } from 'lucide-react';
 // local components
 import MenuTabs from '@/app/_navigation/menuTabs';
 import Logo from '@/app/_components/branding/logo';
-import EnvelopeDrawer from '@/app/_components/forms/envelopeDrawer';
-import TransactionDrawer from '@/app/_components/forms/transactionDrawer';
-import SheetDrawer from '@/app/_components/forms/sheetDrawer';
+import EnvelopeDrawer from '@/app/(authenticated)/envelopes/envelopeDrawer';
+import TransactionDrawer from '@/app/(authenticated)/transactions/transactionDrawer';
+import SheetDrawer from '@/app/(authenticated)/sheets/sheetDrawer';
 
 export default function AuthenticatedLayout({ children }) {
   const { loading } = useAuth();

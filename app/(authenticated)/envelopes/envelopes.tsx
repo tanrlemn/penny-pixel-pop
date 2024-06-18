@@ -6,11 +6,10 @@ import {
   enrichedEnvelopesSelector,
   envelopeTotalsSelector,
 } from '@/app/_state/selectors';
-import { isloadingState } from '@/app/_state/atoms';
+import { loadingEnvelopesState } from '@/app/_state/atoms';
 
 // hooks
-import { useEffect } from 'react';
-import { useEnvelopeDrawer } from '@/app/_lib/hooks/useEnvelopes';
+import { useEnvelopeDrawer } from '@/app/_lib/hooks/envelopes';
 
 // chakra-ui
 import {
@@ -30,15 +29,9 @@ import SheetSelect from '../sheets/sheetSelect';
 
 export default function Envelopes() {
   const { onOpen } = useEnvelopeDrawer();
-  const [isLoading, setIsLoading] = useRecoilState(isloadingState);
+  const loading = useRecoilValue(loadingEnvelopesState);
   const categoryList = useRecoilValue(enrichedEnvelopesSelector);
   const totals = useRecoilValue(envelopeTotalsSelector);
-
-  useEffect(() => {
-    if (categoryList) {
-      setIsLoading(false);
-    }
-  }, [categoryList, setIsLoading]);
 
   return (
     <Box h={'fit-content'} mt={'1rem'} mb={'5rem'}>
@@ -60,27 +53,20 @@ export default function Envelopes() {
             <Heading size={'sm'}>All envelopes</Heading>
           </Flex>
           {categoryList && (
-            <Button onClick={() => onOpen()} colorScheme={'blue'} size={'xs'}>
+            <Button onClick={() => onOpen()} colorScheme={'orange'} size={'xs'}>
               + New Envelope
             </Button>
           )}
         </Flex>
-        <TableContainer pt={'1rem'}>
-          {isLoading && (
+        <TableContainer pt={'1rem'} zIndex={100}>
+          {loading && (
             <Box m={'0 auto'}>
-              <LoadingDiv id={'budget'} isLoading={isLoading} />
+              <LoadingDiv id={'budget'} isLoading={loading} />
             </Box>
           )}
           {categoryList &&
             categoryList.map((category) => {
-              return (
-                <CategoryList
-                  key={category.name}
-                  category={category.name}
-                  envelopes={category.envelopes}
-                  color={category.color}
-                />
-              );
+              return <CategoryList key={category.name} category={category} />;
             })}
           {totals && (
             <>

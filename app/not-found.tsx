@@ -38,7 +38,7 @@ export default function NotFound() {
         </Text>
         <Box>
           <Link mb={'2rem'} maxW={'fit-content'} href={'/'}>
-            <Button colorScheme={'purple'} mr={'1rem'}>
+            <Button colorScheme={'orange'} mr={'1rem'}>
               Return home
             </Button>
           </Link>

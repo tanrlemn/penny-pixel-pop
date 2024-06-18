@@ -32,7 +32,7 @@ export const updateEnvelopeCategoryAPI = async ({ id, category }) => {
   }
 };
 
-export const createUpdateEnvelopeAPI = async ({ envelope, setIsLoading }) => {
+export const createUpdateEnvelopeAPI = async ({ envelope }) => {
   try {
     const { envelope_name, budget_amount, category, sheet_id, id } = envelope;
 
@@ -62,13 +62,9 @@ export const createUpdateEnvelopeAPI = async ({ envelope, setIsLoading }) => {
             sheet_id,
           }),
         });
-
-    setIsLoading(false);
   } catch (error) {
     console.error('Envelope service update/create error:', error);
     throw new Error(error);
-  } finally {
-    setIsLoading(false);
   }
 };
 

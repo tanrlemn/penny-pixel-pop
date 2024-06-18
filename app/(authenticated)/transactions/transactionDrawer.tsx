@@ -1,8 +1,11 @@
 'use client';
 
 // recoil
-import { currentTransactionState } from '@/app/_state/atoms';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useResetRecoilState, useRecoilState } from 'recoil';
+import {
+  currentTransactionState,
+  loadingTransactionsState,
+} from '@/app/_state/atoms';
 import {
   currentTransactionSelector,
   enrichedEnvelopesSelector,
@@ -13,7 +16,7 @@ import { useRef, useState } from 'react';
 import {
   useTransactionsDrawer,
   useTransactions,
-} from '@/app/_lib/hooks/useTransactions';
+} from '@/app/_lib/hooks/transactions';
 
 // chakra-ui
 import {
@@ -51,16 +54,14 @@ export default function TransactionDrawer() {
 
   const categories = useRecoilValue(enrichedEnvelopesSelector);
 
-  const {
-    createUpdateTransaction,
-    deleteTransaction,
-    resetCurrentTransaction,
-  } = useTransactions();
-  const setCurrentTransaction = useSetRecoilState(currentTransactionState);
-  const currentTransaction = useRecoilValue(currentTransactionSelector);
+  const { createUpdateTransaction, deleteTransaction } = useTransactions();
+  const [currentTransaction, setCurrentTransaction] = useRecoilState(
+    currentTransactionSelector
+  );
+  const resetCurrentTransaction = useResetRecoilState(currentTransactionState);
   const { isOpen, onClose } = useTransactionsDrawer();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const loading = useRecoilValue(loadingTransactionsState);
 
   const date = new Date(currentTransaction?.date);
   const setDate = (newDate) => {
@@ -195,7 +196,6 @@ export default function TransactionDrawer() {
                   {currentTransaction.id ? (
                     <Button
                       onClick={() => {
-                        setIsLoading(true);
                         onAlertOpen();
                       }}
                       variant={'outline'}
@@ -219,15 +219,13 @@ export default function TransactionDrawer() {
 
                   <Button
                     onClick={() => {
-                      setIsLoading(true);
                       createUpdateTransaction({
                         transaction: currentTransaction,
-                        setIsLoading,
                       });
                       onClose();
                     }}
-                    isLoading={isLoading}
-                    colorScheme={'purple'}
+                    isLoading={loading}
+                    colorScheme={'orange'}
                     size={'sm'}
                     isDisabled={
                       currentTransaction.amount === 0 ||
@@ -266,10 +264,8 @@ export default function TransactionDrawer() {
               <Button
                 colorScheme='red'
                 onClick={() => {
-                  setIsLoading(true);
                   deleteTransaction({
                     id: currentTransaction.id,
-                    setIsLoading,
                   });
                   onClose();
                   onAlertClose();
