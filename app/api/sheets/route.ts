@@ -10,7 +10,7 @@ export async function GET() {
   const { data, error } = await supabase
     .from('sheets')
     .select('*')
-    .order('updated_at', { ascending: true });
+    .order('updated_at', { ascending: false });
 
   if (error) {
     console.error(error);

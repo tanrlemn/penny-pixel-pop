@@ -11,7 +11,7 @@ export const fetchSheetsAPI = async () => {
     return data;
   } catch (error) {
     console.error('Sheet service fetch error:', error);
-    throw new Error(error);
+    throw error;
   }
 };
 
@@ -29,7 +29,7 @@ export const fetchSingleSheetAPI = async ({ id }) => {
     return data;
   } catch (error) {
     console.error('Sheet service fetch error:', error);
-    throw new Error(error);
+    throw error;
   }
 };
 
@@ -70,13 +70,13 @@ export const createUpdateSheetAPI = async ({ sheet }) => {
     return data;
   } catch (error) {
     console.error('Sheet service update/create error:', error);
-    throw new Error(error);
+    throw error;
   }
 };
 
 export const deleteSheetAPI = async ({ id }) => {
   try {
-    await fetch('/api/sheets/delete', {
+    const res = await fetch('/api/sheets/delete', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -86,9 +86,17 @@ export const deleteSheetAPI = async ({ id }) => {
       }),
     });
 
+    const { data, error } = await res.json();
+
+    if (error) {
+      throw error;
+    }
+
+    console.log('Sheet deleted:', id, data);
+
     return id;
   } catch (error) {
     console.error('Sheet service delete error:', error);
-    throw new Error(error);
+    throw error;
   }
 };

@@ -7,6 +7,7 @@ import {
   currentTransactionState,
   activeSheetState,
   currentUserSheetState,
+  currentEnvelopeState,
 } from './atoms';
 import { categories } from './constants';
 
@@ -23,6 +24,31 @@ export const userProfileSelector = selector({
 });
 
 // envelope selectors
+
+export const currentEnvelopeSelector = selector({
+  key: 'currentEnvelopeSelector',
+  get: ({ get }) => {
+    const currentUserSheet = get(currentUserSheetState);
+    const currentEnvelope = get(currentEnvelopeState);
+    const envelopes = get(envelopesState);
+
+    if (!currentEnvelope || !envelopes || !currentUserSheet) return null;
+
+    return {
+      ...currentEnvelope,
+      sheet_id: currentUserSheet.id,
+    };
+  },
+  set: ({ set, get }, newEnvelope) => {
+    const currentUserSheet = get(currentUserSheetState);
+
+    set(currentEnvelopeState, {
+      ...newEnvelope,
+      sheet_id: currentUserSheet.id,
+    });
+  },
+});
+
 export const enrichedEnvelopesSelector = selector({
   key: 'enrichedEnvelopesSelector',
   get: ({ get }) => {

@@ -52,7 +52,7 @@ export function useSheets() {
 
   const updateCurrentUserSheet = useCallback(
     async ({ id }) => {
-      console.log('setting user current sheet', id);
+      console.log('updating user current sheet', id);
       const updatedProfile = {
         ...profile,
         current_sheet_id: id,
@@ -230,17 +230,39 @@ export function useSheets() {
   const deleteSheet = useCallback(
     async ({ id }) => {
       try {
+        if (sheets.length === 1) {
+          toast({
+            position: 'top',
+            title: 'Sheet delete failed',
+            description:
+              'You cannot delete the last sheet. Please create a new sheet before deleting this one.',
+            status: 'error',
+            duration: null,
+            isClosable: true,
+          });
+          return;
+        }
+        if (currentUserSheet.id === id) {
+          const updatedSheetId = await updateCurrentUserSheet({
+            id: sheets.filter((s) => s.id !== currentUserSheet.id)[0].id,
+          });
+          setCurrentUserSheet(
+            await fetchSingleSheetAPI({ id: updatedSheetId })
+          );
+        }
         const deletedSheet = new Promise((resolve, reject) => {
-          deleteSheetAPI({ id })
-            .then(async () => {
-              const updateSheets = await fetchSheetsAPI();
-              setSheets(updateSheets);
-
-              resetCurrentUserSheet();
-              resolve(updateSheets);
-            })
-            .catch((error) => reject(error));
+          resolve(deleteSheetAPI({ id }));
         });
+
+        deletedSheet
+          .then(async () => {
+            const updateSheets = await fetchSheetsAPI();
+            setSheets(updateSheets);
+          })
+          .catch((error) => {
+            console.error('Sheet delete error:', error);
+            throw error;
+          });
 
         toast.promise(deletedSheet, {
           success: {
@@ -263,10 +285,6 @@ export function useSheets() {
           },
         });
 
-        if (currentUserSheet.id === id) {
-          await updateCurrentUserSheet({ id: sheets[0].id });
-        }
-
         setLoading(false);
       } catch (error) {
         console.error('Sheet delete error:', error);
@@ -283,13 +301,13 @@ export function useSheets() {
       }
     },
     [
-      resetCurrentUserSheet,
       setSheets,
       toast,
       updateCurrentUserSheet,
       currentUserSheet,
       sheets,
       setLoading,
+      setCurrentUserSheet,
     ]
   );
 
