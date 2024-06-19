@@ -3,7 +3,7 @@
 // recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
-  enrichedEnvelopesSelector,
+  envelopeCategoriesSelector,
   envelopeTotalsSelector,
 } from '@/app/_state/selectors';
 import { loadingEnvelopesState } from '@/app/_state/atoms';
@@ -30,7 +30,7 @@ import SheetSelect from '../sheets/sheetSelect';
 export default function Envelopes() {
   const { onOpen } = useEnvelopeDrawer();
   const loading = useRecoilValue(loadingEnvelopesState);
-  const categoryList = useRecoilValue(enrichedEnvelopesSelector);
+  const categoryList = useRecoilValue(envelopeCategoriesSelector);
   const totals = useRecoilValue(envelopeTotalsSelector);
 
   return (

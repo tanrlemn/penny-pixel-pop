@@ -49,10 +49,8 @@ export function useEnvelopes() {
       setLoading(true);
       console.log('fetching envelopes');
       const data = await fetchEnvelopesAPI();
-      const filteredEnvelopes = data.filter(
-        (envelope) => envelope.sheet_id === currentUserSheet.id
-      );
-      setEnvelopes(filteredEnvelopes);
+
+      setEnvelopes(data);
       setLoading(false);
     };
 

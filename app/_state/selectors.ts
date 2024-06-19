@@ -49,8 +49,8 @@ export const currentEnvelopeSelector = selector({
   },
 });
 
-export const enrichedEnvelopesSelector = selector({
-  key: 'enrichedEnvelopesSelector',
+export const envelopeCategoriesSelector = selector({
+  key: 'envelopeCategoriesSelector',
   get: ({ get }) => {
     const transactions = get(enrichedTransactionsSelector);
     const envelopes = get(envelopesState);
@@ -100,11 +100,23 @@ export const enrichedEnvelopesSelector = selector({
   },
 });
 
+const envelopesSelector = selector({
+  key: 'envelopesSelector',
+  get: ({ get }) => {
+    const envelopes = get(envelopesState);
+    const currentUserSheet = get(currentUserSheetState);
+
+    if (!envelopes || !currentUserSheet) return null;
+
+    return envelopes.filter((env) => env.sheet_id === currentUserSheet.id);
+  },
+});
+
 export const envelopeTotalsSelector = selector({
   key: 'envelopeTotalsSelector',
   get: ({ get }) => {
     const transactions = get(enrichedTransactionsSelector);
-    const envelopes = get(envelopesState);
+    const envelopes = get(envelopesSelector);
 
     if (!envelopes) return null;
     if (envelopes.length === 0)
