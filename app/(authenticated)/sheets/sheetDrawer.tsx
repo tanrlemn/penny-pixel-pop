@@ -63,11 +63,19 @@ export default function SheetDrawer() {
     to: activeSheet?.end_date,
   };
   const setRange = (newRange) => {
-    setActiveSheet({
-      ...activeSheet,
-      start_date: newRange.from,
-      end_date: newRange.to,
-    });
+    if (typeof newRange === 'undefined') {
+      setActiveSheet({
+        ...activeSheet,
+        start_date: null,
+        end_date: null,
+      });
+    } else {
+      setActiveSheet({
+        ...activeSheet,
+        start_date: newRange.from ? newRange.from : null,
+        end_date: newRange.to ? newRange.to : null,
+      });
+    }
   };
 
   return (
@@ -91,31 +99,33 @@ export default function SheetDrawer() {
           </DrawerHeader>
 
           <DrawerBody>
-            <Tag
-              cursor={'pointer'}
-              onClick={() => {
-                if (currentUserSheet.id !== activeSheet.id) {
-                  handleChangeCurrentUserSheet(activeSheet);
-                  onClose();
+            {activeSheet?.id && (
+              <Tag
+                cursor={'pointer'}
+                onClick={() => {
+                  if (currentUserSheet.id !== activeSheet.id) {
+                    handleChangeCurrentUserSheet(activeSheet);
+                    onClose();
+                  }
+                }}
+                colorScheme={
+                  currentUserSheet?.id === activeSheet?.id ? 'green' : 'gray'
                 }
-              }}
-              colorScheme={
-                currentUserSheet?.id === activeSheet?.id ? 'green' : 'gray'
-              }
-            >
-              <TagLeftIcon>
-                {currentUserSheet?.id === activeSheet?.id ? (
-                  <Check />
-                ) : (
-                  <MousePointer2 />
-                )}
-              </TagLeftIcon>
-              <TagLabel>
-                {currentUserSheet?.id === activeSheet?.id
-                  ? 'Current'
-                  : 'Use this sheet'}
-              </TagLabel>
-            </Tag>
+              >
+                <TagLeftIcon>
+                  {currentUserSheet?.id === activeSheet?.id ? (
+                    <Check />
+                  ) : (
+                    <MousePointer2 />
+                  )}
+                </TagLeftIcon>
+                <TagLabel>
+                  {currentUserSheet?.id === activeSheet?.id
+                    ? 'Current'
+                    : 'Use this sheet'}
+                </TagLabel>
+              </Tag>
+            )}
             <FormControl>
               <Stack spacing={3}>
                 <Input
@@ -197,6 +207,11 @@ export default function SheetDrawer() {
                   onClose();
                 }}
                 isLoading={loading}
+                isDisabled={
+                  activeSheet.title === '' ||
+                  !activeSheet.start_date ||
+                  !activeSheet.end_date
+                }
                 colorScheme={'orange'}
                 size={'sm'}
               >

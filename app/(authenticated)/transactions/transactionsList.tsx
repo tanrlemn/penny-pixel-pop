@@ -29,13 +29,13 @@ export default function TransactionsList({ transactions }) {
               <DataTitle>Note</DataTitle>
             </Th>
             <Th isNumeric>
-              <DataTitle>Amount spent</DataTitle>
-            </Th>
-            <Th>
-              <DataTitle>Date</DataTitle>
+              <DataTitle>Amount</DataTitle>
             </Th>
             <Th>
               <DataTitle>Envelope name</DataTitle>
+            </Th>
+            <Th>
+              <DataTitle>Date</DataTitle>
             </Th>
           </Tr>
         </Thead>

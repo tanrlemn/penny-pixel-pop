@@ -62,14 +62,18 @@ export function useTransactions() {
       console.log('createUpdateTransaction', transaction);
       try {
         const newTransaction = new Promise((resolve, reject) => {
-          createUpdateTransactionAPI({ transaction })
-            .then(async () => {
-              const updatedTransactions = await fetchTransactionsAPI();
-              setTransactions(updatedTransactions);
-              resolve(updatedTransactions);
-            })
-            .catch((error) => reject(error));
+          resolve(createUpdateTransactionAPI({ transaction }));
         });
+
+        newTransaction
+          .then(async () => {
+            const updatedTransactions = await fetchTransactionsAPI();
+            setTransactions(updatedTransactions);
+          })
+          .catch((error) => {
+            console.error('Transaction update/create error:', error);
+            throw error;
+          });
 
         resetCurrentTransaction();
 
@@ -118,14 +122,18 @@ export function useTransactions() {
       try {
         setLoading(true);
         const deletedTransaction = new Promise((resolve, reject) => {
-          deleteTransactionAPI({ id })
-            .then(async () => {
-              const updatedTransactions = await fetchTransactionsAPI();
-              setTransactions(updatedTransactions);
-              resolve(updatedTransactions);
-            })
-            .catch((error) => reject(error));
+          resolve(deleteTransactionAPI({ id }));
         });
+
+        deletedTransaction
+          .then(async () => {
+            const updatedTransactions = await fetchTransactionsAPI();
+            setTransactions(updatedTransactions);
+          })
+          .catch((error) => {
+            console.error('Transaction delete error:', error);
+            throw error;
+          });
 
         toast.promise(deletedTransaction, {
           success: {

@@ -34,8 +34,8 @@ export default function Error({ error, reset }) {
         >
           Error
         </Tag>
-        <Heading maxW={'500px'} mb={'1rem'} size={'4xl'} fontWeight={800}>
-          Oops... That&apos;s an error
+        <Heading maxW={'500px'} mb={'1rem'} size={'2xl'} fontWeight={800}>
+          Oops... Something went wrong
         </Heading>
         <Text mb={'2rem'}>
           We couldn&apos;t make that request. Please try again.

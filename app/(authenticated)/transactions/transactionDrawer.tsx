@@ -8,7 +8,7 @@ import {
 } from '@/app/_state/atoms';
 import {
   currentTransactionSelector,
-  enrichedEnvelopesSelector,
+  envelopeCategoriesSelector,
 } from '@/app/_state/selectors';
 
 // hooks
@@ -52,7 +52,7 @@ import DatePicker from '@/app/_components/forms/datePicker';
 export default function TransactionDrawer() {
   const cancelRef = useRef();
 
-  const categories = useRecoilValue(enrichedEnvelopesSelector);
+  const categories = useRecoilValue(envelopeCategoriesSelector);
 
   const { createUpdateTransaction, deleteTransaction } = useTransactions();
   const [currentTransaction, setCurrentTransaction] = useRecoilState(

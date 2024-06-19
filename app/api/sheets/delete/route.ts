@@ -3,19 +3,23 @@ import { NextResponse, NextRequest } from 'next/server';
 import { createClient } from '@/app/_lib/utils/supabase/server';
 
 export async function POST(request: NextRequest) {
-  const cookieStore = cookies();
+  try {
+    const cookieStore = cookies();
 
-  const supabase = createClient(cookieStore);
+    const supabase = createClient(cookieStore);
 
-  const req = await request.json();
-  const { id } = req;
+    const req = await request.json();
+    const { id } = req;
 
-  const { error } = await supabase.from('sheets').delete().eq('id', id);
+    const { error, data } = await supabase.from('sheets').delete().eq('id', id);
 
-  if (error) {
-    console.error(error);
+    if (error) {
+      throw error;
+    }
+
+    return NextResponse.json({ data });
+  } catch (error) {
+    console.error('Sheet delete error:', error);
     return NextResponse.error();
   }
-
-  return NextResponse.json({ error });
 }

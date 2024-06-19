@@ -11,7 +11,7 @@ export const fetchEnvelopesAPI = async () => {
     return data;
   } catch (error) {
     console.error('Envelope service fetch error:', error);
-    throw new Error(error);
+    throw error;
   }
 };
 
@@ -28,7 +28,7 @@ export const updateEnvelopeCategoryAPI = async ({ id, category }) => {
     return data;
   } catch (error) {
     console.error('Envelope service update category error:', error);
-    throw new Error(error);
+    throw error;
   }
 };
 
@@ -64,7 +64,7 @@ export const createUpdateEnvelopeAPI = async ({ envelope }) => {
         });
   } catch (error) {
     console.error('Envelope service update/create error:', error);
-    throw new Error(error);
+    throw error;
   }
 };
 
@@ -83,6 +83,6 @@ export const deleteEnvelopeAPI = async ({ id }) => {
     return id;
   } catch (error) {
     console.error('Envelope service delete error:', error);
-    throw new Error(error);
+    throw error;
   }
 };

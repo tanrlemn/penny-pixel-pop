@@ -11,7 +11,7 @@ export const fetchTransactionsAPI = async () => {
     return data;
   } catch (error) {
     console.error('Transaction fetch error:', error);
-    throw new Error(error);
+    throw error;
   }
 };
 
@@ -51,7 +51,7 @@ export const createUpdateTransactionAPI = async ({ transaction }) => {
     return updatedTransactions.json();
   } catch (error) {
     console.error('Transaction update/create error:', error);
-    throw new Error(error);
+    throw error;
   }
 };
 
@@ -70,6 +70,6 @@ export const deleteTransactionAPI = async ({ id }) => {
     return data.json();
   } catch (error) {
     console.error('Transaction delete error:', error);
-    throw new Error(error);
+    throw error;
   }
 };

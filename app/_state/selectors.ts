@@ -7,6 +7,7 @@ import {
   currentTransactionState,
   activeSheetState,
   currentUserSheetState,
+  currentEnvelopeState,
 } from './atoms';
 import { categories } from './constants';
 
@@ -23,8 +24,33 @@ export const userProfileSelector = selector({
 });
 
 // envelope selectors
-export const enrichedEnvelopesSelector = selector({
-  key: 'enrichedEnvelopesSelector',
+
+export const currentEnvelopeSelector = selector({
+  key: 'currentEnvelopeSelector',
+  get: ({ get }) => {
+    const currentUserSheet = get(currentUserSheetState);
+    const currentEnvelope = get(currentEnvelopeState);
+    const envelopes = get(envelopesState);
+
+    if (!currentEnvelope || !envelopes || !currentUserSheet) return null;
+
+    return {
+      ...currentEnvelope,
+      sheet_id: currentUserSheet.id,
+    };
+  },
+  set: ({ set, get }, newEnvelope) => {
+    const currentUserSheet = get(currentUserSheetState);
+
+    set(currentEnvelopeState, {
+      ...newEnvelope,
+      sheet_id: currentUserSheet.id,
+    });
+  },
+});
+
+export const envelopeCategoriesSelector = selector({
+  key: 'envelopeCategoriesSelector',
   get: ({ get }) => {
     const transactions = get(enrichedTransactionsSelector);
     const envelopes = get(envelopesState);
@@ -74,11 +100,23 @@ export const enrichedEnvelopesSelector = selector({
   },
 });
 
+const envelopesSelector = selector({
+  key: 'envelopesSelector',
+  get: ({ get }) => {
+    const envelopes = get(envelopesState);
+    const currentUserSheet = get(currentUserSheetState);
+
+    if (!envelopes || !currentUserSheet) return null;
+
+    return envelopes.filter((env) => env.sheet_id === currentUserSheet.id);
+  },
+});
+
 export const envelopeTotalsSelector = selector({
   key: 'envelopeTotalsSelector',
   get: ({ get }) => {
     const transactions = get(enrichedTransactionsSelector);
-    const envelopes = get(envelopesState);
+    const envelopes = get(envelopesSelector);
 
     if (!envelopes) return null;
     if (envelopes.length === 0)

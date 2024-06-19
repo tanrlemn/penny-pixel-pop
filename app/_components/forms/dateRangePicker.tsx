@@ -11,9 +11,14 @@ export default function DateRangePicker({ range, setRange, setCurrent }) {
       <Text fontWeight={500}>
         {format(range.from, 'MMM d')} – {format(range.to, 'MMM d')}
       </Text>
+    ) : range && range.from && !range.to ? (
+      <Text fontWeight={500}>
+        {format(range.from, 'MMM d')} - Select the last day.
+      </Text>
     ) : (
       <Text fontWeight={500}>Please pick the first day.</Text>
     );
+
   const [footer, setFooter] = useState(initialFooter);
   return (
     <DayPicker
@@ -25,24 +30,8 @@ export default function DateRangePicker({ range, setRange, setCurrent }) {
       onSelect={(r) => {
         setRange(r);
         setCurrent(r);
-
-        if (r && r.from && r.to) {
-          setFooter(
-            <Text fontWeight={500}>
-              {format(r.from, 'MMM d')} – {format(r.to, 'MMM d')}
-            </Text>
-          );
-        } else if (r && r.from && !r.to) {
-          setFooter(
-            <Text fontWeight={500}>
-              {format(r.from, 'MMM d')} - Select the last day.
-            </Text>
-          );
-        } else {
-          setFooter(initialFooter);
-        }
       }}
-      footer={footer}
+      footer={initialFooter}
     />
   );
 }

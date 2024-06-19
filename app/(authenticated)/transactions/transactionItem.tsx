@@ -23,11 +23,14 @@ export default function TransactionItem({ transaction }) {
   };
   return (
     <Tr key={transaction.id} onClick={handleClick} cursor={'pointer'}>
-      <Td maxW={{ base: '45vw' }} whiteSpace={'pre-wrap'}>
+      <Td maxW={{ base: '43vw' }} whiteSpace={'pre-wrap'} pr={0}>
         <DataText>{transaction.note}</DataText>
       </Td>
-      <Td isNumeric>
+      <Td isNumeric pl={0}>
         <DataText>{formatCurrency(transaction.amount)}</DataText>
+      </Td>
+      <Td>
+        <DataText>{transaction.envelope_name}</DataText>
       </Td>
       <Td>
         <DataText>
@@ -43,9 +46,6 @@ export default function TransactionItem({ transaction }) {
             }
           )}
         </DataText>
-      </Td>
-      <Td>
-        <DataText>{transaction.envelope_name}</DataText>
       </Td>
     </Tr>
   );

@@ -49,10 +49,8 @@ export function useEnvelopes() {
       setLoading(true);
       console.log('fetching envelopes');
       const data = await fetchEnvelopesAPI();
-      const filteredEnvelopes = data.filter(
-        (envelope) => envelope.sheet_id === currentUserSheet.id
-      );
-      setEnvelopes(filteredEnvelopes);
+
+      setEnvelopes(data);
       setLoading(false);
     };
 
@@ -69,14 +67,18 @@ export function useEnvelopes() {
           updateEnvelopeCategoryAPI({
             id,
             category,
-          })
-            .then(async () => {
-              const data = await fetchEnvelopesAPI();
-              setEnvelopes(data);
-              resolve(data);
-            })
-            .catch((error) => reject(error));
+          });
         });
+
+        updatedEnvelope
+          .then(async () => {
+            const data = await fetchEnvelopesAPI();
+            setEnvelopes(data);
+          })
+          .catch((error) => {
+            console.error('Envelope update category error:', error);
+            throw error;
+          });
 
         resetCurrentEnvelope();
 
@@ -133,27 +135,29 @@ export function useEnvelopes() {
       try {
         const newEnvelope = id
           ? new Promise((resolve, reject) => {
-              createUpdateEnvelopeAPI({
-                envelope,
-              })
-                .then(async () => {
-                  const data = await fetchEnvelopesAPI();
-                  setEnvelopes(data);
-                  resolve(data);
+              resolve(
+                createUpdateEnvelopeAPI({
+                  envelope,
                 })
-                .catch((error) => reject(error));
+              );
             })
           : new Promise((resolve, reject) => {
-              createUpdateEnvelopeAPI({
-                envelope,
-              })
-                .then(async () => {
-                  const data = await fetchEnvelopesAPI();
-                  setEnvelopes(data);
-                  resolve(data);
+              resolve(
+                createUpdateEnvelopeAPI({
+                  envelope,
                 })
-                .catch((error) => reject(error));
+              );
             });
+
+        newEnvelope
+          .then(async () => {
+            const data = await fetchEnvelopesAPI();
+            setEnvelopes(data);
+          })
+          .catch((error) => {
+            console.error('Envelope update/create error:', error);
+            throw error;
+          });
 
         resetCurrentEnvelope();
 
@@ -202,16 +206,20 @@ export function useEnvelopes() {
       try {
         setLoading(true);
         const deletedEnvelope = new Promise((resolve, reject) => {
-          deleteEnvelopeAPI({ id })
-            .then(async () => {
-              const updateEnvelopes = await fetchEnvelopesAPI();
-              setEnvelopes(updateEnvelopes);
-
-              resetCurrentEnvelope();
-              resolve(updateEnvelopes);
-            })
-            .catch((error) => reject(error));
+          resolve(deleteEnvelopeAPI({ id }));
         });
+
+        deletedEnvelope
+          .then(async () => {
+            const updateEnvelopes = await fetchEnvelopesAPI();
+            setEnvelopes(updateEnvelopes);
+
+            resetCurrentEnvelope();
+          })
+          .catch((error) => {
+            console.error('Envelope delete error:', error);
+            throw error;
+          });
 
         toast.promise(deletedEnvelope, {
           success: {

@@ -3,6 +3,10 @@ import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
+// types
+import { Metadata } from 'next';
+import type { Viewport } from 'next';
+
 // images
 const images = ['https://i.imgur.com/4KQQFag.jpg'];
 
@@ -13,14 +17,20 @@ import { Suspense } from 'react';
 // local components
 import LoadingDiv from './_components/interactive/loadingDiv';
 
+// viewport
+export const viewport: Viewport = {
+  themeColor: 'black',
+  maximumScale: 1,
+};
+
+// metadata
 const APP_NAME = 'Penny Pixel Pop';
 const APP_DEFAULT_TITLE = 'Penny Pixel Pop - Budgeting App';
 const APP_TITLE_TEMPLATE = '%s - Penny Pixel Pop';
 const APP_DESCRIPTION =
   'Simplify your budgeting process with Penny Pixel Pop. Penny Pixel Pop is a free budgeting app that helps you track your spending and save more money through natural language processing.';
 
-// metadata
-export const metadata = {
+export const metadata: Metadata = {
   metadataBase: new URL('https://thoughtsoda.com/'),
   alternates: {
     canonical: '/',
