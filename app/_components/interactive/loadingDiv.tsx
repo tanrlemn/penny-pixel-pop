@@ -11,7 +11,7 @@ import { Box, Flex } from '@chakra-ui/react';
 
 // local components
 import Lottie from 'lottie-react';
-import gooeyBalls from '@/app/_assets/lottie/gooeyBalls.json';
+import logoAnimation from '@/app/_assets/lottie/penny-logo.json';
 
 export const loadingDivStateFamily = atomFamily({
   key: 'loadingDivState',
@@ -28,14 +28,8 @@ export default function LoadingDiv({ id, isLoading }) {
   return (
     <>
       {loadingDiv && (
-        <Box
-          m={'0 auto'}
-          position={'relative'}
-          maxW={'3rem'}>
-          <Lottie
-            animationData={gooeyBalls}
-            loop={true}
-          />
+        <Box m={'0 auto'} position={'relative'} maxW={'2rem'}>
+          <Lottie animationData={logoAnimation} loop={true} />
         </Box>
       )}
     </>
