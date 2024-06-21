@@ -16,6 +16,7 @@ import {
   Th,
   Thead,
   Tr,
+  useColorModeValue,
 } from '@chakra-ui/react';
 
 // local components
@@ -28,6 +29,11 @@ export default function CategoryList({ category }) {
 
   const { onOpen } = useEnvelopeDrawer();
   const isIncome = name === 'Income';
+
+  const bgColor = useColorModeValue('white', 'gray.800');
+  const totalsBgColor = useColorModeValue('gray.50', 'blackAlpha.300');
+  const borderColor = useColorModeValue('gray.100', 'gray.700');
+  const textColor = useColorModeValue('gray.500', 'gray.300');
 
   return (
     <Box m={'0 auto'} mb={'1rem'} p={'1rem 0'} minW={'max-content'} w={'100%'}>
@@ -48,15 +54,15 @@ export default function CategoryList({ category }) {
         </Text>
       </Flex>
       <Table size={'sm'}>
-        <Thead fontSize={'0.8rem'} color={'gray.500'}>
+        <Thead fontSize={'0.8rem'} color={textColor}>
           <Tr>
             <Th
               px={'0.5rem'}
               borderRight={'1px solid'}
-              borderColor={'gray.100'}
+              borderColor={borderColor}
               position={'sticky'}
               left={0}
-              bg={'white'}
+              bg={bgColor}
             >
               <DataTitle>Envelope name</DataTitle>
             </Th>
@@ -64,10 +70,10 @@ export default function CategoryList({ category }) {
               <DataTitle>Budget amount</DataTitle>
             </Th>
             <Th isNumeric>
-              <DataTitle>Amount {isIncome ? 'earned' : 'spent'}</DataTitle>
+              <DataTitle>{isIncome ? 'Left to earn' : 'Amount left'}</DataTitle>
             </Th>
             <Th isNumeric>
-              <DataTitle>{isIncome ? 'Left to earn' : 'Amount left'}</DataTitle>
+              <DataTitle>Amount {isIncome ? 'earned' : 'spent'}</DataTitle>
             </Th>
             <Th>
               <DataTitle>Category</DataTitle>
@@ -98,17 +104,17 @@ export default function CategoryList({ category }) {
               position={'relative'}
               minW={'100%'}
               fontWeight={500}
-              bg={'gray.50'}
+              bg={totalsBgColor}
             >
               <Td
                 px={'0.5rem'}
                 borderRight={'1px solid'}
-                borderColor={'gray.100'}
+                borderColor={borderColor}
                 position={'sticky'}
                 left={0}
                 maxW={'35vw'}
                 overflowX={'hidden'}
-                bg={'gray.50'}
+                bg={totalsBgColor}
               >
                 <Text fontSize={'0.8rem'}>{name} Totals</Text>
               </Td>
@@ -116,10 +122,10 @@ export default function CategoryList({ category }) {
                 {formatCurrency(category.total)}
               </Td>
               <Td isNumeric fontSize={'0.8rem'}>
-                {formatCurrency(category.amountSpent)}
+                {formatCurrency(category.amountLeft)}
               </Td>
               <Td isNumeric fontSize={'0.8rem'}>
-                {formatCurrency(category.amountLeft)}
+                {formatCurrency(category.amountSpent)}
               </Td>
             </Tr>
           )}

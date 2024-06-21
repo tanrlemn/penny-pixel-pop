@@ -34,6 +34,7 @@ import {
   Th,
   Thead,
   Tr,
+  useColorModeValue,
 } from '@chakra-ui/react';
 
 // local components
@@ -48,17 +49,20 @@ export default function Sheets() {
   const { loading } = useSheets();
   const { onOpen } = useSheetDrawer();
 
+  const bgColor = useColorModeValue('white', 'gray.800');
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
+
   return (
     <Box h={'fit-content'} mt={'1rem'} mb={'5rem'}>
-      <Container maxW={{ base: '100vw', md: '700px' }} p={'0.5rem'}>
+      <Container maxW={{ base: '100vw', md: '750px' }} p={'0.5rem'}>
         <Heading mb={'1rem'}>Sheets</Heading>
         <Flex
           position={'sticky'}
           zIndex={10}
-          bg={'white'}
+          bg={bgColor}
           top={'0'}
           borderBottom={'1px solid'}
-          borderBottomColor={'gray.200'}
+          borderBottomColor={borderColor}
           p={'0.5rem 0'}
           justify={'space-between'}
           align={'center'}
@@ -90,17 +94,17 @@ export default function Sheets() {
                   <Th
                     px={'0.5rem'}
                     borderRight={'1px solid'}
-                    borderColor={'gray.100'}
+                    borderColor={borderColor}
                     position={'sticky'}
                     left={0}
-                    bg={'white'}
+                    bg={bgColor}
                   >
                     <DataTitle>Sheet name</DataTitle>
                   </Th>
-                  <Th>
+                  <Th borderRight={'1px solid'} borderColor={borderColor}>
                     <DataTitle>Date range</DataTitle>
                   </Th>
-                  <Th>
+                  <Th borderColor={borderColor}>
                     <DataTitle>Current</DataTitle>
                   </Th>
                 </Tr>
@@ -120,20 +124,28 @@ export default function Sheets() {
                         px={'0.5rem'}
                         position={'sticky'}
                         left={0}
-                        bg={'white'}
+                        bg={bgColor}
+                        borderRight={'1px solid'}
+                        borderColor={borderColor}
                       >
                         <DataText>{sheet.title}</DataText>
                       </Td>
-                      <Td px={'0.5rem'} bg={'white'}>
+                      <Td
+                        px={'1rem'}
+                        bg={bgColor}
+                        borderRight={'1px solid'}
+                        borderColor={borderColor}
+                      >
                         <DataText>
                           {format(sheet.start_date, 'MMM d')} -
                           {format(sheet.end_date, 'MMM d')}
                         </DataText>
                       </Td>
                       <Td
-                        px={'0.5rem'}
-                        bg={'white'}
+                        px={'1rem'}
+                        bg={bgColor}
                         color={'green.500'}
+                        borderColor={borderColor}
                         isNumeric
                       >
                         <Flex w={'100%'} justify={'center'} align={'center'}>

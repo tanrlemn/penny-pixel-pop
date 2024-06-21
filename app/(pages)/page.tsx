@@ -11,12 +11,14 @@ import {
   Link,
   Tag,
   Text,
+  useColorModeValue,
 } from '@chakra-ui/react';
 
 // local components
 import HowItWorks from '@/app/_components/sections/howItWorks';
 
 export default function Home() {
+  const color = useColorModeValue('orange.600', 'orange.300');
   return (
     <Container maxW={'100%'} mb={'10rem'} p={0}>
       <Flex
@@ -34,12 +36,7 @@ export default function Home() {
           <Tag mb={'0.5rem'} colorScheme={'purple'} size={'md'}>
             Beta
           </Tag>
-          <Heading
-            mb={'1rem'}
-            size={'2xl'}
-            fontWeight={900}
-            color={'orange.600'}
-          >
+          <Heading mb={'1rem'} size={'2xl'} fontWeight={900} color={color}>
             Manage Your Budget with Conversational AI.
           </Heading>
           <Text mb={'1rem'}>

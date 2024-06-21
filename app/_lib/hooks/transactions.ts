@@ -184,8 +184,10 @@ export function useTransactions() {
 
 export function useTransactionsDrawer() {
   const [isOpen, setIsOpen] = useRecoilState(transactionDrawerState);
+  const resetCurrentTransaction = useResetRecoilState(currentTransactionState);
 
   const onClose = () => {
+    resetCurrentTransaction();
     setIsOpen(false);
   };
   const onOpen = () => setIsOpen(true);

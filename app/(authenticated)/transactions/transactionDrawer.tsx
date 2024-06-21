@@ -12,7 +12,7 @@ import {
 } from '@/app/_state/selectors';
 
 // hooks
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import {
   useTransactionsDrawer,
   useTransactions,
@@ -37,12 +37,12 @@ import {
   DrawerOverlay,
   Flex,
   FormControl,
-  Input,
   Select,
   Stack,
   Text,
   Textarea,
   useDisclosure,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { NumericFormat } from 'react-number-format';
 
@@ -77,13 +77,20 @@ export default function TransactionDrawer() {
     onClose: onAlertClose,
   } = useDisclosure();
 
+  const bgColor = useColorModeValue('gray.50', 'gray.800');
+  const borderColor = useColorModeValue(
+    'var(--chakra-colors-gray-200)',
+    'var(--chakra-colors-gray-700)'
+  );
+
   const inputProps = {
     placeholder: '$0.00',
     style: {
       borderRadius: 'var(--chakra-radii-md)',
       padding: '0.25rem 1rem',
       border: '1px solid',
-      borderColor: 'var(--chakra-colors-gray-200)',
+      borderColor: borderColor,
+      bgColor: bgColor,
       fontSize: '0.9rem',
     },
   };
@@ -97,7 +104,7 @@ export default function TransactionDrawer() {
         onClose={onClose}
       >
         <DrawerOverlay />
-        <DrawerContent minH={'80vh'}>
+        <DrawerContent minH={'80vh'} bg={bgColor}>
           <DrawerCloseButton />
 
           {categories && (
@@ -118,8 +125,6 @@ export default function TransactionDrawer() {
                           });
                         }}
                         variant={'filled'}
-                        iconColor='gray.400'
-                        color={'gray.700'}
                         defaultValue={
                           currentTransaction.envelope_name ||
                           'Select an envelope'
@@ -191,7 +196,10 @@ export default function TransactionDrawer() {
                 </FormControl>
               </DrawerBody>
 
-              <DrawerFooter borderTop={'1px solid'} borderTopColor={'gray.200'}>
+              <DrawerFooter
+                borderTop={'1px solid'}
+                borderTopColor={borderColor}
+              >
                 <Flex gap={'1rem'}>
                   {currentTransaction.id ? (
                     <Button

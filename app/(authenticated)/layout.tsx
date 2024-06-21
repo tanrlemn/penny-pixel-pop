@@ -22,6 +22,8 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  useColorModeValue,
+  useColorMode,
 } from '@chakra-ui/react';
 import { Link } from '@chakra-ui/next-js';
 
@@ -34,6 +36,7 @@ import Logo from '@/app/_components/branding/logo';
 import EnvelopeDrawer from '@/app/(authenticated)/envelopes/envelopeDrawer';
 import TransactionDrawer from '@/app/(authenticated)/transactions/transactionDrawer';
 import SheetDrawer from '@/app/(authenticated)/sheets/sheetDrawer';
+import ColorModeToggle from '../_components/interactive/colorModeToggle';
 
 export default function AuthenticatedLayout({ children }) {
   const { loading } = useAuth();
@@ -43,7 +46,6 @@ export default function AuthenticatedLayout({ children }) {
   const profile = useRecoilValue(userProfileSelector);
   const loggedIn = !!user;
   const router = useRouter();
-  const supabase = createClient();
 
   const isUserPage =
     pathname.includes('/envelopes') ||
@@ -60,16 +62,16 @@ export default function AuthenticatedLayout({ children }) {
     }
   }, [loading, user, loggedIn, router, isUserPage, pathname]);
 
-  const signOut = async () => {
-    await supabase.auth.signOut({ scope: 'local' });
-    router.replace('/auth/login');
-  };
+  const bgColor = useColorModeValue('white', 'gray.800');
+  const color = useColorModeValue('orange.600', 'orange.300');
+  const borderColor = useColorModeValue('gray.200', 'gray.600');
+
   return (
     <>
       <Box
-        bg={'white'}
+        bg={bgColor}
         borderBottom={'1px solid'}
-        borderBottomColor={'gray.200'}
+        borderBottomColor={borderColor}
         zIndex={1000}
         position={'relative'}
         top={'0'}
@@ -89,7 +91,7 @@ export default function AuthenticatedLayout({ children }) {
                 lineHeight={1.2}
                 size={'xs'}
                 fontWeight={500}
-                color={'orange.600'}
+                color={color}
               >
                 {profile?.full_name}
               </Heading>
@@ -98,19 +100,32 @@ export default function AuthenticatedLayout({ children }) {
               </Text>
             </Box>
           </Flex>
-          <UserMenu signOut={signOut} />
-          <MenuTabs />
+          <UserMenu />
         </Flex>
       </Box>
       {children}
       <SheetDrawer />
       <EnvelopeDrawer />
       <TransactionDrawer />
+      <MenuTabs />
     </>
   );
 }
 
-function UserMenu({ signOut }) {
+function UserMenu() {
+  const { toggleColorMode } = useColorMode();
+
+  const router = useRouter();
+  const supabase = createClient();
+
+  const signOut = async () => {
+    await supabase.auth.signOut({ scope: 'local' });
+    router.replace('/auth/login');
+  };
+  const logoutColor = useColorModeValue('red.600', 'red.300');
+  const borderColor = useColorModeValue('gray.200', 'gray.600');
+  const iconColor = useColorModeValue('gray.600', 'gray.300');
+
   return (
     <Menu>
       <MenuButton>
@@ -118,17 +133,25 @@ function UserMenu({ signOut }) {
           borderRadius={'100px'}
           border={'1px solid'}
           p={'0.15rem'}
-          color={'gray.600'}
-          borderColor={'gray.600'}
+          color={iconColor}
+          borderColor={iconColor}
         >
           <MoreHorizontal size={15} />
         </Box>
       </MenuButton>
       <MenuList fontSize={'0.85rem'} zIndex={10000}>
         <MenuItem
+          onClick={toggleColorMode}
           py={'1rem'}
           borderBottom={'1px solid'}
-          borderBottomColor={'gray.200'}
+          borderBottomColor={borderColor}
+        >
+          <ColorModeToggle />
+        </MenuItem>
+        <MenuItem
+          py={'1rem'}
+          borderBottom={'1px solid'}
+          borderBottomColor={borderColor}
         >
           <Link
             href={'/account'}
@@ -141,7 +164,7 @@ function UserMenu({ signOut }) {
             </Flex>
           </Link>
         </MenuItem>
-        <MenuItem w={'100%'} color={'red.500'} py={'1rem'} onClick={signOut}>
+        <MenuItem w={'100%'} color={logoutColor} py={'1rem'} onClick={signOut}>
           <Flex w={'100%'} gap={'0.5rem'} align={'center'}>
             <LogOut size={15} />
             Log out

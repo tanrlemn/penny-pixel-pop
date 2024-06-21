@@ -22,9 +22,11 @@ import {
   ListItem,
   Tag,
   Text,
+  useColorModeValue,
 } from '@chakra-ui/react';
 
 export default function HowItWorks() {
+  const color = useColorModeValue('orange.600', 'orange.300');
   return (
     <Container maxW={'900px'}>
       <Heading mb={'2rem'}>How it works</Heading>
@@ -75,8 +77,8 @@ export default function HowItWorks() {
           isReversed
         />
       </List>
-      <Box m={'auto'} maxW={'700px'} pt={'2rem'}>
-        <Heading mb={'1rem'} color={'orange.600'} fontWeight={900}>
+      <Box m={'auto'} maxW={'750px'} pt={'2rem'}>
+        <Heading mb={'1rem'} color={color} fontWeight={900}>
           Where budgeting meets innovation, that&apos;s where you&apos;ll find
           Penny Pixel Pop.
         </Heading>

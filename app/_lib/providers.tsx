@@ -2,12 +2,23 @@
 
 // state
 import { RecoilRoot } from 'recoil';
-import { ChakraProvider } from '@chakra-ui/react';
+import {
+  ChakraProvider,
+  cookieStorageManagerSSR,
+  localStorageManager,
+} from '@chakra-ui/react';
 
-export default function Providers({ children }) {
+export default function Providers({ cookies, children }) {
+  const colorModeManager =
+    typeof cookies === 'string'
+      ? cookieStorageManagerSSR(cookies)
+      : localStorageManager;
+
   return (
     <RecoilRoot>
-      <ChakraProvider>{children}</ChakraProvider>
+      <ChakraProvider colorModeManager={colorModeManager}>
+        {children}
+      </ChakraProvider>
     </RecoilRoot>
   );
 }

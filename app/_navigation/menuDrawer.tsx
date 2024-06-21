@@ -22,11 +22,13 @@ import {
   Heading,
   Box,
   VStack,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { Menu } from 'lucide-react';
 
 // local components
 import LinkedLogo from '../_components/branding/linkedLogo';
+import ColorModeToggle from '../_components/interactive/colorModeToggle';
 
 export default function MenuDrawer() {
   const btnRef = useRef();
@@ -36,6 +38,9 @@ export default function MenuDrawer() {
   const loggedIn = !!user;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const bgColor = useColorModeValue('orange.300', 'orange.700');
+  const color = useColorModeValue('orange.700', 'orange.50');
 
   return (
     <>
@@ -56,26 +61,22 @@ export default function MenuDrawer() {
         autoFocus={false}
       >
         <DrawerOverlay />
-        <DrawerContent
-          w={'100%'}
-          maxH={{ base: '100vh' }}
-          color={'white'}
-          background={'orange.600'}
-        >
+        <DrawerContent w={'100%'} maxH={{ base: '100vh' }} bg={bgColor}>
           <DrawerCloseButton p={'2rem'} />
           <DrawerHeader>
-            <LinkedLogo text color='orange.50' />
+            <LinkedLogo text />
           </DrawerHeader>
 
           <DrawerBody p={{ base: '2rem', md: '2rem 3rem' }} w={'100%'}>
             <VStack h={'100%'} align={'flex-start'} justify={'space-between'}>
-              <Box mb={'3rem'}>
-                <Heading color={'orange.50'} size={'md'} mb={'1rem'}>
+              <ColorModeToggle />
+              <Box mb={'3rem'} pt={'1rem'}>
+                <Heading color={color} size={'md'} mb={'1rem'}>
                   Transform your finances with chat <br />– budgeting made so
                   simple, it feels like talking to a friend.
                 </Heading>
                 <Link href={loggedIn ? '/envelopes' : '/auth/login'}>
-                  <Button colorScheme={'gray'}>
+                  <Button colorScheme={'orange'}>
                     {loggedIn ? 'Go to envelopes' : 'Get started'}
                   </Button>
                 </Link>

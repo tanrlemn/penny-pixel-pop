@@ -13,6 +13,7 @@ import {
   Th,
   Thead,
   Tr,
+  useColorModeValue,
 } from '@chakra-ui/react';
 
 // local components
@@ -32,6 +33,10 @@ export default function Totals({ title, totals, color }) {
 
   const isBudgeted = title === 'Budgeted';
 
+  const negativeColor = useColorModeValue('red.500', 'red.300');
+  const positiveColor = useColorModeValue('green.500', 'green.300');
+  const textColor = useColorModeValue('gray.700', 'gray.300');
+
   const formattedTotals = {
     income: {
       title: isBudgeted ? 'Total Budgeted Income:' : 'Total Income:',
@@ -46,11 +51,11 @@ export default function Totals({ title, totals, color }) {
       value: formatCurrency(isBudgeted ? totalDifference : totalLeft),
       color: isBudgeted
         ? budgetIsNegative
-          ? 'red.500'
-          : 'green.500'
+          ? negativeColor
+          : positiveColor
         : actualIsNegative
-        ? 'red.500'
-        : 'green.500',
+        ? negativeColor
+        : positiveColor,
     },
   };
 
@@ -70,7 +75,7 @@ export default function Totals({ title, totals, color }) {
         </Tag>
       </Flex>
       <Table variant='simple' size={'sm'}>
-        <Tbody fontSize={'0.8rem'} color={'gray.500'}>
+        <Tbody fontSize={'0.8rem'} color={textColor}>
           <Tr>
             <Th>
               <DataTitle>{formattedTotals.income.title}</DataTitle>
@@ -103,7 +108,7 @@ export default function Totals({ title, totals, color }) {
 
 const DataTitle = ({ children }) => {
   return (
-    <Text color={'gray.500'} fontWeight={500} fontSize={'0.65rem'}>
+    <Text fontWeight={500} fontSize={'0.65rem'}>
       {children}
     </Text>
   );

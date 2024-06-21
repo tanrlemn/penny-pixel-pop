@@ -33,6 +33,7 @@ import {
   TagLabel,
   TagLeftIcon,
   Text,
+  useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
 import DateRangePicker from '@/app/_components/forms/dateRangePicker';
@@ -78,6 +79,9 @@ export default function SheetDrawer() {
     }
   };
 
+  const bgColor = useColorModeValue('gray.50', 'gray.800');
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
+
   return (
     <>
       <Drawer
@@ -89,7 +93,7 @@ export default function SheetDrawer() {
         onClose={onClose}
       >
         <DrawerOverlay />
-        <DrawerContent minH={'80vh'}>
+        <DrawerContent minH={'80vh'} bg={bgColor}>
           <DrawerCloseButton />
 
           <DrawerHeader>
@@ -131,7 +135,7 @@ export default function SheetDrawer() {
                 <Input
                   border={'none'}
                   borderBottom={'1px solid'}
-                  borderColor={'gray.200'}
+                  borderColor={borderColor}
                   borderRadius={0}
                   _placeholder={{ color: 'gray.300' }}
                   transition={'all 0.2s ease-in-out'}
@@ -173,7 +177,7 @@ export default function SheetDrawer() {
               </Stack>
             </FormControl>
           </DrawerBody>
-          <DrawerFooter borderTop={'1px solid'} borderTopColor={'gray.200'}>
+          <DrawerFooter borderTop={'1px solid'} borderTopColor={borderColor}>
             <Flex gap={'1rem'}>
               {activeSheet?.id ? (
                 <Button

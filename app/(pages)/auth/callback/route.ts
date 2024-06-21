@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { type CookieOptions, createServerClient } from '@supabase/ssr';
 
-const MODE = process.env.NEXT_PUBLIC_MODE;
+const MODE = process.env.NODE_ENV;
 
 export async function GET(request: Request) {
   const { searchParams, origin, port } = new URL(request.url);
