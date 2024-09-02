@@ -19,6 +19,7 @@ import {
   Flex,
   Heading,
   TableContainer,
+  useColorModeValue,
 } from '@chakra-ui/react';
 
 // local components
@@ -33,18 +34,20 @@ export default function Envelopes() {
   const categoryList = useRecoilValue(envelopeCategoriesSelector);
   const totals = useRecoilValue(envelopeTotalsSelector);
 
+  const bgColor = useColorModeValue('white', 'gray.800');
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
   return (
     <Box h={'fit-content'} mt={'1rem'} mb={'5rem'}>
-      <Container maxW={{ base: '100vw', md: '700px' }} p={'0.5rem'}>
+      <Container maxW={{ base: '100vw', md: '750px' }} p={'0.5rem'}>
         <SheetSelect />
         <Heading mb={'1rem'}>Envelopes</Heading>
         <Flex
           position={'sticky'}
           zIndex={10}
-          bg={'white'}
+          bg={bgColor}
           top={'0'}
           borderBottom={'1px solid'}
-          borderBottomColor={'gray.200'}
+          borderBottomColor={borderColor}
           p={'0.5rem 0'}
           justify={'space-between'}
           align={'center'}
@@ -71,7 +74,7 @@ export default function Envelopes() {
           {totals && (
             <>
               <Totals totals={totals} title={'Budgeted'} color={'gray'} />
-              <Totals totals={totals} title={'Actual'} color={'red'} />
+              <Totals totals={totals} title={'Actual'} color={'green'} />
             </>
           )}
         </TableContainer>

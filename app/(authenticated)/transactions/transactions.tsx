@@ -19,6 +19,7 @@ import {
   Flex,
   Heading,
   TableContainer,
+  useColorModeValue,
 } from '@chakra-ui/react';
 
 // local components
@@ -33,18 +34,21 @@ export default function Transactions() {
 
   const { onOpen } = useTransactionsDrawer();
 
+  const bgColor = useColorModeValue('white', 'gray.800');
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
+
   return (
     <Box mt={'1rem'} mb={'5rem'}>
-      <Container maxW={'700px'}>
+      <Container maxW={'750px'}>
         <SheetSelect />
         <Heading mb={'1rem'}>Transactions</Heading>
         <Flex
           position={'sticky'}
           zIndex={1000}
-          bg={'white'}
+          bg={bgColor}
           top={'0'}
           borderBottom={'1px solid'}
-          borderBottomColor={'gray.200'}
+          borderBottomColor={borderColor}
           p={'0.5rem 0'}
           justify={'space-between'}
           align={'center'}

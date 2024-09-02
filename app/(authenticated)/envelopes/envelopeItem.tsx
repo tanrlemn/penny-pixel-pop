@@ -13,7 +13,7 @@ import { formatCurrency } from '@/app/_lib/utils/currencyFormater';
 import { categories } from '@/app/_state/constants';
 
 // chakra-ui
-import { Select, Td, Text, Tr } from '@chakra-ui/react';
+import { Select, Td, Text, Tr, useColorModeValue } from '@chakra-ui/react';
 
 // local components
 import LoadingDiv from '@/app/_components/interactive/loadingDiv';
@@ -33,6 +33,22 @@ export default function EnvelopeItem({ envelope, color }) {
     onOpen();
   };
 
+  const nameBgColor = useColorModeValue(
+    envelope.isOver ? 'red.50' : 'white',
+    envelope.isOver ? 'red.900' : 'gray.800'
+  );
+  const bgColor = useColorModeValue(
+    envelope.isOver ? 'red.50' : 'white',
+    'gray.800'
+  );
+
+  const borderColor = useColorModeValue('gray.100', 'gray.700');
+
+  const textColor = useColorModeValue(
+    envelope.isOver ? 'red.600' : null,
+    envelope.isOver ? 'red.300' : null
+  );
+
   return (
     <Tr
       cursor={'pointer'}
@@ -40,15 +56,15 @@ export default function EnvelopeItem({ envelope, color }) {
       onClick={() => {
         setCurrentEnvelope(envelope);
       }}
-      bg={envelope.isOver ? 'red.50' : 'white'}
+      bg={bgColor}
     >
       <Td
         px={'0.5rem'}
         borderRight={'1px solid'}
-        borderColor={'gray.100'}
+        borderColor={borderColor}
         position={'sticky'}
         left={0}
-        bg={envelope.isOver ? 'red.50' : 'white'}
+        bg={nameBgColor}
         maxW={'35vw'}
         overflowX={'hidden'}
         onClick={handleClick}
@@ -58,15 +74,11 @@ export default function EnvelopeItem({ envelope, color }) {
       <Td onClick={handleClick} isNumeric>
         <DataText>{formatCurrency(envelope.budget_amount)}</DataText>
       </Td>
+      <Td onClick={handleClick} isNumeric color={textColor}>
+        <DataText>{formatCurrency(envelope.amountLeft)}</DataText>
+      </Td>
       <Td onClick={handleClick} isNumeric>
         <DataText>{formatCurrency(envelope.totalSpent)}</DataText>
-      </Td>
-      <Td
-        onClick={handleClick}
-        isNumeric
-        color={envelope.isOver ? 'red.500' : null}
-      >
-        <DataText>{formatCurrency(envelope.amountLeft)}</DataText>
       </Td>
       <Td>
         {loadingEnvelope === envelope.id ? (
@@ -81,9 +93,6 @@ export default function EnvelopeItem({ envelope, color }) {
               });
             }}
             variant={'filled'}
-            bg={`${color}.100`}
-            iconColor='gray.400'
-            color={'gray.700'}
             defaultValue={envelope.category}
             size={'xs'}
             minW={'max-content'}

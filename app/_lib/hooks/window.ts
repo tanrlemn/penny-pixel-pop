@@ -45,7 +45,7 @@ export function useIsMobile() {
   return isMobile;
 }
 
-const MODE = process.env.NEXT_PUBLIC_MODE;
+const MODE = process.env.NODE_ENV;
 
 export function useOrigin() {
   if (typeof window === 'undefined') {

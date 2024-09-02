@@ -33,6 +33,7 @@ import {
   Stack,
   Text,
   useDisclosure,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { categories } from '@/app/_state/constants';
 import { NumericFormat } from 'react-number-format';
@@ -66,13 +67,14 @@ export default function EnvelopeDrawer() {
     },
   };
 
+  const bgColor = useColorModeValue('gray.50', 'gray.800');
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
+
   return (
     <>
       {currentEnvelope && (
         <>
-          {' '}
           <Drawer
-            autoFocus={false}
             trapFocus={false}
             isOpen={isOpen}
             placement={'right'}
@@ -80,7 +82,7 @@ export default function EnvelopeDrawer() {
             onClose={onClose}
           >
             <DrawerOverlay />
-            <DrawerContent minH={'80vh'}>
+            <DrawerContent minH={'80vh'} bg={bgColor}>
               <DrawerCloseButton />
 
               <DrawerHeader>
@@ -95,7 +97,7 @@ export default function EnvelopeDrawer() {
                     <Input
                       border={'none'}
                       borderBottom={'1px solid'}
-                      borderColor={'gray.200'}
+                      borderColor={borderColor}
                       borderRadius={0}
                       _placeholder={{ color: 'gray.300' }}
                       transition={'all 0.2s ease-in-out'}
@@ -146,8 +148,6 @@ export default function EnvelopeDrawer() {
                           });
                         }}
                         variant={'filled'}
-                        iconColor='gray.400'
-                        color={'gray.700'}
                         defaultValue={currentEnvelope.category || 'Necessities'}
                         maxW={'fit-content'}
                         size={'sm'}
@@ -165,7 +165,10 @@ export default function EnvelopeDrawer() {
                   </Stack>
                 </FormControl>
               </DrawerBody>
-              <DrawerFooter borderTop={'1px solid'} borderTopColor={'gray.200'}>
+              <DrawerFooter
+                borderTop={'1px solid'}
+                borderTopColor={borderColor}
+              >
                 <Flex gap={'1rem'}>
                   {currentEnvelope.id ? (
                     <Button
